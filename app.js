@@ -10,6 +10,10 @@ let lastExpression = "";
 let lastAction = null;
 let history = [];
 
+function getHistoryEntryLabel(entry) {
+  return `${entry.expression} = ${entry.displayResult}`;
+}
+
 const digitWords = [
   "zero",
   "one",
@@ -129,64 +133,128 @@ const scaleNames = [
 ];
 
 const googolismPowerNames = {
-  4: "myriad",
-  5: "lakh",
+  0: "one",
+  1: "ten",
+  2: "hundred",
+  3: "thousand",
+  4: "ten thousand",
+  5: "hundred thousand",
   6: "million",
-  7: "crore",
-  8: "myllion",
   9: "billion",
-  10: "dialogue",
   12: "trillion",
   15: "quadrillion",
-  16: "byllion",
   18: "quintillion",
-  20: "guppy",
   21: "sextillion",
   24: "septillion",
   27: "octillion",
   30: "nonillion",
-  32: "tryllion",
   33: "decillion",
   36: "undecillion",
   39: "duodecillion",
   42: "tredecillion",
   45: "quattuordecillion",
   48: "quindecillion",
-  50: "lcillion",
   51: "sexdecillion",
   54: "septendecillion",
   57: "octodecillion",
   60: "novemdecillion",
   63: "vigintillion",
-  68: "muryoutaisuu",
-  80: "ogol",
+  66: "unvigintillion",
+  69: "duovigintillion",
+  72: "tresvigintillion",
+  75: "quattuorvigintillion",
+  78: "quinvigintillion",
+  81: "sexvigintillion",
+  84: "septenvigintillion",
+  87: "octovigintillion",
+  90: "novemvigintillion",
   93: "trigintillion",
-  100: "googol",
-  120: "shannon number",
+  96: "untrigintillion",
+  99: "duotrigintillion",
+  102: "trestrigintillion",
+  105: "quattuortrigintillion",
+  108: "quintrigintillion",
+  111: "sextrigintillion",
+  114: "septentrigintillion",
+  117: "octotrigintillion",
+  120: "novemtrigintillion",
   123: "quadragintillion",
+  126: "unquadragintillion",
+  129: "duoquadragintillion",
+  132: "tresquadragintillion",
+  135: "quattuorquadragintillion",
+  138: "quinquadragintillion",
+  141: "sexquadragintillion",
+  144: "septenquadragintillion",
+  147: "octoquadragintillion",
+  150: "novemquadragintillion",
   153: "quinquagintillion",
-  180: "trigintillion",
+  156: "unquinquagintillion",
+  159: "duoquinquagintillion",
+  162: "tresquinquagintillion",
+  165: "quattuorquinquagintillion",
+  168: "quinquinquagintillion",
+  171: "sexquinquagintillion",
+  174: "septenquinquagintillion",
+  177: "octoquinquagintillion",
+  180: "novemquinquagintillion",
   183: "sexagintillion",
-  200: "gargoogol",
+  186: "unsexagintillion",
+  189: "duosexagintillion",
+  192: "tresexagintillion",
+  195: "quattuorsexagintillion",
+  198: "quinsexagintillion",
+  201: "sexsexagintillion",
+  204: "septensexagintillion",
+  207: "octosexagintillion",
+  210: "novemsexagintillion",
   213: "septuagintillion",
-  240: "quadragintillion",
+  216: "unseptuagintillion",
+  219: "duoseptuagintillion",
+  222: "treseptuagintillion",
+  225: "quattuorseptuagintillion",
+  228: "quinseptuagintillion",
+  231: "sexseptuagintillion",
+  234: "septenseptuagintillion",
+  237: "octoseptuagintillion",
+  240: "novemseptuagintillion",
   243: "octogintillion",
+  246: "unoctogintillion",
+  249: "duooctogintillion",
+  252: "tresoctogintillion",
+  255: "quattuoroctogintillion",
+  258: "quinoctogintillion",
+  261: "sexoctogintillion",
+  264: "septenoctogintillion",
+  267: "octooctogintillion",
+  270: "novemoctogintillion",
   273: "nonagintillion",
-  300: "quinquagintillion",
+  276: "unnonagintillion",
+  279: "duononagintillion",
+  282: "tresnonagintillion",
+  285: "quattuornonagintillion",
+  288: "quinnonagintillion",
+  291: "sexnonagintillion",
+  294: "septennonagintillion",
+  297: "octononagintillion",
+  300: "novemnonagintillion",
+  100: "googol",
+  200: "gargoogol",
+  302: "ecetonchunk",
   303: "centillion",
+  304: "ecetonbunch",
+  306: "uncentillion",
+  308: "ecetoncrowd",
+  309: "duocentillion",
+  312: "trescentillion",
+  333: "decicentillion",
   360: "sexagintillion",
-  366: "primo-vigesimo-centillion",
-  420: "septuagintillion",
-  480: "octogintillion",
-  540: "nonagintillion",
-  600: "centillion",
+  363: "viginticentillion",
+  393: "trigintacentillion",
+  423: "quadragintacentillion",
+  453: "quinquagintacentillion",
   603: "ducentillion",
-  726: "primo-vigesimo-centillion",
   903: "trecentillion",
-  1000: "googolchime",
-  1010: "trialogue",
-  1020: "guppyplex",
-  1068: "doppelgaengion",
   1203: "quadringentillion",
   1503: "quingentillion",
   1803: "sescentillion",
@@ -194,31 +262,6 @@ const googolismPowerNames = {
   2403: "octingentillion",
   2703: "nongentillion",
   3003: "millillion",
-  4096: "decyllion",
-  6000: "millillion",
-  10000: "googoltoll",
-  10100: "googolplex",
-  10303: "ecetonplex",
-  30003: "myrillion",
-  100000: "googolgong",
-  101000: "googolplexichime",
-  300003: "centimillillion",
-  1000000: "milliplexion",
-  10100000: "googolplexigong",
-  101000000: "millionduplex",
-  101010: "tetralogue",
-  1010100: "googolduplex",
-  1010303: "ecetonduplex",
-  1010101000: "googolduplexigong",
-  10101000000: "millitriplexion",
-  10101010: "pentalogue",
-  101010100: "googoltriplex",
-  101010303: "ecetontriplex",
-  101010100000: "googoltriplexigong",
-  3000003: "milli-millillion",
-  4194304: "vigintyllion",
-  6000000: "milli-millillion",
-  3000000003: "nanillion",
 };
 
 function getPowerOfTenName(valueStr) {
@@ -232,7 +275,14 @@ function getPowerOfTenName(valueStr) {
   }
 
   const exponent = match[1].length;
-  return googolismPowerNames[exponent] || null;
+  const namedPower = googolismPowerNames[exponent];
+  if (!namedPower) {
+    return null;
+  }
+  if (exponent === 1) {
+    return namedPower;
+  }
+  return `one ${namedPower}`.trim();
 }
 
 function updateDisplay() {
@@ -312,9 +362,17 @@ function formatNumberForDisplay(value) {
 
 function updateHistory() {
   historyList.innerHTML = "";
-  history.forEach((item) => {
+  history.forEach((entry, index) => {
     const li = document.createElement("li");
-    li.textContent = item;
+    const text = document.createElement("span");
+    text.textContent = getHistoryEntryLabel(entry);
+    const restoreButton = document.createElement("button");
+    restoreButton.type = "button";
+    restoreButton.className = "history-restore";
+    restoreButton.dataset.index = String(index);
+    restoreButton.textContent = "Restore";
+    li.appendChild(text);
+    li.appendChild(restoreButton);
     historyList.appendChild(li);
   });
 }
@@ -476,7 +534,11 @@ function handleEquals() {
     const resultString = result.toString();
     lastResult = resultString;
     const formattedResult = formatNumberForDisplay(resultString);
-    history.unshift(`${expressionText} = ${formattedResult}`);
+    history.unshift({
+      expression: expressionText,
+      displayResult: formattedResult,
+      rawResult: resultString,
+    });
     history = history.slice(0, 10);
     updateHistory();
     tokens = [];
@@ -576,6 +638,39 @@ function speakCurrent() {
   window.speechSynthesis.speak(utterance);
 }
 
+function basicNumberToWords(valueStr) {
+  let normalized = normalizeNumberString(valueStr);
+  if (!normalized) {
+    return "";
+  }
+
+  let prefix = "";
+  if (normalized.startsWith("-")) {
+    prefix = "negative ";
+    normalized = normalized.slice(1);
+  }
+
+  const hasDecimal = normalized.includes(".");
+  let [integerPart, fractionalPart = ""] = normalized.split(".");
+  integerPart = integerPart.replace(/^0+/, "") || "0";
+
+  let words = integerToWords(integerPart);
+  if (!words) {
+    words = "zero";
+  }
+
+  if (hasDecimal) {
+    const fraction = fractionalPart === "" ? "0" : fractionalPart;
+    const fractionWords = fraction
+      .split("")
+      .map((digit) => digitWords[Number(digit)])
+      .join(" ");
+    words = `${words} point ${fractionWords}`;
+  }
+
+  return `${prefix}${words}`.trim();
+}
+
 function numberToWords(valueStr) {
   if (!valueStr) {
     return "";
@@ -583,6 +678,19 @@ function numberToWords(valueStr) {
 
   if (valueStr.toLowerCase().includes("error")) {
     return "error";
+  }
+
+  const scientificMatch = valueStr.trim().match(/^(-?)([0-9]*\.?[0-9]+)[eE]([+-]?\d+)$/);
+  if (scientificMatch) {
+    const mantissa = scientificMatch[2];
+    const exponent = Number(scientificMatch[3]);
+    const powerName = exponent >= 0 ? googolismPowerNames[exponent] : null;
+    if (powerName) {
+      const mantissaWords = basicNumberToWords(`${scientificMatch[1]}${mantissa}`);
+      if (mantissaWords) {
+        return `${mantissaWords} ${powerName}`.trim();
+      }
+    }
   }
 
   let normalized = normalizeNumberString(valueStr);
@@ -601,6 +709,22 @@ function numberToWords(valueStr) {
     return `${prefix}${powerName}`.trim();
   }
 
+  const singleDigitPowerMatch = normalized.match(/^([1-9])0+$/);
+  if (singleDigitPowerMatch) {
+    const digit = singleDigitPowerMatch[1];
+    const exponent = normalized.length - 1;
+    const namedPower = googolismPowerNames[exponent];
+    if (namedPower) {
+      if (digit === "1") {
+        if (exponent === 1) {
+          return `${prefix}${namedPower}`.trim();
+        }
+        return `${prefix}one ${namedPower}`.trim();
+      }
+      return `${prefix}${digitWords[Number(digit)]} ${namedPower}`.trim();
+    }
+  }
+
   const hasDecimal = normalized.includes(".");
   let [integerPart, fractionalPart = ""] = normalized.split(".");
   integerPart = integerPart.replace(/^0+/, "") || "0";
@@ -611,8 +735,7 @@ function numberToWords(valueStr) {
   }
 
   if (hasDecimal) {
-    const trimmedFraction = fractionalPart.replace(/0+$/, "");
-    const fraction = trimmedFraction ? trimmedFraction.slice(0, 2) : "0";
+    const fraction = fractionalPart === "" ? "0" : fractionalPart;
     const fractionWords = fraction
       .split("")
       .map((digit) => digitWords[Number(digit)])
@@ -796,32 +919,61 @@ keypad.addEventListener("click", (event) => {
   const action = button.dataset.action;
   const value = button.dataset.value;
 
-  switch (action) {
-    case "digit":
-      handleDigit(value);
-      break;
-    case "operator":
-      handleOperator(value);
-      break;
-    case "equals":
-      handleEquals();
-      break;
-    case "clear":
-      clearAll();
-      break;
-    case "backspace":
-      backspace();
-      break;
-    case "toggle-sign":
-      toggleSign();
-      break;
-    case "speak":
-      speakCurrent();
-      break;
-    default:
-      break;
+  if (action === "digit") {
+    handleDigit(value);
+    return;
+  }
+
+  if (action === "operator") {
+    handleOperator(value);
+    return;
+  }
+
+  if (action === "equals") {
+    handleEquals();
+    return;
+  }
+
+  if (action === "clear") {
+    clearAll();
+    return;
+  }
+
+  if (action === "backspace") {
+    backspace();
+    return;
+  }
+
+  if (action === "toggle-sign") {
+    toggleSign();
+    return;
+  }
+
+  if (action === "speak") {
+    speakCurrent();
   }
 });
+
+historyList.addEventListener("click", (event) => {
+  const button = event.target.closest("button");
+  if (!button || button.dataset.index === undefined) {
+    return;
+  }
+
+  const index = Number(button.dataset.index);
+  const entry = history[index];
+  if (!entry) {
+    return;
+  }
+
+  currentInput = entry.rawResult;
+  lastResult = "";
+  lastExpression = entry.expression;
+  tokens = [];
+  lastAction = null;
+  updateDisplay();
+});
+
 
 document.addEventListener("keydown", (event) => {
   if (event.key >= "0" && event.key <= "9") {

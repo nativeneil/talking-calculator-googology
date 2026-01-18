@@ -1,0 +1,300 @@
+:root {
+  color-scheme: light;
+  --bg: #f8f6ff;
+  --panel: #ffffff;
+  --accent: #5b7fff;
+  --accent-dark: #3554c7;
+  --action: #ffb347;
+  --operator: #ffd166;
+  --text: #1f1f2e;
+  --muted: #6b6b80;
+  --shadow: 0 12px 30px rgba(61, 70, 98, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Helvetica Neue", "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 24px;
+  touch-action: manipulation;
+}
+
+button {
+  touch-action: manipulation;
+}
+
+.calculator {
+  width: min(940px, 100%);
+  background: var(--panel);
+  border-radius: 32px;
+  box-shadow: var(--shadow);
+  padding: 28px;
+  display: grid;
+  gap: 24px;
+  grid-template-rows: auto auto 1fr;
+}
+
+.display {
+  background: #eef1ff;
+  border-radius: 24px;
+  padding: 20px 24px;
+  display: grid;
+  gap: 8px;
+  height: clamp(120px, 18vh, 160px);
+  align-content: center;
+  overflow: hidden;
+}
+
+.result {
+  font-size: clamp(2.6rem, 6vw, 3.6rem);
+  font-weight: 700;
+  text-align: right;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.result::-webkit-scrollbar {
+  display: none;
+}
+
+.expression {
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  text-align: right;
+  color: var(--muted);
+  min-height: 1.6rem;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.expression::-webkit-scrollbar {
+  display: none;
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-areas:
+    "speak seven eight nine divide sign"
+    "speak four five six multiply clear"
+    "speak one two three minus back"
+    ". zero zero dot plus e"
+    ". equals equals equals . .";
+  gap: 16px;
+  grid-auto-rows: minmax(64px, auto);
+}
+
+.key {
+  border: none;
+  border-radius: 18px;
+  padding: 18px 0;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  background: #f2f3f7;
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.08);
+  min-height: 64px;
+}
+
+.key:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12);
+}
+
+.key.operator {
+  background: var(--operator);
+}
+
+.key.action {
+  background: var(--action);
+}
+
+.key.speak {
+  background: #ff4b4b;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  grid-area: speak;
+}
+
+.key.speak .icon {
+  display: inline-flex;
+}
+
+.key.speak svg {
+  width: 32px;
+  height: 32px;
+}
+
+.key.equals {
+  background: var(--accent);
+  color: #ffffff;
+  grid-area: equals;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  padding: 22px 0;
+}
+
+.key-clear {
+  grid-area: clear;
+}
+
+.key-backspace {
+  grid-area: back;
+}
+
+.key-divide {
+  grid-area: divide;
+}
+
+.key-multiply {
+  grid-area: multiply;
+}
+
+.key-minus {
+  grid-area: minus;
+}
+
+.key-plus {
+  grid-area: plus;
+}
+
+.key-e {
+  grid-area: e;
+}
+
+.key-sign {
+  grid-area: sign;
+}
+
+.key-seven {
+  grid-area: seven;
+}
+
+.key-eight {
+  grid-area: eight;
+}
+
+.key-nine {
+  grid-area: nine;
+}
+
+.key-four {
+  grid-area: four;
+}
+
+.key-five {
+  grid-area: five;
+}
+
+.key-six {
+  grid-area: six;
+}
+
+.key-one {
+  grid-area: one;
+}
+
+.key-two {
+  grid-area: two;
+}
+
+.key-three {
+  grid-area: three;
+}
+
+.key-zero {
+  grid-area: zero;
+}
+
+.key-dot {
+  grid-area: dot;
+}
+
+.key.equals:active {
+  background: var(--accent-dark);
+}
+
+
+.history {
+  background: #fafafe;
+  border-radius: 20px;
+  padding: 16px 20px;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.history h2 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+  color: var(--muted);
+}
+
+.history ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  font-size: 1.05rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+  scrollbar-width: thin;
+}
+
+.history li {
+  padding: 6px 10px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 640px) {
+  .calculator {
+    padding: 20px;
+  }
+
+  .keypad {
+    gap: 12px;
+  }
+
+  .key {
+    min-height: 68px;
+  }
+}
+
+@media (pointer: coarse) {
+  .calculator {
+    grid-template-rows: auto auto minmax(160px, 1fr);
+  }
+
+  .keypad {
+    grid-auto-rows: minmax(72px, auto);
+  }
+
+  .key {
+    min-height: 72px;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+  }
+}

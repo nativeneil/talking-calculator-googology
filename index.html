@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Talking Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/decimal.js@10.4.3/decimal.min.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="calculator">
+    <header class="display">
+      <div class="result" id="result">0</div>
+      <div class="expression" id="expression"></div>
+    </header>
+
+    <section class="keypad">
+      <button data-action="speak" class="key action speak key-speak">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+            <path
+              d="M3 9h4l5-4v14l-5-4H3z"
+              fill="currentColor"
+            />
+            <path
+              d="M16.5 7.5a5 5 0 010 9"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+            <path
+              d="M18.5 5a8 8 0 010 14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+        </span>
+        <span>Speak</span>
+      </button>
+      <button data-action="clear" class="key action key-clear">C</button>
+      <button data-action="backspace" class="key action key-backspace">⌫</button>
+      <button data-action="operator" data-value="/" class="key operator key-divide">÷</button>
+      <button data-action="operator" data-value="*" class="key operator key-multiply">×</button>
+      <button data-action="digit" data-value="e" class="key key-e">e</button>
+
+      <button data-action="digit" data-value="7" class="key key-seven">7</button>
+      <button data-action="digit" data-value="8" class="key key-eight">8</button>
+      <button data-action="digit" data-value="9" class="key key-nine">9</button>
+      <button data-action="operator" data-value="-" class="key operator key-minus">−</button>
+      <button data-action="toggle-sign" class="key action key-sign">+/-</button>
+
+      <button data-action="digit" data-value="4" class="key key-four">4</button>
+      <button data-action="digit" data-value="5" class="key key-five">5</button>
+      <button data-action="digit" data-value="6" class="key key-six">6</button>
+      <button data-action="operator" data-value="+" class="key operator key-plus">+</button>
+
+      <button data-action="digit" data-value="1" class="key key-one">1</button>
+      <button data-action="digit" data-value="2" class="key key-two">2</button>
+      <button data-action="digit" data-value="3" class="key key-three">3</button>
+      <button data-action="equals" class="key equals key-equals">=</button>
+
+      <button data-action="digit" data-value="0" class="key key-zero">0</button>
+      <button data-action="digit" data-value="." class="key key-dot">.</button>
+    </section>
+
+    <section class="history">
+      <h2>History</h2>
+      <ul id="historyList"></ul>
+    </section>
+  </main>
+</body>
+</html>

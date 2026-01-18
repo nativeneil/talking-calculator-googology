@@ -1,0 +1,866 @@
+const resultEl = document.getElementById("result");
+const expressionEl = document.getElementById("expression");
+const historyList = document.getElementById("historyList");
+const keypad = document.querySelector(".keypad");
+
+let tokens = [];
+let currentInput = "";
+let lastResult = "";
+let lastExpression = "";
+let lastAction = null;
+let history = [];
+
+const digitWords = [
+  "zero",
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+];
+
+const scaleNames = [
+  "",
+  "thousand",
+  "million",
+  "billion",
+  "trillion",
+  "quadrillion",
+  "quintillion",
+  "sextillion",
+  "septillion",
+  "octillion",
+  "nonillion",
+  "decillion",
+  "undecillion",
+  "duodecillion",
+  "tredecillion",
+  "quattuordecillion",
+  "quindecillion",
+  "sexdecillion",
+  "septendecillion",
+  "octodecillion",
+  "novemdecillion",
+  "vigintillion",
+  "unvigintillion",
+  "duovigintillion",
+  "trevigintillion",
+  "quattuorvigintillion",
+  "quinvigintillion",
+  "sexvigintillion",
+  "septenvigintillion",
+  "octovigintillion",
+  "novemvigintillion",
+  "trigintillion",
+  "untrigintillion",
+  "duotrigintillion",
+  "trestrigintillion",
+  "quattuortrigintillion",
+  "quintrigintillion",
+  "sextrigintillion",
+  "septentrigintillion",
+  "octotrigintillion",
+  "novemtrigintillion",
+  "quadragintillion",
+  "unquadragintillion",
+  "duoquadragintillion",
+  "tresquadragintillion",
+  "quattuorquadragintillion",
+  "quinquadragintillion",
+  "sexquadragintillion",
+  "septenquadragintillion",
+  "octoquadragintillion",
+  "novemquadragintillion",
+  "quinquagintillion",
+  "unquinquagintillion",
+  "duoquinquagintillion",
+  "tresquinquagintillion",
+  "quattuorquinquagintillion",
+  "quinquinquagintillion",
+  "sexquinquagintillion",
+  "septenquinquagintillion",
+  "octoquinquagintillion",
+  "novemquinquagintillion",
+  "sexagintillion",
+  "unsexagintillion",
+  "duosexagintillion",
+  "tresexagintillion",
+  "quattuorsexagintillion",
+  "quinsexagintillion",
+  "sexsexagintillion",
+  "septensexagintillion",
+  "octosexagintillion",
+  "novemsexagintillion",
+  "septuagintillion",
+  "unseptuagintillion",
+  "duoseptuagintillion",
+  "treseptuagintillion",
+  "quattuorseptuagintillion",
+  "quinseptuagintillion",
+  "sexseptuagintillion",
+  "septenseptuagintillion",
+  "octoseptuagintillion",
+  "novemseptuagintillion",
+  "octogintillion",
+  "unoctogintillion",
+  "duooctogintillion",
+  "treoctogintillion",
+  "quattuoroctogintillion",
+  "quinoctogintillion",
+  "sexoctogintillion",
+  "septenoctogintillion",
+  "octooctogintillion",
+  "novemoctogintillion",
+  "nonagintillion",
+  "unnonagintillion",
+  "duononagintillion",
+  "trenonagintillion",
+  "quattuornonagintillion",
+  "quinnonagintillion",
+  "sexnonagintillion",
+  "septennonagintillion",
+  "octononagintillion",
+  "novemnonagintillion",
+  "centillion",
+];
+
+const googolismPowerNames = {
+  4: "myriad",
+  5: "lakh",
+  6: "million",
+  7: "crore",
+  8: "myllion",
+  9: "billion",
+  10: "dialogue",
+  12: "trillion",
+  15: "quadrillion",
+  16: "byllion",
+  18: "quintillion",
+  20: "guppy",
+  21: "sextillion",
+  24: "septillion",
+  27: "octillion",
+  30: "nonillion",
+  32: "tryllion",
+  33: "decillion",
+  36: "undecillion",
+  39: "duodecillion",
+  42: "tredecillion",
+  45: "quattuordecillion",
+  48: "quindecillion",
+  50: "lcillion",
+  51: "sexdecillion",
+  54: "septendecillion",
+  57: "octodecillion",
+  60: "novemdecillion",
+  63: "vigintillion",
+  68: "muryoutaisuu",
+  80: "ogol",
+  93: "trigintillion",
+  100: "googol",
+  120: "shannon number",
+  123: "quadragintillion",
+  153: "quinquagintillion",
+  180: "trigintillion",
+  183: "sexagintillion",
+  200: "gargoogol",
+  213: "septuagintillion",
+  240: "quadragintillion",
+  243: "octogintillion",
+  273: "nonagintillion",
+  300: "quinquagintillion",
+  303: "centillion",
+  360: "sexagintillion",
+  366: "primo-vigesimo-centillion",
+  420: "septuagintillion",
+  480: "octogintillion",
+  540: "nonagintillion",
+  600: "centillion",
+  603: "ducentillion",
+  726: "primo-vigesimo-centillion",
+  903: "trecentillion",
+  1000: "googolchime",
+  1010: "trialogue",
+  1020: "guppyplex",
+  1068: "doppelgaengion",
+  1203: "quadringentillion",
+  1503: "quingentillion",
+  1803: "sescentillion",
+  2103: "septingentillion",
+  2403: "octingentillion",
+  2703: "nongentillion",
+  3003: "millillion",
+  4096: "decyllion",
+  6000: "millillion",
+  10000: "googoltoll",
+  10100: "googolplex",
+  10303: "ecetonplex",
+  30003: "myrillion",
+  100000: "googolgong",
+  101000: "googolplexichime",
+  300003: "centimillillion",
+  1000000: "milliplexion",
+  10100000: "googolplexigong",
+  101000000: "millionduplex",
+  101010: "tetralogue",
+  1010100: "googolduplex",
+  1010303: "ecetonduplex",
+  1010101000: "googolduplexigong",
+  10101000000: "millitriplexion",
+  10101010: "pentalogue",
+  101010100: "googoltriplex",
+  101010303: "ecetontriplex",
+  101010100000: "googoltriplexigong",
+  3000003: "milli-millillion",
+  4194304: "vigintyllion",
+  6000000: "milli-millillion",
+  3000000003: "nanillion",
+};
+
+function getPowerOfTenName(valueStr) {
+  if (!/^[1-9]\d*$/.test(valueStr)) {
+    return null;
+  }
+
+  const match = valueStr.match(/^1(0+)$/);
+  if (!match) {
+    return null;
+  }
+
+  const exponent = match[1].length;
+  return googolismPowerNames[exponent] || null;
+}
+
+function updateDisplay() {
+  let visibleValue = currentInput || lastResult || "0";
+  if (currentInput) {
+    visibleValue = formatInputForDisplay(currentInput);
+  } else if (lastResult) {
+    visibleValue = formatNumberForDisplay(lastResult);
+  }
+  resultEl.textContent = visibleValue;
+  const activeExpression = currentInput
+    ? formatExpression(tokens, currentInput)
+    : tokens.length
+      ? formatExpression(tokens, "")
+      : lastExpression;
+  expressionEl.textContent = activeExpression;
+}
+
+function formatExpression(tokenList, pendingInput) {
+  const displayTokens = tokenList.map((token) => formatTokenForDisplay(token));
+  if (pendingInput) {
+    displayTokens.push(formatInputForDisplay(pendingInput));
+  }
+  return displayTokens.join(" ");
+}
+
+function formatTokenForDisplay(token) {
+  if (token === "*") return "×";
+  if (token === "/") return "÷";
+  if (token === "+" || token === "-") return token;
+  return formatInputForDisplay(token);
+}
+
+function formatInputForDisplay(value) {
+  if (!value) {
+    return value;
+  }
+  if (value === "-") {
+    return value;
+  }
+  if (/[eE]/.test(value)) {
+    return value;
+  }
+
+  const sign = value.startsWith("-") ? "-" : "";
+  const unsigned = sign ? value.slice(1) : value;
+  const hasTrailingDot = unsigned.endsWith(".");
+  const [integerPart, fractionalPart] = unsigned.split(".");
+  const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if (fractionalPart !== undefined) {
+    const safeFraction = hasTrailingDot ? "" : fractionalPart;
+    return `${sign}${formattedInteger}.${safeFraction}`;
+  }
+  return `${sign}${formattedInteger}`;
+}
+
+function formatNumberForDisplay(value) {
+  if (!value) {
+    return value;
+  }
+  if (value.toLowerCase().includes("error")) {
+    return value;
+  }
+  if (/[eE]/.test(value)) {
+    return value;
+  }
+
+  const sign = value.startsWith("-") ? "-" : "";
+  const unsigned = sign ? value.slice(1) : value;
+  const [integerPart, fractionalPart] = unsigned.split(".");
+  const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if (fractionalPart !== undefined) {
+    return `${sign}${formattedInteger}.${fractionalPart}`;
+  }
+  return `${sign}${formattedInteger}`;
+}
+
+function updateHistory() {
+  historyList.innerHTML = "";
+  history.forEach((item) => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    historyList.appendChild(li);
+  });
+}
+
+function pushCurrentInput() {
+  if (!currentInput || currentInput === "-") {
+    return;
+  }
+  tokens.push(currentInput);
+  currentInput = "";
+}
+
+function clearAll() {
+  tokens = [];
+  currentInput = "";
+  lastResult = "";
+  lastExpression = "";
+  lastAction = null;
+  updateDisplay();
+}
+
+function backspace() {
+  if (currentInput) {
+    currentInput = currentInput.slice(0, -1);
+  } else if (tokens.length) {
+    const lastToken = tokens.pop();
+    if (!isOperator(lastToken)) {
+      currentInput = lastToken.slice(0, -1);
+    }
+  }
+  updateDisplay();
+}
+
+function isOperator(token) {
+  return token === "+" || token === "-" || token === "*" || token === "/";
+}
+
+function handleDigit(value) {
+  if (lastAction === "equals") {
+    tokens = [];
+    lastResult = "";
+    lastExpression = "";
+    lastAction = null;
+  }
+
+  if (value === ".") {
+    if (currentInput.includes("e") || currentInput.includes("E")) {
+      return;
+    }
+    if (currentInput.includes(".")) {
+      return;
+    }
+    currentInput = currentInput ? `${currentInput}.` : "0.";
+    updateDisplay();
+    return;
+  }
+
+  if (value === "e") {
+    if (!currentInput || currentInput.includes("e") || currentInput.includes("E")) {
+      return;
+    }
+    currentInput += "e";
+    updateDisplay();
+    return;
+  }
+
+  currentInput += value;
+  updateDisplay();
+}
+
+function handleOperator(operator) {
+  if (lastAction === "equals") {
+    lastExpression = "";
+  }
+  if (currentInput.endsWith("e")) {
+    return;
+  }
+
+  if (!currentInput && (tokens.length === 0 || isOperator(tokens[tokens.length - 1])) && operator === "-") {
+    currentInput = "-";
+    updateDisplay();
+    return;
+  }
+
+  if (!currentInput && tokens.length === 0 && lastResult) {
+    tokens = [lastResult];
+  }
+
+  if (currentInput) {
+    pushCurrentInput();
+  }
+
+  if (tokens.length === 0) {
+    return;
+  }
+
+  if (isOperator(tokens[tokens.length - 1])) {
+    tokens[tokens.length - 1] = operator;
+  } else {
+    tokens.push(operator);
+  }
+
+  lastAction = null;
+  updateDisplay();
+}
+
+function toggleSign() {
+  if (currentInput) {
+    if (currentInput === "-") {
+      currentInput = "";
+      updateDisplay();
+      return;
+    }
+    currentInput = currentInput.startsWith("-")
+      ? currentInput.slice(1)
+      : `-${currentInput}`;
+    updateDisplay();
+    return;
+  }
+
+  if (tokens.length && isOperator(tokens[tokens.length - 1])) {
+    currentInput = "-";
+    updateDisplay();
+    return;
+  }
+
+  if (lastResult) {
+    currentInput = lastResult.startsWith("-")
+      ? lastResult.slice(1)
+      : `-${lastResult}`;
+    lastResult = "";
+    lastExpression = "";
+    tokens = [];
+    lastAction = null;
+    updateDisplay();
+  }
+}
+
+function handleEquals() {
+  if (currentInput.endsWith("e") || currentInput.endsWith("-")) {
+    return;
+  }
+
+  pushCurrentInput();
+
+  if (!tokens.length) {
+    return;
+  }
+
+  if (isOperator(tokens[tokens.length - 1])) {
+    tokens.pop();
+  }
+
+  const expressionText = formatExpression(tokens, "");
+  lastExpression = expressionText;
+
+  try {
+    const result = evaluate(tokens);
+    const resultString = result.toString();
+    lastResult = resultString;
+    const formattedResult = formatNumberForDisplay(resultString);
+    history.unshift(`${expressionText} = ${formattedResult}`);
+    history = history.slice(0, 10);
+    updateHistory();
+    tokens = [];
+    currentInput = "";
+    lastAction = "equals";
+    updateDisplay();
+  } catch (error) {
+    lastResult = "Error";
+    tokens = [];
+    currentInput = "";
+    lastAction = "equals";
+    updateDisplay();
+  }
+}
+
+function evaluate(tokenList) {
+  const output = [];
+  const operators = [];
+  const precedence = {
+    "+": 1,
+    "-": 1,
+    "*": 2,
+    "/": 2,
+  };
+
+  tokenList.forEach((token) => {
+    if (!isOperator(token)) {
+      output.push(token);
+      return;
+    }
+
+    while (
+      operators.length &&
+      precedence[operators[operators.length - 1]] >= precedence[token]
+    ) {
+      output.push(operators.pop());
+    }
+    operators.push(token);
+  });
+
+  while (operators.length) {
+    output.push(operators.pop());
+  }
+
+  const stack = [];
+  output.forEach((token) => {
+    if (!isOperator(token)) {
+      stack.push(new Decimal(token));
+      return;
+    }
+
+    const right = stack.pop();
+    const left = stack.pop();
+    if (!left || !right) {
+      throw new Error("Invalid expression");
+    }
+
+    switch (token) {
+      case "+":
+        stack.push(left.plus(right));
+        break;
+      case "-":
+        stack.push(left.minus(right));
+        break;
+      case "*":
+        stack.push(left.times(right));
+        break;
+      case "/":
+        stack.push(left.div(right));
+        break;
+      default:
+        throw new Error("Unknown operator");
+    }
+  });
+
+  if (stack.length !== 1) {
+    throw new Error("Invalid expression");
+  }
+  return stack[0];
+}
+
+function speakCurrent() {
+  const rawValue = currentInput || lastResult || resultEl.textContent.trim();
+  const text = numberToWords(rawValue);
+  if (!text) {
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  const voice = window.speechSynthesis
+    .getVoices()
+    .find((item) => item.lang && item.lang.startsWith("en-GB"));
+  if (voice) {
+    utterance.voice = voice;
+  }
+  window.speechSynthesis.speak(utterance);
+}
+
+function numberToWords(valueStr) {
+  if (!valueStr) {
+    return "";
+  }
+
+  if (valueStr.toLowerCase().includes("error")) {
+    return "error";
+  }
+
+  let normalized = normalizeNumberString(valueStr);
+  if (!normalized) {
+    return "";
+  }
+
+  let prefix = "";
+  if (normalized.startsWith("-")) {
+    prefix = "negative ";
+    normalized = normalized.slice(1);
+  }
+
+  const powerName = getPowerOfTenName(normalized);
+  if (powerName) {
+    return `${prefix}${powerName}`.trim();
+  }
+
+  const hasDecimal = normalized.includes(".");
+  let [integerPart, fractionalPart = ""] = normalized.split(".");
+  integerPart = integerPart.replace(/^0+/, "") || "0";
+
+  let words = integerToWords(integerPart);
+  if (!words) {
+    words = "zero";
+  }
+
+  if (hasDecimal) {
+    const trimmedFraction = fractionalPart.replace(/0+$/, "");
+    const fraction = trimmedFraction ? trimmedFraction.slice(0, 2) : "0";
+    const fractionWords = fraction
+      .split("")
+      .map((digit) => digitWords[Number(digit)])
+      .join(" ");
+    words = `${words} point ${fractionWords}`;
+  }
+
+  return `${prefix}${words}`.trim();
+}
+
+function normalizeNumberString(valueStr) {
+  const trimmed = valueStr.trim();
+  if (!trimmed) {
+    return null;
+  }
+
+  const cleaned = trimmed.replace(/,/g, "");
+  if (cleaned.includes("Infinity") || cleaned.includes("NaN")) {
+    return null;
+  }
+
+  if (/[eE]/.test(cleaned)) {
+    return expandScientific(cleaned);
+  }
+
+  return cleaned;
+}
+
+function expandScientific(valueStr) {
+  const match = valueStr.trim().match(/^(-?)([0-9]*\.?[0-9]+)[eE]([+-]?\d+)$/);
+  if (!match) {
+    return valueStr;
+  }
+
+  const sign = match[1];
+  const mantissa = match[2];
+  const exponent = Number(match[3]);
+  const parts = mantissa.split(".");
+  const digits = parts.join("");
+  const decimalPlaces = parts[1] ? parts[1].length : 0;
+  const shift = exponent - decimalPlaces;
+
+  if (shift >= 0) {
+    return `${sign}${digits}${"0".repeat(shift)}`;
+  }
+
+  const position = digits.length + shift;
+  if (position > 0) {
+    return `${sign}${digits.slice(0, position)}.${digits.slice(position)}`;
+  }
+
+  return `${sign}0.${"0".repeat(Math.abs(position))}${digits}`;
+}
+
+function integerToWords(intStr) {
+  if (intStr === "0") {
+    return "zero";
+  }
+
+  if (/^[1-9]0{100}$/.test(intStr)) {
+    return `${digitWords[Number(intStr[0])]} googol`;
+  }
+
+  const groups = [];
+  for (let i = intStr.length; i > 0; i -= 3) {
+    const start = Math.max(i - 3, 0);
+    groups.unshift(intStr.slice(start, i));
+  }
+
+  const maxScaleIndex = scaleNames.length - 1;
+  const maxGroupIndex = groups.length - 1;
+  if (maxGroupIndex > maxScaleIndex) {
+    return `unnamed number, ten to the power of ${intStr.length - 1}`;
+  }
+
+  const words = [];
+  let lastGroupValue = 0;
+
+  groups.forEach((group, index) => {
+    const value = Number(group);
+    const scaleIndex = groups.length - 1 - index;
+    if (value === 0) {
+      if (scaleIndex === 0) {
+        lastGroupValue = value;
+      }
+      return;
+    }
+
+    let groupWords = convertHundreds(value);
+    const scale = scaleNames[scaleIndex];
+    if (scale) {
+      groupWords += ` ${scale}`;
+    }
+    words.push(groupWords);
+    if (scaleIndex === 0) {
+      lastGroupValue = value;
+    }
+  });
+
+  if (words.length > 1 && lastGroupValue > 0 && lastGroupValue < 100) {
+    const last = words.pop();
+    words[words.length - 1] = `${words[words.length - 1]} and ${last}`;
+  }
+
+  return words.join(" ");
+}
+
+function convertHundreds(value) {
+  if (value === 0) {
+    return "";
+  }
+
+  const units = [
+    "zero",
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+    "ten",
+    "eleven",
+    "twelve",
+    "thirteen",
+    "fourteen",
+    "fifteen",
+    "sixteen",
+    "seventeen",
+    "eighteen",
+    "nineteen",
+  ];
+  const tens = [
+    "",
+    "",
+    "twenty",
+    "thirty",
+    "forty",
+    "fifty",
+    "sixty",
+    "seventy",
+    "eighty",
+    "ninety",
+  ];
+
+  const hundreds = Math.floor(value / 100);
+  const remainder = value % 100;
+  let words = "";
+
+  if (hundreds) {
+    words = `${units[hundreds]} hundred`;
+    if (remainder) {
+      words += " and ";
+    }
+  }
+
+  if (remainder) {
+    if (remainder < 20) {
+      words += units[remainder];
+    } else {
+      const ten = Math.floor(remainder / 10);
+      const unit = remainder % 10;
+      words += tens[ten];
+      if (unit) {
+        words += ` ${units[unit]}`;
+      }
+    }
+  }
+
+  return words;
+}
+
+keypad.addEventListener("click", (event) => {
+  const button = event.target.closest("button");
+  if (!button) {
+    return;
+  }
+
+  const action = button.dataset.action;
+  const value = button.dataset.value;
+
+  switch (action) {
+    case "digit":
+      handleDigit(value);
+      break;
+    case "operator":
+      handleOperator(value);
+      break;
+    case "equals":
+      handleEquals();
+      break;
+    case "clear":
+      clearAll();
+      break;
+    case "backspace":
+      backspace();
+      break;
+    case "toggle-sign":
+      toggleSign();
+      break;
+    case "speak":
+      speakCurrent();
+      break;
+    default:
+      break;
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key >= "0" && event.key <= "9") {
+    handleDigit(event.key);
+    return;
+  }
+
+  if (event.key === ".") {
+    handleDigit(".");
+    return;
+  }
+
+  if (event.key.toLowerCase() === "e") {
+    handleDigit("e");
+    return;
+  }
+
+  if (["+", "-", "*", "/"].includes(event.key)) {
+    if (event.key === "-" && currentInput.endsWith("e")) {
+      currentInput += "-";
+      updateDisplay();
+      return;
+    }
+    handleOperator(event.key);
+    return;
+  }
+
+  if (event.key === "Enter" || event.key === "=") {
+    event.preventDefault();
+    handleEquals();
+  }
+
+  if (event.key === "Backspace") {
+    backspace();
+  }
+
+  if (event.key === "Escape") {
+    clearAll();
+  }
+});
+
+updateDisplay();

@@ -290,9 +290,12 @@ function updateDisplay() {
   if (currentInput) {
     visibleValue = formatInputForDisplay(currentInput);
   } else if (lastResult) {
-    visibleValue = formatNumberForDisplay(lastResult);
+    visibleValue = formatResultToFit(lastResult);
   }
   resultEl.textContent = visibleValue;
+  if (currentInput) {
+    resultEl.scrollLeft = resultEl.scrollWidth;
+  }
   const activeExpression = currentInput
     ? formatExpression(tokens, currentInput)
     : tokens.length
@@ -358,6 +361,67 @@ function formatNumberForDisplay(value) {
     return `${sign}${formattedInteger}.${fractionalPart}`;
   }
   return `${sign}${formattedInteger}`;
+}
+
+function getResultFont() {
+  const style = window.getComputedStyle(resultEl);
+  return `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+}
+
+function measureResultTextWidth(text) {
+  const canvas = measureResultTextWidth.canvas || document.createElement("canvas");
+  measureResultTextWidth.canvas = canvas;
+  const context = canvas.getContext("2d");
+  context.font = getResultFont();
+  return context.measureText(text).width;
+}
+
+function fitsResultDisplay(text) {
+  const availableWidth = resultEl.clientWidth;
+  return measureResultTextWidth(text) <= Math.max(availableWidth - 2, 0);
+}
+
+function formatResultToFit(value) {
+  if (!value) {
+    return value;
+  }
+  if (value.toLowerCase().includes("error")) {
+    return value;
+  }
+
+  const formatted = formatNumberForDisplay(value);
+  if (fitsResultDisplay(formatted)) {
+    return formatted;
+  }
+
+  let decimalValue = null;
+  try {
+    decimalValue = new Decimal(value);
+  } catch (error) {
+    return formatted;
+  }
+
+  if (!decimalValue.isFinite()) {
+    return formatted;
+  }
+
+  const maxSig = Math.min(decimalValue.sd(), 60);
+  for (let precision = maxSig; precision >= 1; precision -= 1) {
+    const rounded = decimalValue.toSignificantDigits(precision).toString();
+    const candidate = formatNumberForDisplay(rounded);
+    if (fitsResultDisplay(candidate)) {
+      return candidate;
+    }
+  }
+
+  for (let precision = maxSig; precision >= 1; precision -= 1) {
+    const candidate = decimalValue.toExponential(precision - 1);
+    if (fitsResultDisplay(candidate)) {
+      return candidate;
+    }
+  }
+
+  return decimalValue.toExponential(0);
 }
 
 function updateHistory() {
@@ -533,7 +597,7 @@ function handleEquals() {
     const result = evaluate(tokens);
     const resultString = result.toString();
     lastResult = resultString;
-    const formattedResult = formatNumberForDisplay(resultString);
+    const formattedResult = formatResultToFit(resultString);
     history.unshift({
       expression: expressionText,
       displayResult: formattedResult,

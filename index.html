@@ -13,6 +13,34 @@
 </head>
 <body>
   <main class="calculator">
+    <div class="topbar">
+      <button class="icon-button" id="voiceButton" type="button" aria-label="Voice settings" aria-expanded="false">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
+          <path
+            d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.1 7.1 0 00-1.63-.94l-.36-2.54a.5.5 0 00-.5-.42h-3.84a.5.5 0 00-.5.42l-.36 2.54c-.57.22-1.12.52-1.63.94l-2.39-.96a.5.5 0 00-.6.22L2.71 7.84a.5.5 0 00.12.64l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.5.5 0 00-.12.64l1.92 3.32a.5.5 0 00.6.22l2.39-.96c.5.41 1.05.74 1.63.94l.36 2.54a.5.5 0 00.5.42h3.84a.5.5 0 00.5-.42l.36-2.54c.57-.22 1.12-.52 1.63-.94l2.39.96a.5.5 0 00.6-.22l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58z"
+            fill="currentColor"
+          />
+          <path d="M12 8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7z" fill="currentColor" />
+        </svg>
+      </button>
+      <div class="voice-panel" id="voicePanel" hidden>
+        <label class="voice-label" for="voiceSelect">Voice</label>
+        <select id="voiceSelect" class="voice-select"></select>
+        <div class="voice-control">
+          <label class="voice-label" for="voiceRate">Pace</label>
+          <input id="voiceRate" type="range" min="0.6" max="1.6" step="0.05" value="1" />
+        </div>
+        <div class="voice-control">
+          <label class="voice-label" for="voicePitch">Pitch</label>
+          <input id="voicePitch" type="range" min="0.6" max="1.6" step="0.05" value="1" />
+        </div>
+        <div class="voice-control">
+          <label class="voice-label" for="voiceVolume">Volume</label>
+          <input id="voiceVolume" type="range" min="0" max="1" step="0.05" value="1" />
+        </div>
+        <button class="voice-reset" id="voiceReset" type="button">Reset</button>
+      </div>
+    </div>
     <header class="display">
       <div class="result" id="result">0</div>
       <div class="expression" id="expression"></div>

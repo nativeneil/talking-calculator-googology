@@ -43,6 +43,88 @@ button {
   grid-template-rows: auto auto 1fr;
 }
 
+.topbar {
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.icon-button {
+  border: none;
+  background: #eef1ff;
+  color: var(--text);
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.08);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.icon-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12);
+}
+
+.voice-panel {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  min-width: 220px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 8px;
+  z-index: 10;
+}
+
+.voice-panel[hidden] {
+  display: none;
+}
+
+.voice-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.voice-select {
+  border-radius: 12px;
+  padding: 8px 10px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.voice-control {
+  display: grid;
+  gap: 6px;
+}
+
+.voice-panel input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.voice-reset {
+  justify-self: end;
+  border: none;
+  background: transparent;
+  color: var(--accent-dark);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 2px 0;
+}
+
+.voice-reset:hover {
+  color: var(--accent);
+}
+
 .display {
   background: #eef1ff;
   border-radius: 24px;

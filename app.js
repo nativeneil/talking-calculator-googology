@@ -2,6 +2,13 @@ const resultEl = document.getElementById("result");
 const expressionEl = document.getElementById("expression");
 const historyList = document.getElementById("historyList");
 const keypad = document.querySelector(".keypad");
+const voiceButton = document.getElementById("voiceButton");
+const voicePanel = document.getElementById("voicePanel");
+const voiceSelect = document.getElementById("voiceSelect");
+const voiceRate = document.getElementById("voiceRate");
+const voicePitch = document.getElementById("voicePitch");
+const voiceVolume = document.getElementById("voiceVolume");
+const voiceReset = document.getElementById("voiceReset");
 
 let tokens = [];
 let currentInput = "";
@@ -9,6 +16,17 @@ let lastResult = "";
 let lastExpression = "";
 let lastAction = null;
 let history = [];
+let availableVoices = [];
+let selectedVoiceName = "";
+const defaultVoiceSettings = {
+  rate: 1,
+  pitch: 1,
+  volume: 1,
+};
+
+let voiceSettings = {
+  ...defaultVoiceSettings,
+};
 
 function getHistoryEntryLabel(entry) {
   return `${entry.expression} = ${entry.displayResult}`;
@@ -302,6 +320,125 @@ function updateDisplay() {
       ? formatExpression(tokens, "")
       : lastExpression;
   expressionEl.textContent = activeExpression;
+}
+
+function getStoredVoiceName() {
+  return localStorage.getItem("voiceName") || "";
+}
+
+function saveSelectedVoiceName(name) {
+  localStorage.setItem("voiceName", name);
+}
+
+function getStoredVoiceSettings() {
+  return {
+    rate: Number(localStorage.getItem("voiceRate")) || defaultVoiceSettings.rate,
+    pitch: Number(localStorage.getItem("voicePitch")) || defaultVoiceSettings.pitch,
+    volume: Number(localStorage.getItem("voiceVolume")) || defaultVoiceSettings.volume,
+  };
+}
+
+function saveVoiceSettings(settings) {
+  localStorage.setItem("voiceRate", String(settings.rate));
+  localStorage.setItem("voicePitch", String(settings.pitch));
+  localStorage.setItem("voiceVolume", String(settings.volume));
+}
+
+function buildVoiceLabel(voice) {
+  const lang = voice.lang ? ` (${voice.lang})` : "";
+  return `${voice.name}${lang}`;
+}
+
+function populateVoiceSelect(voices) {
+  voiceSelect.innerHTML = "";
+  voices.forEach((voice) => {
+    const option = document.createElement("option");
+    option.value = voice.name;
+    option.textContent = buildVoiceLabel(voice);
+    voiceSelect.appendChild(option);
+  });
+}
+
+function getFallbackVoiceName(voices) {
+  const gbVoice = voices.find((voice) => voice.lang && voice.lang.startsWith("en-GB"));
+  if (gbVoice) {
+    return gbVoice.name;
+  }
+  const enVoice = voices.find((voice) => voice.lang && voice.lang.startsWith("en"));
+  if (enVoice) {
+    return enVoice.name;
+  }
+  return voices[0]?.name || "";
+}
+
+function refreshVoiceList() {
+  const voices = window.speechSynthesis.getVoices();
+  if (!voices.length) {
+    return;
+  }
+  const englishVoices = voices.filter((voice) => voice.lang && voice.lang.startsWith("en"));
+  availableVoices = (englishVoices.length ? englishVoices : voices)
+    .slice()
+    .sort((a, b) => a.name.localeCompare(b.name));
+  populateVoiceSelect(availableVoices);
+  const storedName = getStoredVoiceName();
+  const fallbackName = getFallbackVoiceName(availableVoices);
+  selectedVoiceName = availableVoices.some((voice) => voice.name === storedName)
+    ? storedName
+    : fallbackName;
+  if (selectedVoiceName) {
+    voiceSelect.value = selectedVoiceName;
+  }
+}
+
+function setSelectedVoice(name) {
+  selectedVoiceName = name;
+  saveSelectedVoiceName(name);
+}
+
+function applyVoiceSettings(settings) {
+  voiceSettings = settings;
+  voiceRate.value = String(settings.rate);
+  voicePitch.value = String(settings.pitch);
+  voiceVolume.value = String(settings.volume);
+}
+
+function resetVoiceSettings() {
+  applyVoiceSettings({
+    ...defaultVoiceSettings,
+  });
+  saveVoiceSettings(voiceSettings);
+}
+
+function updateVoiceSettingValue(key, value) {
+  const numeric = Number(value);
+  if (Number.isNaN(numeric)) {
+    return;
+  }
+  voiceSettings = {
+    ...voiceSettings,
+    [key]: numeric,
+  };
+  saveVoiceSettings(voiceSettings);
+}
+
+function toggleVoicePanel(forceState) {
+  const shouldOpen = forceState ?? voicePanel.hasAttribute("hidden");
+  if (shouldOpen) {
+    voicePanel.removeAttribute("hidden");
+    voiceButton.setAttribute("aria-expanded", "true");
+    refreshVoiceList();
+  } else {
+    voicePanel.setAttribute("hidden", "");
+    voiceButton.setAttribute("aria-expanded", "false");
+  }
+}
+
+function handleVoiceSelection() {
+  const selected = voiceSelect.value;
+  if (selected) {
+    setSelectedVoice(selected);
+  }
 }
 
 function formatExpression(tokenList, pendingInput) {
@@ -693,12 +830,17 @@ function speakCurrent() {
 
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
-  const voice = window.speechSynthesis
-    .getVoices()
-    .find((item) => item.lang && item.lang.startsWith("en-GB"));
-  if (voice) {
-    utterance.voice = voice;
+  const voices = window.speechSynthesis.getVoices();
+  const selectedVoice = voices.find((voice) => voice.name === selectedVoiceName);
+  const fallbackVoice = voices.find((voice) => voice.lang && voice.lang.startsWith("en-GB"));
+  if (selectedVoice) {
+    utterance.voice = selectedVoice;
+  } else if (fallbackVoice) {
+    utterance.voice = fallbackVoice;
   }
+  utterance.rate = voiceSettings.rate;
+  utterance.pitch = voiceSettings.pitch;
+  utterance.volume = voiceSettings.volume;
   window.speechSynthesis.speak(utterance);
 }
 
@@ -1037,6 +1179,46 @@ historyList.addEventListener("click", (event) => {
   lastAction = null;
   updateDisplay();
 });
+
+voiceButton.addEventListener("click", (event) => {
+  event.stopPropagation();
+  toggleVoicePanel();
+});
+
+voiceSelect.addEventListener("change", handleVoiceSelection);
+
+voiceRate.addEventListener("input", (event) => {
+  updateVoiceSettingValue("rate", event.target.value);
+});
+
+voicePitch.addEventListener("input", (event) => {
+  updateVoiceSettingValue("pitch", event.target.value);
+});
+
+voiceVolume.addEventListener("input", (event) => {
+  updateVoiceSettingValue("volume", event.target.value);
+});
+
+voiceReset.addEventListener("click", () => {
+  resetVoiceSettings();
+});
+
+voicePanel.addEventListener("click", (event) => {
+  event.stopPropagation();
+});
+
+document.addEventListener("click", (event) => {
+  if (voicePanel.hasAttribute("hidden")) {
+    return;
+  }
+  if (!voicePanel.contains(event.target) && event.target !== voiceButton) {
+    toggleVoicePanel(false);
+  }
+});
+
+window.speechSynthesis.addEventListener("voiceschanged", refreshVoiceList);
+applyVoiceSettings(getStoredVoiceSettings());
+refreshVoiceList();
 
 
 document.addEventListener("keydown", (event) => {

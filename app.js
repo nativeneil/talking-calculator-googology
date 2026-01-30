@@ -828,6 +828,8 @@ function speakCurrent() {
     return;
   }
 
+  const speakButton = document.querySelector('.key.speak');
+
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   const voices = window.speechSynthesis.getVoices();
@@ -841,6 +843,36 @@ function speakCurrent() {
   utterance.rate = voiceSettings.rate;
   utterance.pitch = voiceSettings.pitch;
   utterance.volume = voiceSettings.volume;
+
+  // Add speaking animation
+  if (speakButton) {
+    speakButton.classList.add('speaking');
+    const speakLabel = speakButton.querySelector('.speak-label');
+    if (speakLabel) {
+      speakLabel.textContent = 'Speaking...';
+    }
+  }
+
+  utterance.onend = () => {
+    if (speakButton) {
+      speakButton.classList.remove('speaking');
+      const speakLabel = speakButton.querySelector('.speak-label');
+      if (speakLabel) {
+        speakLabel.textContent = 'Speak!';
+      }
+    }
+  };
+
+  utterance.onerror = () => {
+    if (speakButton) {
+      speakButton.classList.remove('speaking');
+      const speakLabel = speakButton.querySelector('.speak-label');
+      if (speakLabel) {
+        speakLabel.textContent = 'Speak!';
+      }
+    }
+  };
+
   window.speechSynthesis.speak(utterance);
 }
 

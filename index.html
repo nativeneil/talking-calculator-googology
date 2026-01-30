@@ -15,12 +15,10 @@
   <main class="calculator">
     <div class="topbar">
       <button class="icon-button" id="voiceButton" type="button" aria-label="Voice settings" aria-expanded="false">
-        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
-          <path
-            d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.1 7.1 0 00-1.63-.94l-.36-2.54a.5.5 0 00-.5-.42h-3.84a.5.5 0 00-.5.42l-.36 2.54c-.57.22-1.12.52-1.63.94l-2.39-.96a.5.5 0 00-.6.22L2.71 7.84a.5.5 0 00.12.64l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.5.5 0 00-.12.64l1.92 3.32a.5.5 0 00.6.22l2.39-.96c.5.41 1.05.74 1.63.94l.36 2.54a.5.5 0 00.5.42h3.84a.5.5 0 00.5-.42l.36-2.54c.57-.22 1.12-.52 1.63-.94l2.39.96a.5.5 0 00.6-.22l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58z"
-            fill="currentColor"
-          />
-          <path d="M12 8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7z" fill="currentColor" />
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="5" r="2" fill="currentColor"/>
+          <circle cx="12" cy="12" r="2" fill="currentColor"/>
+          <circle cx="12" cy="19" r="2" fill="currentColor"/>
         </svg>
       </button>
       <div class="voice-panel" id="voicePanel" hidden>
@@ -48,29 +46,22 @@
 
     <section class="keypad">
       <button data-action="speak" class="key action speak key-speak">
-        <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
-            <path
-              d="M3 9h4l5-4v14l-5-4H3z"
-              fill="currentColor"
-            />
-            <path
-              d="M16.5 7.5a5 5 0 010 9"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-            />
-            <path
-              d="M18.5 5a8 8 0 010 14"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-            />
-          </svg>
-        </span>
-        <span>Speak</span>
+        <div class="speak-visual">
+          <div class="mouth-face" aria-hidden="true">
+            <!-- Eyes -->
+            <div class="eyes">
+              <span class="eye eye-left"></span>
+              <span class="eye eye-right"></span>
+            </div>
+            <!-- Mouth -->
+            <div class="mouth">
+              <div class="mouth-inner">
+                <div class="tongue"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="speak-label">Speak!</span>
       </button>
       <button data-action="clear" class="key action key-clear">C</button>
       <button data-action="backspace" class="key action key-backspace">⌫</button>

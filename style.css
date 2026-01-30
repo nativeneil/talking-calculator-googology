@@ -1,14 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap');
+
 :root {
   color-scheme: light;
-  --bg: #f8f6ff;
-  --panel: #ffffff;
-  --accent: #5b7fff;
-  --accent-dark: #3554c7;
-  --action: #ffb347;
-  --operator: #ffd166;
-  --text: #1f1f2e;
-  --muted: #6b6b80;
-  --shadow: 0 12px 30px rgba(61, 70, 98, 0.16);
+
+  /* Color System - Candy Rainbow */
+  --bg-main: #E8F4FD;
+  --panel-color: #FFFEF7;
+
+  /* Button Colors */
+  --speak-primary: #FF6B9D;
+  --speak-shadow: #E65580;
+  --operator-yellow: #FFD93D;
+  --operator-shadow: #E6C235;
+  --action-mint: #6BCB77;
+  --action-shadow: #5AB068;
+  --equals-purple: #9B5DE5;
+  --equals-shadow: #7B4BC4;
+  --number-bg: #F0E6FF;
+  --number-shadow: #D9CCF0;
+
+  /* Text Colors */
+  --text-primary: #2D1B4E;
+  --text-secondary: #6B5B7A;
+  --text-light: #9B8DAD;
+
+  /* Gradients */
+  --speak-gradient: linear-gradient(135deg, #FF6B9D 0%, #FF8E72 50%, #FFB347 100%);
+  --equals-gradient: linear-gradient(135deg, #9B5DE5 0%, #C77DFF 100%);
+  --display-gradient: linear-gradient(180deg, #F8F5FF 0%, #EDE7F6 100%);
+
+  /* Typography */
+  --font-display: 'Fredoka One', cursive;
+  --font-body: 'Nunito', sans-serif;
+
+  /* Shadows */
+  --shadow-panel: 0 20px 60px rgba(45, 27, 78, 0.15);
+  --shadow-display: inset 0 4px 12px rgba(45, 27, 78, 0.08);
 }
 
 * {
@@ -17,9 +44,9 @@
 
 body {
   margin: 0;
-  font-family: "Helvetica Neue", "Segoe UI", sans-serif;
-  background: var(--bg);
-  color: var(--text);
+  font-family: var(--font-body);
+  background: var(--bg-main);
+  color: var(--text-primary);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,57 +55,88 @@ body {
   touch-action: manipulation;
 }
 
+@supports (padding: env(safe-area-inset-top)) {
+  body {
+    padding-top: max(24px, env(safe-area-inset-top));
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
+    padding-left: max(24px, env(safe-area-inset-left));
+    padding-right: max(24px, env(safe-area-inset-right));
+  }
+}
+
 button {
   touch-action: manipulation;
+  font-family: var(--font-body);
 }
 
 .calculator {
   width: min(940px, 100%);
-  background: var(--panel);
-  border-radius: 32px;
-  box-shadow: var(--shadow);
-  padding: 28px;
+  background: var(--panel-color);
+  border-radius: 40px;
+  box-shadow:
+    var(--shadow-panel),
+    0 0 0 1px rgba(155, 93, 229, 0.08);
+  padding: 32px;
   display: grid;
   gap: 24px;
   grid-template-rows: auto auto 1fr;
-}
-
-.topbar {
-  display: flex;
-  justify-content: flex-end;
   position: relative;
 }
 
+/* Settings Icon - Small and Hidden */
+.topbar {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 5;
+}
+
 .icon-button {
+  width: 28px;
+  height: 28px;
+  padding: 8px;
+  margin: -8px;
   border: none;
-  background: #eef1ff;
-  color: var(--text);
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
+  background: transparent;
+  color: var(--text-secondary);
+  opacity: 0.35;
+  border-radius: 50%;
+  cursor: pointer;
   display: grid;
   place-items: center;
-  cursor: pointer;
-  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.08);
-  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.icon-button:hover,
+.icon-button:focus {
+  opacity: 0.8;
+  transform: scale(1.15);
 }
 
 .icon-button:active {
-  transform: translateY(2px);
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12);
+  transform: scale(0.95);
+  opacity: 1;
 }
 
+.icon-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Voice Panel */
 .voice-panel {
   position: absolute;
-  top: 52px;
+  top: 44px;
   right: 0;
-  min-width: 220px;
-  background: #fff;
-  border-radius: 16px;
-  padding: 12px 14px;
-  box-shadow: var(--shadow);
+  min-width: 240px;
+  background: var(--panel-color);
+  border-radius: 24px;
+  padding: 16px 18px;
+  box-shadow:
+    0 12px 40px rgba(45, 27, 78, 0.2),
+    0 0 0 1px rgba(155, 93, 229, 0.12);
   display: grid;
-  gap: 8px;
+  gap: 12px;
   z-index: 10;
 }
 
@@ -88,16 +146,24 @@ button {
 
 .voice-label {
   font-size: 0.85rem;
-  color: var(--muted);
-  font-weight: 600;
+  color: var(--text-secondary);
+  font-weight: 700;
 }
 
 .voice-select {
-  border-radius: 12px;
-  padding: 8px 10px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 14px;
+  padding: 10px 12px;
+  border: 2px solid rgba(155, 93, 229, 0.15);
   font-size: 0.95rem;
-  font-family: inherit;
+  font-family: var(--font-body);
+  font-weight: 600;
+  background: #FAFAFE;
+  color: var(--text-primary);
+}
+
+.voice-select:focus {
+  outline: none;
+  border-color: var(--equals-purple);
 }
 
 .voice-control {
@@ -107,44 +173,52 @@ button {
 
 .voice-panel input[type="range"] {
   width: 100%;
-  accent-color: var(--accent);
+  accent-color: var(--equals-purple);
+  height: 6px;
 }
 
 .voice-reset {
   justify-self: end;
   border: none;
   background: transparent;
-  color: var(--accent-dark);
-  font-weight: 600;
+  color: var(--equals-purple);
+  font-weight: 700;
   font-size: 0.85rem;
   cursor: pointer;
-  padding: 2px 0;
+  padding: 4px 0;
+  font-family: var(--font-body);
 }
 
 .voice-reset:hover {
-  color: var(--accent);
+  color: var(--speak-primary);
 }
 
+/* Display */
 .display {
-  background: #eef1ff;
-  border-radius: 24px;
-  padding: 20px 24px;
+  background: var(--display-gradient);
+  border-radius: 28px;
+  padding: 24px 28px;
   display: grid;
   gap: 8px;
-  height: clamp(120px, 18vh, 160px);
+  height: clamp(130px, 20vh, 170px);
   align-content: center;
   overflow: hidden;
+  border: 3px solid rgba(155, 93, 229, 0.1);
+  box-shadow: var(--shadow-display);
 }
 
 .result {
-  font-size: clamp(2.6rem, 6vw, 3.6rem);
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  font-weight: 400;
   text-align: right;
   white-space: nowrap;
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  color: var(--text-primary);
+  text-shadow: 0 2px 4px rgba(45, 27, 78, 0.08);
 }
 
 .result::-webkit-scrollbar {
@@ -152,9 +226,11 @@ button {
 }
 
 .expression {
+  font-family: var(--font-body);
   font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-weight: 600;
   text-align: right;
-  color: var(--muted);
+  color: var(--text-secondary);
   min-height: 1.6rem;
   white-space: nowrap;
   overflow-x: auto;
@@ -167,6 +243,7 @@ button {
   display: none;
 }
 
+/* Keypad */
 .keypad {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -177,159 +254,376 @@ button {
     ". zero zero dot plus e"
     ". equals equals equals . .";
   gap: 16px;
-  grid-auto-rows: minmax(64px, auto);
+  grid-auto-rows: minmax(72px, auto);
 }
 
+/* Base Key Styling - Toy-like 3D Effect */
 .key {
   border: none;
-  border-radius: 18px;
+  border-radius: 22px;
   padding: 18px 0;
-  font-size: clamp(1.4rem, 3vw, 2rem);
-  font-weight: 700;
-  background: #f2f3f7;
-  color: var(--text);
+  font-family: var(--font-body);
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 800;
+  background: var(--number-bg);
+  color: var(--text-primary);
   cursor: pointer;
-  transition: transform 0.08s ease, box-shadow 0.08s ease;
-  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.08);
-  min-height: 64px;
+  min-height: 72px;
+
+  /* Toy-like 3D effect */
+  box-shadow:
+    0 6px 0 var(--number-shadow),
+    0 8px 16px rgba(45, 27, 78, 0.1);
+
+  transition:
+    transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.1s ease;
+}
+
+.key:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 0 var(--number-shadow),
+    0 12px 24px rgba(45, 27, 78, 0.12);
 }
 
 .key:active {
-  transform: translateY(2px);
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12);
+  transform: translateY(4px);
+  box-shadow:
+    0 2px 0 var(--number-shadow),
+    0 4px 8px rgba(45, 27, 78, 0.08);
 }
 
+/* Operator Buttons - Yellow */
 .key.operator {
-  background: var(--operator);
+  background: var(--operator-yellow);
+  color: var(--text-primary);
+  box-shadow:
+    0 6px 0 var(--operator-shadow),
+    0 8px 16px rgba(255, 217, 61, 0.3);
 }
 
+.key.operator:hover {
+  box-shadow:
+    0 8px 0 var(--operator-shadow),
+    0 12px 24px rgba(255, 217, 61, 0.4);
+}
+
+.key.operator:active {
+  box-shadow:
+    0 2px 0 var(--operator-shadow),
+    0 4px 8px rgba(255, 217, 61, 0.2);
+}
+
+/* Action Buttons - Mint Green */
 .key.action {
-  background: var(--action);
+  background: var(--action-mint);
+  color: white;
+  box-shadow:
+    0 6px 0 var(--action-shadow),
+    0 8px 16px rgba(107, 203, 119, 0.3);
 }
 
+.key.action:hover {
+  box-shadow:
+    0 8px 0 var(--action-shadow),
+    0 12px 24px rgba(107, 203, 119, 0.4);
+}
+
+.key.action:active {
+  box-shadow:
+    0 2px 0 var(--action-shadow),
+    0 4px 8px rgba(107, 203, 119, 0.2);
+}
+
+/* Speak Button - Magical Gradient */
 .key.speak {
-  background: #ff4b4b;
-  color: #ffffff;
+  background: var(--speak-gradient);
+  color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   grid-area: speak;
+  border-radius: 28px;
+  position: relative;
+  overflow: visible;
+  box-shadow:
+    0 6px 0 var(--speak-shadow),
+    0 8px 20px rgba(255, 107, 157, 0.35);
+  animation: gentle-pulse 2.5s ease-in-out infinite;
 }
 
-.key.speak .icon {
-  display: inline-flex;
+.key.speak:hover {
+  animation: none;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    0 8px 0 var(--speak-shadow),
+    0 12px 28px rgba(255, 107, 157, 0.45);
 }
 
-.key.speak svg {
-  width: 32px;
-  height: 32px;
+.key.speak:active {
+  animation: none;
+  transform: translateY(4px) scale(0.98);
+  box-shadow:
+    0 2px 0 var(--speak-shadow),
+    0 4px 12px rgba(255, 107, 157, 0.3);
 }
 
+@keyframes gentle-pulse {
+  0%, 100% {
+    box-shadow:
+      0 6px 0 var(--speak-shadow),
+      0 8px 20px rgba(255, 107, 157, 0.35);
+  }
+  50% {
+    box-shadow:
+      0 6px 0 var(--speak-shadow),
+      0 8px 32px rgba(255, 107, 157, 0.5);
+  }
+}
+
+/* Speak Button Visual Container */
+.speak-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+}
+
+/* Animated Mouth Face */
+.mouth-face {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  background: #FFE8EC;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    inset 0 -4px 8px rgba(255, 107, 157, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease;
+}
+
+.key.speak:hover .mouth-face {
+  transform: scale(1.05);
+}
+
+.key.speak:active .mouth-face {
+  transform: scale(0.95);
+}
+
+/* Eyes */
+.eyes {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 4px;
+}
+
+.eye {
+  width: 10px;
+  height: 10px;
+  background: #2D1B4E;
+  border-radius: 50%;
+  position: relative;
+}
+
+/* Eye shine */
+.eye::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  top: 1px;
+  right: 1px;
+}
+
+/* Happy eyes when speaking */
+.key.speak.speaking .eye {
+  height: 5px;
+  border-radius: 5px 5px 0 0;
+  animation: happy-eyes 0.3s ease-in-out infinite alternate;
+}
+
+.key.speak.speaking .eye::after {
+  display: none;
+}
+
+@keyframes happy-eyes {
+  0% { transform: scaleY(1); }
+  100% { transform: scaleY(0.8); }
+}
+
+/* Mouth */
+.mouth {
+  width: 28px;
+  height: 14px;
+  background: #C73659;
+  border-radius: 0 0 20px 20px;
+  overflow: hidden;
+  position: relative;
+  transition: height 0.15s ease;
+}
+
+/* Mouth inner (darker) */
+.mouth-inner {
+  position: absolute;
+  inset: 2px;
+  background: #8B1E3F;
+  border-radius: 0 0 16px 16px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Tongue */
+.tongue {
+  width: 14px;
+  height: 8px;
+  background: #E85A7A;
+  border-radius: 50% 50% 0 0;
+  transform: translateY(4px);
+  transition: transform 0.15s ease;
+}
+
+/* Speaking Animation - Mouth opens and closes */
+.key.speak.speaking {
+  animation: none;
+}
+
+.key.speak.speaking .mouth {
+  animation: mouth-talk 0.25s ease-in-out infinite;
+}
+
+.key.speak.speaking .tongue {
+  animation: tongue-wiggle 0.25s ease-in-out infinite;
+}
+
+@keyframes mouth-talk {
+  0%, 100% {
+    height: 14px;
+    width: 28px;
+  }
+  50% {
+    height: 22px;
+    width: 24px;
+  }
+}
+
+@keyframes tongue-wiggle {
+  0%, 100% {
+    transform: translateY(4px);
+  }
+  50% {
+    transform: translateY(0px);
+  }
+}
+
+/* Idle smile animation */
+.mouth-face {
+  animation: face-breathe 3s ease-in-out infinite;
+}
+
+@keyframes face-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.key.speak:hover .mouth-face,
+.key.speak.speaking .mouth-face {
+  animation: none;
+}
+
+/* Speak Label */
+.speak-label {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.key.speak.speaking .speak-label {
+  animation: bounce-text 0.6s ease-in-out infinite;
+}
+
+@keyframes bounce-text {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+/* Equals Button - Magical Purple */
 .key.equals {
-  background: var(--accent);
-  color: #ffffff;
+  background: var(--equals-gradient);
+  color: white;
   grid-area: equals;
-  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-size: clamp(2rem, 5vw, 3rem);
+  border-radius: 28px;
   padding: 22px 0;
+  box-shadow:
+    0 8px 0 var(--equals-shadow),
+    0 12px 24px rgba(155, 93, 229, 0.4);
 }
 
-.key-clear {
-  grid-area: clear;
-}
-
-.key-backspace {
-  grid-area: back;
-}
-
-.key-divide {
-  grid-area: divide;
-}
-
-.key-multiply {
-  grid-area: multiply;
-}
-
-.key-minus {
-  grid-area: minus;
-}
-
-.key-plus {
-  grid-area: plus;
-}
-
-.key-e {
-  grid-area: e;
-}
-
-.key-sign {
-  grid-area: sign;
-}
-
-.key-seven {
-  grid-area: seven;
-}
-
-.key-eight {
-  grid-area: eight;
-}
-
-.key-nine {
-  grid-area: nine;
-}
-
-.key-four {
-  grid-area: four;
-}
-
-.key-five {
-  grid-area: five;
-}
-
-.key-six {
-  grid-area: six;
-}
-
-.key-one {
-  grid-area: one;
-}
-
-.key-two {
-  grid-area: two;
-}
-
-.key-three {
-  grid-area: three;
-}
-
-.key-zero {
-  grid-area: zero;
-}
-
-.key-dot {
-  grid-area: dot;
+.key.equals:hover {
+  box-shadow:
+    0 10px 0 var(--equals-shadow),
+    0 16px 32px rgba(155, 93, 229, 0.5);
 }
 
 .key.equals:active {
-  background: var(--accent-dark);
+  transform: translateY(5px);
+  box-shadow:
+    0 3px 0 var(--equals-shadow),
+    0 6px 12px rgba(155, 93, 229, 0.3);
 }
 
+/* Grid Area Assignments */
+.key-clear { grid-area: clear; }
+.key-backspace { grid-area: back; }
+.key-divide { grid-area: divide; }
+.key-multiply { grid-area: multiply; }
+.key-minus { grid-area: minus; }
+.key-plus { grid-area: plus; }
+.key-e { grid-area: e; }
+.key-sign { grid-area: sign; }
+.key-seven { grid-area: seven; }
+.key-eight { grid-area: eight; }
+.key-nine { grid-area: nine; }
+.key-four { grid-area: four; }
+.key-five { grid-area: five; }
+.key-six { grid-area: six; }
+.key-one { grid-area: one; }
+.key-two { grid-area: two; }
+.key-three { grid-area: three; }
+.key-zero { grid-area: zero; }
+.key-dot { grid-area: dot; }
 
+/* History */
 .history {
-  background: #fafafe;
-  border-radius: 20px;
+  background: #FAFAFE;
+  border-radius: 24px;
   padding: 16px 20px;
   min-height: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  border: 2px solid rgba(155, 93, 229, 0.08);
 }
 
 .history h2 {
   margin: 0 0 12px;
-  font-size: 1.1rem;
-  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-secondary);
 }
 
 .history ul {
@@ -338,7 +632,8 @@ button {
   padding: 0;
   display: grid;
   gap: 8px;
-  font-size: 1.05rem;
+  font-size: 1rem;
+  font-weight: 600;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   flex: 1;
@@ -346,55 +641,452 @@ button {
 }
 
 .history li {
-  padding: 8px 10px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  padding: 10px 14px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(45, 27, 78, 0.06);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 12px;
+  animation: slide-in 0.3s ease-out;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .history-restore {
   border: none;
   border-radius: 999px;
-  padding: 4px 12px;
-  background: var(--accent);
-  color: #fff;
+  padding: 6px 14px;
+  background: var(--equals-gradient);
+  color: white;
   font-size: 0.85rem;
+  font-weight: 700;
   cursor: pointer;
+  font-family: var(--font-body);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 3px 0 var(--equals-shadow);
 }
 
 .history-restore:hover {
-  background: var(--accent-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 var(--equals-shadow);
 }
 
-@media (max-width: 640px) {
+.history-restore:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--equals-shadow);
+}
+
+/* iPad Optimizations (768px+) */
+@media (min-width: 768px) {
   .calculator {
+    padding: 36px;
+    border-radius: 48px;
+  }
+
+  .keypad {
+    gap: 20px;
+    grid-auto-rows: minmax(88px, auto);
+  }
+
+  .key {
+    min-height: 88px;
+    border-radius: 26px;
+    font-size: 2.2rem;
+  }
+
+  .key.speak {
+    border-radius: 32px;
+  }
+
+  .key.equals {
+    font-size: 2.8rem;
+    border-radius: 32px;
+  }
+
+  .display {
+    height: clamp(150px, 22vh, 190px);
+    border-radius: 32px;
+    padding: 28px 32px;
+  }
+
+  .result {
+    font-size: 4rem;
+  }
+
+  .speak-visual {
+    width: 80px;
+    height: 80px;
+  }
+
+  .mouth-face {
+    width: 72px;
+    height: 72px;
+  }
+
+  .eyes {
+    gap: 20px;
+    margin-bottom: 6px;
+  }
+
+  .eye {
+    width: 12px;
+    height: 12px;
+  }
+
+  .eye::after {
+    width: 5px;
+    height: 5px;
+  }
+
+  .mouth {
+    width: 32px;
+    height: 16px;
+  }
+
+  .tongue {
+    width: 16px;
+    height: 10px;
+  }
+
+  @keyframes mouth-talk {
+    0%, 100% {
+      height: 16px;
+      width: 32px;
+    }
+    50% {
+      height: 26px;
+      width: 28px;
+    }
+  }
+
+  .speak-label {
+    font-size: 1.3rem;
+  }
+
+  .history {
+    padding: 20px 24px;
+    border-radius: 28px;
+  }
+
+  .history li {
+    padding: 12px 18px;
+    font-size: 1.1rem;
+    border-radius: 16px;
+  }
+}
+
+/* iPhone Optimizations (< 768px) */
+@media (max-width: 767px) {
+  body {
+    padding: 16px;
+  }
+
+  .calculator {
+    width: 100%;
     padding: 20px;
+    border-radius: 32px;
+    gap: 16px;
+  }
+
+  .topbar {
+    top: 12px;
+    right: 12px;
   }
 
   .keypad {
     gap: 12px;
+    grid-auto-rows: minmax(64px, auto);
   }
 
   .key {
-    min-height: 68px;
+    min-height: 64px;
+    border-radius: 18px;
+    font-size: 1.5rem;
+    padding: 14px 0;
+    box-shadow:
+      0 4px 0 var(--number-shadow),
+      0 6px 12px rgba(45, 27, 78, 0.08);
+  }
+
+  .key:active {
+    transform: translateY(3px);
+    box-shadow:
+      0 1px 0 var(--number-shadow),
+      0 2px 4px rgba(45, 27, 78, 0.06);
+  }
+
+  .key.speak {
+    border-radius: 22px;
+    gap: 4px;
+  }
+
+  .speak-visual {
+    width: 52px;
+    height: 52px;
+  }
+
+  .mouth-face {
+    width: 48px;
+    height: 48px;
+  }
+
+  .eyes {
+    gap: 12px;
+    margin-bottom: 2px;
+  }
+
+  .eye {
+    width: 8px;
+    height: 8px;
+  }
+
+  .eye::after {
+    width: 3px;
+    height: 3px;
+  }
+
+  .mouth {
+    width: 22px;
+    height: 11px;
+  }
+
+  .mouth-inner {
+    inset: 1px;
+  }
+
+  .tongue {
+    width: 10px;
+    height: 6px;
+    transform: translateY(3px);
+  }
+
+  @keyframes mouth-talk {
+    0%, 100% {
+      height: 11px;
+      width: 22px;
+    }
+    50% {
+      height: 18px;
+      width: 18px;
+    }
+  }
+
+  @keyframes tongue-wiggle {
+    0%, 100% {
+      transform: translateY(3px);
+    }
+    50% {
+      transform: translateY(0px);
+    }
+  }
+
+  .speak-label {
+    font-size: 0.9rem;
+  }
+
+  .key.equals {
+    border-radius: 22px;
+    font-size: 2rem;
+  }
+
+  .display {
+    height: clamp(100px, 16vh, 130px);
+    border-radius: 22px;
+    padding: 16px 20px;
+    gap: 6px;
+  }
+
+  .result {
+    font-size: clamp(2.4rem, 8vw, 3.2rem);
+  }
+
+  .expression {
+    font-size: clamp(1rem, 3vw, 1.3rem);
+    min-height: 1.4rem;
+  }
+
+  .history {
+    padding: 14px 16px;
+    border-radius: 20px;
+  }
+
+  .history h2 {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+
+  .history li {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    border-radius: 12px;
+  }
+
+  .history-restore {
+    padding: 5px 12px;
+    font-size: 0.8rem;
   }
 }
 
-@media (pointer: coarse) {
+/* iPhone SE / Very Small Screens (< 375px) */
+@media (max-width: 375px) {
+  body {
+    padding: 12px;
+  }
+
   .calculator {
-    grid-template-rows: auto auto minmax(160px, 1fr);
+    padding: 16px;
+    border-radius: 28px;
+    gap: 12px;
   }
 
   .keypad {
-    grid-auto-rows: minmax(72px, auto);
+    gap: 10px;
+    grid-auto-rows: minmax(56px, auto);
   }
 
   .key {
-    min-height: 72px;
-    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    min-height: 56px;
+    font-size: 1.3rem;
+    border-radius: 16px;
   }
+
+  .key.speak {
+    gap: 2px;
+  }
+
+  .speak-visual {
+    width: 40px;
+    height: 40px;
+  }
+
+  .mouth-face {
+    width: 36px;
+    height: 36px;
+  }
+
+  .eyes {
+    gap: 10px;
+    margin-bottom: 1px;
+  }
+
+  .eye {
+    width: 6px;
+    height: 6px;
+  }
+
+  .eye::after {
+    width: 2px;
+    height: 2px;
+  }
+
+  .mouth {
+    width: 16px;
+    height: 8px;
+  }
+
+  .tongue {
+    width: 8px;
+    height: 4px;
+  }
+
+  .speak-label {
+    font-size: 0.75rem;
+  }
+
+  .key.equals {
+    font-size: 1.8rem;
+  }
+
+  .display {
+    height: clamp(90px, 14vh, 110px);
+    padding: 12px 16px;
+  }
+
+  .result {
+    font-size: 2.2rem;
+  }
+
+  .history {
+    display: none;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (pointer: coarse) {
+  .key {
+    min-height: 72px;
+  }
+
+  .key:hover {
+    transform: none;
+    box-shadow:
+      0 6px 0 var(--number-shadow),
+      0 8px 16px rgba(45, 27, 78, 0.1);
+  }
+
+  .key.operator:hover {
+    box-shadow:
+      0 6px 0 var(--operator-shadow),
+      0 8px 16px rgba(255, 217, 61, 0.3);
+  }
+
+  .key.action:hover {
+    box-shadow:
+      0 6px 0 var(--action-shadow),
+      0 8px 16px rgba(107, 203, 119, 0.3);
+  }
+
+  .key.speak:hover {
+    transform: none;
+  }
+
+  .key.equals:hover {
+    box-shadow:
+      0 8px 0 var(--equals-shadow),
+      0 12px 24px rgba(155, 93, 229, 0.4);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .key,
+  .key.speak,
+  .mouth,
+  .tongue,
+  .eye,
+  .mouth-face,
+  .speak-label,
+  .history li {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Focus States for Accessibility */
+.key:focus-visible {
+  outline: 3px solid var(--equals-purple);
+  outline-offset: 3px;
+}
+
+.icon-button:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+  opacity: 1;
+}
+
+.voice-select:focus-visible,
+.voice-reset:focus-visible {
+  outline: 2px solid var(--equals-purple);
+  outline-offset: 2px;
 }

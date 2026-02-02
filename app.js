@@ -849,7 +849,7 @@ function speakCurrent() {
     speakButton.classList.add('speaking');
     const speakLabel = speakButton.querySelector('.speak-label');
     if (speakLabel) {
-      speakLabel.textContent = 'Speaking...';
+      speakLabel.textContent = 'Speaking';
     }
   }
 
@@ -858,7 +858,7 @@ function speakCurrent() {
       speakButton.classList.remove('speaking');
       const speakLabel = speakButton.querySelector('.speak-label');
       if (speakLabel) {
-        speakLabel.textContent = 'Speak!';
+        speakLabel.textContent = 'Speak';
       }
     }
   };
@@ -868,7 +868,7 @@ function speakCurrent() {
       speakButton.classList.remove('speaking');
       const speakLabel = speakButton.querySelector('.speak-label');
       if (speakLabel) {
-        speakLabel.textContent = 'Speak!';
+        speakLabel.textContent = 'Speak';
       }
     }
   };

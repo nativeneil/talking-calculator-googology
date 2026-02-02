@@ -25,7 +25,7 @@
   --btn-action-hover: #5c5c65;
   --btn-action-border: #62626b;
   --btn-equals: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  --btn-speak-bg: #0a0a0c;
+  --btn-speak-bg: #202227;
   --btn-speak-border: #f97316;
 
   /* Text Colors */
@@ -323,7 +323,7 @@ button {
     "speak four five six multiply back"
     "speak one two three minus sign"
     ". zero zero dot plus e"
-    ". equals equals equals . .";
+    ". equals equals equals equals equals";
   gap: 10px;
   grid-auto-rows: minmax(60px, auto);
 }
@@ -427,10 +427,12 @@ button {
   border-radius: 12px;
   position: relative;
   overflow: hidden;
-  border: 2px solid var(--btn-speak-border);
+  border: 4px solid var(--btn-speak-border);
   box-shadow:
-    0 0 20px rgba(249, 115, 22, 0.15),
-    inset 0 0 30px rgba(249, 115, 22, 0.03);
+    0 0 36px rgba(249, 115, 22, 0.45),
+    0 0 70px rgba(249, 115, 22, 0.28),
+    0 0 95px rgba(249, 115, 22, 0.18),
+    inset 0 0 40px rgba(249, 115, 22, 0.08);
 }
 
 .key.speak::before {
@@ -445,8 +447,10 @@ button {
 .key.speak:hover {
   border-color: #fb923c;
   box-shadow:
-    0 0 30px rgba(249, 115, 22, 0.25),
-    inset 0 0 40px rgba(249, 115, 22, 0.05);
+    0 0 44px rgba(249, 115, 22, 0.55),
+    0 0 80px rgba(249, 115, 22, 0.3),
+    0 0 110px rgba(249, 115, 22, 0.2),
+    inset 0 0 50px rgba(249, 115, 22, 0.1);
 }
 
 .key.speak:hover::before {
@@ -457,8 +461,10 @@ button {
   transform: scale(0.95);
   border-color: #fbbf24;
   box-shadow:
-    0 0 40px rgba(251, 191, 36, 0.4),
-    inset 0 0 40px rgba(251, 191, 36, 0.08);
+    0 0 58px rgba(251, 191, 36, 0.7),
+    0 0 95px rgba(251, 191, 36, 0.4),
+    0 0 125px rgba(251, 191, 36, 0.26),
+    inset 0 0 54px rgba(251, 191, 36, 0.16);
 }
 
 /* Speak Button Visual Container */
@@ -882,6 +888,14 @@ button {
   .keypad {
     gap: 8px;
     grid-auto-rows: minmax(54px, auto);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-areas:
+      "speak speak speak speak speak"
+      "seven eight nine divide clear"
+      "four five six multiply back"
+      "one two three minus sign"
+      "zero zero dot plus e"
+      "equals equals equals equals equals";
   }
 
   .key {
@@ -1130,8 +1144,10 @@ button {
   .key.speak:hover {
     border-color: var(--btn-speak-border);
     box-shadow:
-      0 0 20px rgba(249, 115, 22, 0.15),
-      inset 0 0 30px rgba(249, 115, 22, 0.03);
+      0 0 36px rgba(249, 115, 22, 0.45),
+      0 0 70px rgba(249, 115, 22, 0.28),
+      0 0 95px rgba(249, 115, 22, 0.18),
+      inset 0 0 40px rgba(249, 115, 22, 0.08);
   }
 
   .key.speak:hover::before {
@@ -1204,6 +1220,32 @@ button {
     box-shadow:
       inset 0 0 0 2px rgba(255, 255, 255, 0.2),
       0 12px 24px rgba(239, 68, 68, 0.35);
+  }
+
+  button:not(.key) {
+    position: relative;
+    overflow: hidden;
+  }
+
+  button:not(.key)::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at 50% 45%, rgba(249, 115, 22, 0.28), transparent 70%);
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.12s ease, transform 0.12s ease;
+    pointer-events: none;
+  }
+
+  button:not(.key):active::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  button:not(.key):active {
+    filter: brightness(1.08);
   }
 }
 

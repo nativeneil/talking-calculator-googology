@@ -12,8 +12,9 @@
   <script src="app.js" defer></script>
 </head>
 <body>
-  <main class="calculator">
-    <div class="topbar">
+  <main class="app">
+    <section class="calculator">
+      <div class="topbar">
       <button class="icon-button" id="voiceButton" type="button" aria-label="Voice settings" aria-expanded="false">
         <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
           <circle cx="12" cy="5" r="2" fill="currentColor"/>
@@ -38,55 +39,56 @@
         </div>
         <button class="voice-reset" id="voiceReset" type="button">Reset</button>
       </div>
-    </div>
-    <header class="display">
-      <div class="result" id="result">0</div>
-      <div class="expression" id="expression"></div>
-    </header>
+      </div>
+      <header class="display">
+        <div class="result" id="result">0</div>
+        <div class="expression" id="expression"></div>
+      </header>
 
-    <section class="keypad">
-      <button data-action="speak" class="key action speak key-speak">
-        <div class="speak-visual">
-          <div class="mouth-face" aria-hidden="true">
-            <!-- Eyes -->
-            <div class="eyes">
-              <span class="eye eye-left"></span>
-              <span class="eye eye-right"></span>
-            </div>
-            <!-- Mouth -->
-            <div class="mouth">
-              <div class="mouth-inner">
-                <div class="tongue"></div>
+      <section class="keypad">
+        <button data-action="speak" class="key action speak key-speak">
+          <div class="speak-visual">
+            <div class="mouth-face" aria-hidden="true">
+              <!-- Eyes -->
+              <div class="eyes">
+                <span class="eye eye-left"></span>
+                <span class="eye eye-right"></span>
+              </div>
+              <!-- Mouth -->
+              <div class="mouth">
+                <div class="mouth-inner">
+                  <div class="tongue"></div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <span class="speak-label">Speak</span>
-      </button>
-      <button data-action="clear" class="key action key-clear">C</button>
-      <button data-action="backspace" class="key action key-backspace">⌫</button>
-      <button data-action="operator" data-value="/" class="key operator key-divide">÷</button>
-      <button data-action="operator" data-value="*" class="key operator key-multiply">×</button>
-      <button data-action="digit" data-value="e" class="key key-e">e</button>
+          <span class="speak-label">Speak</span>
+        </button>
+        <button data-action="clear" class="key action key-clear">C</button>
+        <button data-action="backspace" class="key action key-backspace" aria-label="Backspace">⌫</button>
+        <button data-action="operator" data-value="/" class="key operator key-divide">÷</button>
+        <button data-action="operator" data-value="*" class="key operator key-multiply">×</button>
+        <button data-action="digit" data-value="e" class="key key-e">e</button>
 
-      <button data-action="digit" data-value="7" class="key key-seven">7</button>
-      <button data-action="digit" data-value="8" class="key key-eight">8</button>
-      <button data-action="digit" data-value="9" class="key key-nine">9</button>
-      <button data-action="operator" data-value="-" class="key operator key-minus">−</button>
-      <button data-action="toggle-sign" class="key action key-sign">+/-</button>
+        <button data-action="digit" data-value="7" class="key key-seven">7</button>
+        <button data-action="digit" data-value="8" class="key key-eight">8</button>
+        <button data-action="digit" data-value="9" class="key key-nine">9</button>
+        <button data-action="operator" data-value="-" class="key operator key-minus">−</button>
+        <button data-action="toggle-sign" class="key action key-sign">+/-</button>
 
-      <button data-action="digit" data-value="4" class="key key-four">4</button>
-      <button data-action="digit" data-value="5" class="key key-five">5</button>
-      <button data-action="digit" data-value="6" class="key key-six">6</button>
-      <button data-action="operator" data-value="+" class="key operator key-plus">+</button>
+        <button data-action="digit" data-value="4" class="key key-four">4</button>
+        <button data-action="digit" data-value="5" class="key key-five">5</button>
+        <button data-action="digit" data-value="6" class="key key-six">6</button>
+        <button data-action="operator" data-value="+" class="key operator key-plus">+</button>
 
-      <button data-action="digit" data-value="1" class="key key-one">1</button>
-      <button data-action="digit" data-value="2" class="key key-two">2</button>
-      <button data-action="digit" data-value="3" class="key key-three">3</button>
-      <button data-action="equals" class="key equals key-equals">=</button>
+        <button data-action="digit" data-value="1" class="key key-one">1</button>
+        <button data-action="digit" data-value="2" class="key key-two">2</button>
+        <button data-action="digit" data-value="3" class="key key-three">3</button>
+        <button data-action="equals" class="key equals key-equals">=</button>
 
-      <button data-action="digit" data-value="0" class="key key-zero">0</button>
-      <button data-action="digit" data-value="." class="key key-dot">.</button>
+        <button data-action="digit" data-value="0" class="key key-zero">0</button>
+        <button data-action="digit" data-value="." class="key key-dot">.</button>
+      </section>
     </section>
 
     <section class="history">

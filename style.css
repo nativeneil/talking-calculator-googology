@@ -52,6 +52,7 @@
   --shadow-panel: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
   --shadow-btn: 0 2px 4px rgba(0, 0, 0, 0.2);
   --shadow-glow: 0 0 40px var(--accent-glow);
+  --page-padding: 24px;
 }
 
 * {
@@ -67,7 +68,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 24px;
+  padding: var(--page-padding);
   touch-action: manipulation;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
@@ -76,10 +77,10 @@ body {
 
 @supports (padding: env(safe-area-inset-top)) {
   body {
-    padding-top: max(24px, env(safe-area-inset-top));
-    padding-bottom: max(24px, env(safe-area-inset-bottom));
-    padding-left: max(24px, env(safe-area-inset-left));
-    padding-right: max(24px, env(safe-area-inset-right));
+    padding-top: max(var(--page-padding), env(safe-area-inset-top));
+    padding-bottom: max(var(--page-padding), env(safe-area-inset-bottom));
+    padding-left: max(var(--page-padding), env(safe-area-inset-left));
+    padding-right: max(var(--page-padding), env(safe-area-inset-right));
   }
 }
 
@@ -92,8 +93,15 @@ button {
   -webkit-tap-highlight-color: transparent;
 }
 
-.calculator {
+.app {
   width: min(940px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.calculator {
+  width: 100%;
   background: var(--panel-color);
   border: 1px solid var(--panel-border);
   border-radius: 16px;
@@ -101,11 +109,13 @@ button {
   padding: 36px 24px 24px;
   display: grid;
   gap: 20px;
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: auto 1fr;
   position: relative;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
   user-select: none;
+  flex-shrink: 0;
+  height: calc(100vh - (var(--page-padding) * 2));
 }
 
 /* Status indicator - top left */
@@ -324,7 +334,7 @@ button {
   border-radius: 10px;
   padding: 16px 0;
   font-family: var(--font-body);
-  font-size: clamp(1.25rem, 3.5vw, 1.5rem);
+  font-size: clamp(1.6rem, 4.4vw, 1.95rem);
   font-weight: 600;
   background: var(--btn-number);
   color: var(--text-primary);
@@ -348,11 +358,24 @@ button {
   transition: transform 0.05s ease, background 0.05s ease;
 }
 
+.key-backspace svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+  margin: 0 auto;
+}
+
+.key-backspace {
+  display: grid;
+  place-items: center;
+}
+
 /* Operator Buttons - Orange accent */
 .key.operator {
   background: var(--btn-operator);
   color: var(--text-on-accent);
   font-weight: 700;
+  font-size: clamp(1.85rem, 5vw, 2.4rem);
   border-color: var(--btn-operator);
   box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
 }
@@ -444,8 +467,8 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
+  width: 60px;
+  height: 60px;
 }
 
 /* Speak Visual - Friendly Robot */
@@ -591,7 +614,7 @@ button {
 /* Speak Label - Orange */
 .speak-label {
   font-family: var(--font-display);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -612,7 +635,7 @@ button {
   background: var(--btn-equals);
   color: white;
   grid-area: equals;
-  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-size: clamp(1.85rem, 4.8vw, 2.5rem);
   font-weight: 700;
   border-radius: 10px;
   border: none;
@@ -741,6 +764,10 @@ button {
 
 /* iPad Optimizations (768px+) */
 @media (min-width: 768px) {
+  .app {
+    gap: 24px;
+  }
+
   .calculator {
     padding: 40px 28px 28px;
     border-radius: 20px;
@@ -754,7 +781,7 @@ button {
   .key {
     min-height: 72px;
     border-radius: 12px;
-    font-size: 1.5rem;
+    font-size: 1.85rem;
   }
 
   .key.speak {
@@ -762,7 +789,7 @@ button {
   }
 
   .key.equals {
-    font-size: 2rem;
+    font-size: 2.15rem;
     border-radius: 12px;
   }
 
@@ -777,8 +804,8 @@ button {
   }
 
   .speak-visual {
-    width: 64px;
-    height: 64px;
+    width: 70px;
+    height: 70px;
   }
 
   .mouth-face {
@@ -808,7 +835,7 @@ button {
   }
 
   .speak-label {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
   }
 
   .history {
@@ -826,6 +853,10 @@ button {
 @media (max-width: 767px) {
   body {
     padding: 16px;
+  }
+
+  .app {
+    gap: 16px;
   }
 
   .calculator {
@@ -855,7 +886,7 @@ button {
   .key {
     min-height: 54px;
     border-radius: 8px;
-    font-size: 1.25rem;
+    font-size: 1.6rem;
     padding: 12px 0;
   }
 
@@ -865,8 +896,8 @@ button {
   }
 
   .speak-visual {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
   }
 
   .mouth-face {
@@ -903,12 +934,12 @@ button {
   }
 
   .speak-label {
-    font-size: 0.6rem;
+    font-size: 0.65rem;
   }
 
   .key.equals {
     border-radius: 8px;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
   }
 
   .display {
@@ -955,6 +986,10 @@ button {
     padding: 12px;
   }
 
+  .app {
+    gap: 12px;
+  }
+
   .calculator {
     padding: 12px;
     border-radius: 12px;
@@ -972,7 +1007,7 @@ button {
 
   .key {
     min-height: 48px;
-    font-size: 1.1rem;
+    font-size: 1.4rem;
     border-radius: 6px;
   }
 
@@ -981,8 +1016,8 @@ button {
   }
 
   .speak-visual {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
   }
 
   .mouth-face {
@@ -1009,11 +1044,11 @@ button {
   }
 
   .speak-label {
-    font-size: 0.55rem;
+    font-size: 0.6rem;
   }
 
   .key.equals {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
   }
 
   .display {
@@ -1032,8 +1067,29 @@ button {
 
 /* Touch Device Optimizations */
 @media (pointer: coarse) {
+  body {
+    min-height: 100svh;
+    justify-content: flex-start;
+    align-items: stretch;
+  }
+
+  .app {
+    min-height: 100svh;
+  }
+
+  .calculator {
+    height: calc(100svh - (var(--page-padding) * 2));
+    flex: 0 0 auto;
+  }
+
+  .keypad {
+    align-content: stretch;
+    grid-auto-rows: minmax(60px, 1fr);
+  }
+
   .key {
     min-height: 60px;
+    -webkit-tap-highlight-color: rgba(249, 115, 22, 0.2);
   }
 
   .key:hover {
@@ -1089,6 +1145,34 @@ button {
   .key.equals:hover {
     box-shadow: 0 0 20px rgba(239, 68, 68, 0.25);
     transform: none;
+  }
+
+  .icon-button {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.12);
+  }
+
+  .icon-button:active {
+    background: rgba(0, 0, 0, 0.1);
+    transform: scale(0.95);
+  }
+
+  .key:active {
+    transform: scale(0.96);
+    filter: brightness(1.08);
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.08);
+  }
+
+  .key.operator:active {
+    filter: brightness(1.05);
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.12);
+  }
+
+  .key.action:active {
+    filter: brightness(1.1);
+  }
+
+  .key.equals:active {
+    filter: brightness(1.08);
   }
 }
 

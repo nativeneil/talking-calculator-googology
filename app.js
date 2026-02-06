@@ -45,6 +45,19 @@ const digitWords = [
   "nine",
 ];
 
+const tensDigitWords = [
+  "",
+  "ten",
+  "twenty",
+  "thirty",
+  "forty",
+  "fifty",
+  "sixty",
+  "seventy",
+  "eighty",
+  "ninety",
+];
+
 const scaleNames = [
   "",
   "thousand",
@@ -495,6 +508,37 @@ function parseScientificExponent(exponentText) {
   } catch (error) {
     return null;
   }
+}
+
+function combineMantissaWithPowerName(mantissaWords, powerName) {
+  if (!mantissaWords) {
+    return "";
+  }
+
+  if (powerName.includes(" ")) {
+    if (mantissaWords === "one") {
+      return powerName;
+    }
+    if (mantissaWords === "negative one") {
+      return `negative ${powerName}`;
+    }
+
+    const isNegative = mantissaWords.startsWith("negative ");
+    const baseMantissa = isNegative ? mantissaWords.slice("negative ".length) : mantissaWords;
+    const digitIndex = digitWords.indexOf(baseMantissa);
+    if (digitIndex >= 2) {
+      if (powerName.startsWith("ten ")) {
+        const rest = powerName.slice(4);
+        return `${isNegative ? "negative " : ""}${tensDigitWords[digitIndex]} ${rest}`.trim();
+      }
+      if (powerName.startsWith("one hundred ")) {
+        const rest = powerName.slice("one hundred ".length);
+        return `${isNegative ? "negative " : ""}${digitWords[digitIndex]} hundred ${rest}`.trim();
+      }
+    }
+  }
+
+  return `${mantissaWords} ${powerName}`.trim();
 }
 
 function getPowerOfTenName(valueStr) {
@@ -1105,7 +1149,7 @@ function speakCurrent() {
 
 function makeSpeechFriendlyUtteranceText(text) {
   return text.replace(/\b[a-z]+illion\b/gi, (word) => {
-    if (!/milli/i.test(word)) {
+    if (!/milli/i.test(word) || word.length < 15) {
       return word;
     }
     return word
@@ -1175,15 +1219,7 @@ function numberToWords(valueStr) {
     if (powerName) {
       const mantissaWords = basicNumberToWords(`${scientificMatch[1]}${mantissa}`);
       if (mantissaWords) {
-        if (powerName.includes(" ")) {
-          if (mantissaWords === "one") {
-            return powerName;
-          }
-          if (mantissaWords === "negative one") {
-            return `negative ${powerName}`;
-          }
-        }
-        return `${mantissaWords} ${powerName}`.trim();
+        return combineMantissaWithPowerName(mantissaWords, powerName);
       }
     }
   }
@@ -1215,6 +1251,15 @@ function numberToWords(valueStr) {
           return `${prefix}${namedPower}`.trim();
         }
         return `${prefix}one ${namedPower}`.trim();
+      }
+      const digitNumber = Number(digit);
+      if (namedPower.startsWith("ten ")) {
+        const rest = namedPower.slice(4);
+        return `${prefix}${tensDigitWords[digitNumber]} ${rest}`.trim();
+      }
+      if (namedPower.startsWith("one hundred ")) {
+        const rest = namedPower.slice("one hundred ".length);
+        return `${prefix}${digitWords[digitNumber]} hundred ${rest}`.trim();
       }
       return `${prefix}${digitWords[Number(digit)]} ${namedPower}`.trim();
     }

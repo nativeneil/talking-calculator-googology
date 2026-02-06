@@ -282,6 +282,221 @@ const googolismPowerNames = {
   3003: "millillion",
 };
 
+const standardSmallIllionNames = {
+  1: "million",
+  2: "billion",
+  3: "trillion",
+  4: "quadrillion",
+  5: "quintillion",
+  6: "sextillion",
+  7: "septillion",
+  8: "octillion",
+  9: "nonillion",
+  10: "decillion",
+};
+
+const latinUnitsPrefixes = [
+  "",
+  "un",
+  "duo",
+  "tres",
+  "quattuor",
+  "quin",
+  "sex",
+  "septen",
+  "octo",
+  "novem",
+];
+
+const latinTensPrefixes = [
+  "",
+  "deci",
+  "viginti",
+  "triginta",
+  "quadraginta",
+  "quinquaginta",
+  "sexaginta",
+  "septuaginta",
+  "octoginta",
+  "nonaginta",
+];
+
+const latinHundredsPrefixes = [
+  "",
+  "centi",
+  "ducenti",
+  "trecenti",
+  "quadringenti",
+  "quingenti",
+  "sescenti",
+  "septingenti",
+  "octingenti",
+  "nongenti",
+];
+
+function normalizeNonNegativeExponent(exponentValue) {
+  if (typeof exponentValue === "bigint") {
+    return exponentValue >= 0n ? exponentValue : null;
+  }
+  if (typeof exponentValue === "number") {
+    if (!Number.isFinite(exponentValue) || exponentValue < 0 || !Number.isInteger(exponentValue)) {
+      return null;
+    }
+    return BigInt(exponentValue);
+  }
+  if (typeof exponentValue === "string" && /^\+?\d+$/.test(exponentValue)) {
+    return BigInt(exponentValue);
+  }
+  return null;
+}
+
+function toSafeNumber(bigintValue) {
+  if (bigintValue > BigInt(Number.MAX_SAFE_INTEGER)) {
+    return null;
+  }
+  return Number(bigintValue);
+}
+
+function getOverridePowerName(exponentValue) {
+  const safeExponent = toSafeNumber(exponentValue);
+  if (safeExponent === null) {
+    return null;
+  }
+  return googolismPowerNames[safeExponent] || null;
+}
+
+function applyRepoDialectSmoothing(prefix) {
+  let smoothed = prefix;
+  smoothed = smoothed.replace(/tre(?=[aeiou])/g, "tres");
+  smoothed = smoothed.replace(/([aeiou])\1+/g, "$1");
+  return smoothed;
+}
+
+function finalizeIllionName(prefix) {
+  const smoothedPrefix = applyRepoDialectSmoothing(prefix);
+  let name = `${smoothedPrefix}illion`;
+  name = name.replace(/([ai])illion$/, "illion");
+  name = name.replace(/([aeiou])\1+/g, "$1");
+  return name;
+}
+
+function buildLatinPrefixUnderOneThousand(value) {
+  if (!Number.isInteger(value) || value < 0 || value > 999) {
+    return "";
+  }
+  if (value === 0) {
+    return "";
+  }
+
+  const units = value % 10;
+  const tens = Math.floor(value / 10) % 10;
+  const hundreds = Math.floor(value / 100);
+  return `${latinUnitsPrefixes[units]}${latinTensPrefixes[tens]}${latinHundredsPrefixes[hundreds]}`;
+}
+
+function buildMilliaChainPrefix(index) {
+  if (index < 1000n) {
+    return buildLatinPrefixUnderOneThousand(Number(index));
+  }
+
+  const higher = index / 1000n;
+  const lower = Number(index % 1000n);
+  const higherPrefix = higher === 1n ? "" : buildMilliaChainPrefix(higher);
+  const lowerPrefix = lower === 0 ? "n" : buildLatinPrefixUnderOneThousand(lower);
+  return `${higherPrefix}milli${lowerPrefix}`;
+}
+
+function buildIllionNameFromIndex(indexValue) {
+  const index = normalizeNonNegativeExponent(indexValue);
+  if (index === null || index < 1n) {
+    return null;
+  }
+
+  const safeIndex = toSafeNumber(index);
+  if (safeIndex !== null) {
+    const smallName = standardSmallIllionNames[safeIndex];
+    if (smallName) {
+      return smallName;
+    }
+    if (safeIndex <= 999) {
+      return finalizeIllionName(buildLatinPrefixUnderOneThousand(safeIndex));
+    }
+  }
+
+  const prefix = buildMilliaChainPrefix(index);
+  if (!prefix) {
+    return null;
+  }
+  return finalizeIllionName(prefix);
+}
+
+function getScaleNameByScaleIndex(scaleIndexValue) {
+  const scaleIndex = normalizeNonNegativeExponent(scaleIndexValue);
+  if (scaleIndex === null) {
+    return null;
+  }
+  if (scaleIndex === 0n) {
+    return "";
+  }
+  if (scaleIndex === 1n) {
+    return "thousand";
+  }
+
+  const exponent = scaleIndex * 3n;
+  const overrideName = getOverridePowerName(exponent);
+  if (overrideName) {
+    return overrideName;
+  }
+
+  const safeScaleIndex = toSafeNumber(scaleIndex);
+  if (safeScaleIndex !== null && safeScaleIndex < scaleNames.length) {
+    return scaleNames[safeScaleIndex];
+  }
+
+  return buildIllionNameFromIndex(scaleIndex - 1n);
+}
+
+function resolvePowerNameFromExponent(exponentValue, options = {}) {
+  const { allowNearestLower = false } = options;
+  const exponent = normalizeNonNegativeExponent(exponentValue);
+  if (exponent === null) {
+    return null;
+  }
+
+  const overrideName = getOverridePowerName(exponent);
+  if (overrideName) {
+    return overrideName;
+  }
+
+  const mod = exponent % 3n;
+  if (mod === 0n) {
+    return getScaleNameByScaleIndex(exponent / 3n);
+  }
+  if (!allowNearestLower || exponent < 3n) {
+    return null;
+  }
+
+  const lowerScaleName = getScaleNameByScaleIndex((exponent - mod) / 3n);
+  if (!lowerScaleName) {
+    return null;
+  }
+  if (mod === 1n) {
+    return `ten ${lowerScaleName}`.trim();
+  }
+  return `one hundred ${lowerScaleName}`.trim();
+}
+
+function parseScientificExponent(exponentText) {
+  if (!/^[+-]?\d+$/.test(exponentText)) {
+    return null;
+  }
+  try {
+    return BigInt(exponentText);
+  } catch (error) {
+    return null;
+  }
+}
+
 function getPowerOfTenName(valueStr) {
   if (!/^[1-9]\d*$/.test(valueStr)) {
     return null;
@@ -292,15 +507,18 @@ function getPowerOfTenName(valueStr) {
     return null;
   }
 
-  const exponent = match[1].length;
-  const namedPower = googolismPowerNames[exponent];
+  const exponent = BigInt(match[1].length);
+  const namedPower = resolvePowerNameFromExponent(exponent, { allowNearestLower: true });
   if (!namedPower) {
     return null;
   }
-  if (exponent === 1) {
+  if (namedPower.includes(" ")) {
     return namedPower;
   }
-  return `one ${namedPower}`.trim();
+  if (exponent === 1n) {
+    return namedPower;
+  }
+  return `one ${namedPower}`;
 }
 
 function updateDisplay() {
@@ -331,10 +549,13 @@ function saveSelectedVoiceName(name) {
 }
 
 function getStoredVoiceSettings() {
+  const storedRate = localStorage.getItem("voiceRate");
+  const storedPitch = localStorage.getItem("voicePitch");
+  const storedVolume = localStorage.getItem("voiceVolume");
   return {
-    rate: Number(localStorage.getItem("voiceRate")) || defaultVoiceSettings.rate,
-    pitch: Number(localStorage.getItem("voicePitch")) || defaultVoiceSettings.pitch,
-    volume: Number(localStorage.getItem("voiceVolume")) || defaultVoiceSettings.volume,
+    rate: storedRate !== null ? Number(storedRate) : defaultVoiceSettings.rate,
+    pitch: storedPitch !== null ? Number(storedPitch) : defaultVoiceSettings.pitch,
+    volume: storedVolume !== null ? Number(storedVolume) : defaultVoiceSettings.volume,
   };
 }
 
@@ -648,6 +869,11 @@ function handleOperator(operator) {
   if (lastAction === "equals") {
     lastExpression = "";
   }
+  if (currentInput.endsWith("e") && operator === "-") {
+    currentInput += "-";
+    updateDisplay();
+    return;
+  }
   if (currentInput.endsWith("e")) {
     return;
   }
@@ -914,18 +1140,36 @@ function numberToWords(valueStr) {
     return "";
   }
 
-  if (valueStr.toLowerCase().includes("error")) {
+  const trimmedLower = valueStr.trim().toLowerCase();
+  if (trimmedLower === "infinity" || trimmedLower === "+infinity") {
+    return "infinity and beyond!";
+  }
+  if (trimmedLower === "-infinity") {
+    return "negative infinity and beyond!";
+  }
+
+  if (trimmedLower.includes("error")) {
     return "error";
   }
 
   const scientificMatch = valueStr.trim().match(/^(-?)([0-9]*\.?[0-9]+)[eE]([+-]?\d+)$/);
   if (scientificMatch) {
     const mantissa = scientificMatch[2];
-    const exponent = Number(scientificMatch[3]);
-    const powerName = exponent >= 0 ? googolismPowerNames[exponent] : null;
+    const exponent = parseScientificExponent(scientificMatch[3]);
+    const powerName = exponent !== null && exponent > 0n
+      ? resolvePowerNameFromExponent(exponent, { allowNearestLower: true })
+      : null;
     if (powerName) {
       const mantissaWords = basicNumberToWords(`${scientificMatch[1]}${mantissa}`);
       if (mantissaWords) {
+        if (powerName.includes(" ")) {
+          if (mantissaWords === "one") {
+            return powerName;
+          }
+          if (mantissaWords === "negative one") {
+            return `negative ${powerName}`;
+          }
+        }
         return `${mantissaWords} ${powerName}`.trim();
       }
     }
@@ -951,10 +1195,10 @@ function numberToWords(valueStr) {
   if (singleDigitPowerMatch) {
     const digit = singleDigitPowerMatch[1];
     const exponent = normalized.length - 1;
-    const namedPower = googolismPowerNames[exponent];
+    const namedPower = resolvePowerNameFromExponent(exponent, { allowNearestLower: false });
     if (namedPower) {
       if (digit === "1") {
-        if (exponent === 1) {
+        if (exponent === 1 || namedPower.includes(" ")) {
           return `${prefix}${namedPower}`.trim();
         }
         return `${prefix}one ${namedPower}`.trim();
@@ -1043,14 +1287,9 @@ function integerToWords(intStr) {
     groups.unshift(intStr.slice(start, i));
   }
 
-  const maxScaleIndex = scaleNames.length - 1;
-  const maxGroupIndex = groups.length - 1;
-  if (maxGroupIndex > maxScaleIndex) {
-    return `unnamed number, ten to the power of ${intStr.length - 1}`;
-  }
-
   const words = [];
   let lastGroupValue = 0;
+  let hasMissingScale = false;
 
   groups.forEach((group, index) => {
     const value = Number(group);
@@ -1063,7 +1302,11 @@ function integerToWords(intStr) {
     }
 
     let groupWords = convertHundreds(value);
-    const scale = scaleNames[scaleIndex];
+    const scale = getScaleNameByScaleIndex(BigInt(scaleIndex));
+    if (scale === null) {
+      hasMissingScale = true;
+      return;
+    }
     if (scale) {
       groupWords += ` ${scale}`;
     }
@@ -1072,6 +1315,10 @@ function integerToWords(intStr) {
       lastGroupValue = value;
     }
   });
+
+  if (hasMissingScale) {
+    return `unnamed number, ten to the power of ${intStr.length - 1}`;
+  }
 
   if (words.length > 1 && lastGroupValue > 0 && lastGroupValue < 100) {
     const last = words.pop();

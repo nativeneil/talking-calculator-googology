@@ -1053,11 +1053,12 @@ function speakCurrent() {
   if (!text) {
     return;
   }
+  const speechText = makeSpeechFriendlyUtteranceText(text);
 
   const speakButton = document.querySelector('.key.speak');
 
   window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
+  const utterance = new SpeechSynthesisUtterance(speechText);
   const voices = window.speechSynthesis.getVoices();
   const selectedVoice = voices.find((voice) => voice.name === selectedVoiceName);
   const fallbackVoice = voices.find((voice) => voice.lang && voice.lang.startsWith("en-GB"));
@@ -1100,6 +1101,18 @@ function speakCurrent() {
   };
 
   window.speechSynthesis.speak(utterance);
+}
+
+function makeSpeechFriendlyUtteranceText(text) {
+  return text.replace(/\b[a-z]+illion\b/gi, (word) => {
+    if (!/milli/i.test(word)) {
+      return word;
+    }
+    return word
+      .replace(/milli/gi, " milli ")
+      .replace(/\s+/g, " ")
+      .trim();
+  });
 }
 
 function basicNumberToWords(valueStr) {

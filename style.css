@@ -67,17 +67,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-<<<<<<< HEAD
-  min-height: 100vh;
-  padding: var(--page-padding);
-=======
   min-height: 100dvh;
-  padding: 24px;
-  padding-top: max(24px, env(safe-area-inset-top));
-  padding-bottom: max(24px, env(safe-area-inset-bottom));
-  padding-left: max(24px, env(safe-area-inset-left));
-  padding-right: max(24px, env(safe-area-inset-right));
->>>>>>> 7a24bf0 (Fix iPhone layout overflow)
+  padding: var(--page-padding);
   touch-action: manipulation;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
@@ -117,7 +108,6 @@ button {
   box-shadow: var(--shadow-panel);
   padding: 36px 24px 24px;
   display: grid;
-<<<<<<< HEAD
   gap: 20px;
   grid-template-rows: auto 1fr;
   position: relative;
@@ -125,11 +115,6 @@ button {
   -webkit-touch-callout: none;
   user-select: none;
   flex-shrink: 0;
-  height: calc(100vh - (var(--page-padding) * 2));
-=======
-  gap: 24px;
-  grid-template-rows: auto auto auto minmax(0, 1fr);
->>>>>>> 7a24bf0 (Fix iPhone layout overflow)
 }
 
 /* Status indicator - top left */
@@ -779,7 +764,6 @@ button {
   color: white;
 }
 
-<<<<<<< HEAD
 .history-restore:active {
   transform: scale(0.95);
 }
@@ -793,70 +777,14 @@ button {
   .calculator {
     padding: 40px 28px 28px;
     border-radius: 20px;
+    height: calc(100dvh - (var(--page-padding) * 2));
   }
 
   .keypad {
     gap: 12px;
-=======
-@media (max-width: 640px) {
-  body {
-    align-items: flex-start;
-    padding: 10px;
-    padding-top: max(10px, env(safe-area-inset-top));
-    padding-bottom: max(10px, env(safe-area-inset-bottom));
-    padding-left: max(10px, env(safe-area-inset-left));
-    padding-right: max(10px, env(safe-area-inset-right));
-  }
-
-  .calculator {
-    width: 100%;
-    padding: 14px;
-    border-radius: 20px;
-    gap: 12px;
-    max-height: calc(100dvh - max(10px, env(safe-area-inset-top)) - max(10px, env(safe-area-inset-bottom)));
-    overflow: hidden;
-    grid-template-rows: auto auto auto minmax(96px, 1fr);
   }
 
   .keypad {
-    gap: 8px;
-    grid-auto-rows: minmax(52px, auto);
-  }
-
-  .key {
-    min-height: 52px;
-    padding: 12px 0;
-    font-size: clamp(1.1rem, 5.2vw, 1.5rem);
-  }
-
-  .key.speak svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  .key.equals {
-    font-size: clamp(1.2rem, 5.5vw, 1.7rem);
-    padding: 14px 0;
-  }
-
-  .display {
-    height: clamp(96px, 20vh, 124px);
-    padding: 14px 16px;
-  }
-
-  .history {
-    padding: 12px;
-    min-height: 96px;
-  }
-}
-
-@media (pointer: coarse) and (min-width: 641px) {
-  .calculator {
-    grid-template-rows: auto auto auto minmax(120px, 1fr);
-  }
-
-  .keypad {
->>>>>>> 7a24bf0 (Fix iPhone layout overflow)
     grid-auto-rows: minmax(72px, auto);
   }
 
@@ -934,7 +862,13 @@ button {
 /* iPhone Optimizations (< 768px) */
 @media (max-width: 767px) {
   body {
-    padding: 16px;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 12px;
+    padding-top: max(12px, env(safe-area-inset-top));
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
   }
 
   .app {
@@ -946,6 +880,7 @@ button {
     padding: 32px 16px 16px;
     border-radius: 14px;
     gap: 14px;
+    height: auto;
   }
 
   .calculator::before {
@@ -1156,20 +1091,11 @@ button {
 }
 
 /* Touch Device Optimizations */
-@media (pointer: coarse) {
+@media (pointer: coarse) and (min-width: 768px) {
   body {
     min-height: 100svh;
     justify-content: flex-start;
     align-items: stretch;
-  }
-
-  .app {
-    min-height: 100svh;
-  }
-
-  .calculator {
-    height: calc(100svh - (var(--page-padding) * 2));
-    flex: 0 0 auto;
   }
 
   body {

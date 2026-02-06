@@ -880,7 +880,8 @@ button {
     padding: 32px 16px 16px;
     border-radius: 14px;
     gap: 14px;
-    height: auto;
+    min-height: calc(100dvh - max(12px, env(safe-area-inset-top)) - max(12px, env(safe-area-inset-bottom)));
+    align-content: start;
   }
 
   .calculator::before {
@@ -1019,6 +1020,7 @@ button {
     padding: 12px;
     border-radius: 12px;
     gap: 10px;
+    min-height: calc(100dvh - max(12px, env(safe-area-inset-top)) - max(12px, env(safe-area-inset-bottom)));
   }
 
   .calculator::before {
@@ -1086,7 +1088,7 @@ button {
   }
 
   .history {
-    display: none;
+    display: flex;
   }
 }
 

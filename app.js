@@ -515,26 +515,24 @@ function combineMantissaWithPowerName(mantissaWords, powerName) {
     return "";
   }
 
-  if (powerName.includes(" ")) {
-    if (mantissaWords === "one") {
-      return powerName;
-    }
-    if (mantissaWords === "negative one") {
-      return `negative ${powerName}`;
-    }
+  if (mantissaWords === "one") {
+    return powerName;
+  }
+  if (mantissaWords === "negative one") {
+    return `negative ${powerName}`;
+  }
 
-    const isNegative = mantissaWords.startsWith("negative ");
-    const baseMantissa = isNegative ? mantissaWords.slice("negative ".length) : mantissaWords;
-    const digitIndex = digitWords.indexOf(baseMantissa);
-    if (digitIndex >= 2) {
-      if (powerName.startsWith("ten ")) {
-        const rest = powerName.slice(4);
-        return `${isNegative ? "negative " : ""}${tensDigitWords[digitIndex]} ${rest}`.trim();
-      }
-      if (powerName.startsWith("one hundred ")) {
-        const rest = powerName.slice("one hundred ".length);
-        return `${isNegative ? "negative " : ""}${digitWords[digitIndex]} hundred ${rest}`.trim();
-      }
+  const isNegative = mantissaWords.startsWith("negative ");
+  const baseMantissa = isNegative ? mantissaWords.slice("negative ".length) : mantissaWords;
+  const digitIndex = digitWords.indexOf(baseMantissa);
+  if (digitIndex >= 2) {
+    if (powerName === "ten" || powerName.startsWith("ten ")) {
+      const rest = powerName === "ten" ? "" : powerName.slice(4);
+      return `${isNegative ? "negative " : ""}${tensDigitWords[digitIndex]}${rest ? ` ${rest}` : ""}`.trim();
+    }
+    if (powerName.startsWith("one hundred ")) {
+      const rest = powerName.slice("one hundred ".length);
+      return `${isNegative ? "negative " : ""}${digitWords[digitIndex]} hundred ${rest}`.trim();
     }
   }
 
@@ -1253,9 +1251,9 @@ function numberToWords(valueStr) {
         return `${prefix}one ${namedPower}`.trim();
       }
       const digitNumber = Number(digit);
-      if (namedPower.startsWith("ten ")) {
-        const rest = namedPower.slice(4);
-        return `${prefix}${tensDigitWords[digitNumber]} ${rest}`.trim();
+      if (namedPower === "ten" || namedPower.startsWith("ten ")) {
+        const rest = namedPower === "ten" ? "" : namedPower.slice(4);
+        return `${prefix}${tensDigitWords[digitNumber]}${rest ? ` ${rest}` : ""}`.trim();
       }
       if (namedPower.startsWith("one hundred ")) {
         const rest = namedPower.slice("one hundred ".length);

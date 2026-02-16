@@ -874,6 +874,10 @@ function isOperator(token) {
   return token === "+" || token === "-" || token === "*" || token === "/";
 }
 
+function hasUsableLastResult() {
+  return lastResult !== "" && !lastResult.toLowerCase().includes("error");
+}
+
 function handleDigit(value) {
   if (lastAction === "equals") {
     tokens = [];
@@ -920,7 +924,7 @@ function handleOperator(operator) {
     return;
   }
 
-  if (!currentInput && tokens.length === 0 && lastResult) {
+  if (!currentInput && tokens.length === 0 && hasUsableLastResult()) {
     tokens = [lastResult];
   }
 
@@ -968,7 +972,7 @@ function toggleSign() {
     return;
   }
 
-  if (lastResult) {
+  if (hasUsableLastResult()) {
     currentInput = lastResult.startsWith("-")
       ? lastResult.slice(1)
       : `-${lastResult}`;

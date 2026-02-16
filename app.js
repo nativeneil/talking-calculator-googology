@@ -920,14 +920,14 @@ function handleOperator(operator) {
     return;
   }
 
+  if (!currentInput && tokens.length === 0 && lastResult) {
+    tokens = [lastResult];
+  }
+
   if (!currentInput && (tokens.length === 0 || isOperator(tokens[tokens.length - 1])) && operator === "-") {
     currentInput = "-";
     updateDisplay();
     return;
-  }
-
-  if (!currentInput && tokens.length === 0 && lastResult) {
-    tokens = [lastResult];
   }
 
   if (currentInput) {

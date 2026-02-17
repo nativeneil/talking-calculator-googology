@@ -912,8 +912,12 @@ function handleDigit(value) {
 }
 
 function handleOperator(operator) {
+  if (lastAction === "equals" && !currentInput && tokens.length === 0 && hasUsableLastResult()) {
+    tokens = [lastResult];
+  }
   if (lastAction === "equals") {
     lastExpression = "";
+    lastAction = null;
   }
   if (currentInput.endsWith("e") && operator === "-") {
     currentInput += "-";
@@ -922,10 +926,6 @@ function handleOperator(operator) {
   }
   if (currentInput.endsWith("e")) {
     return;
-  }
-
-  if (!currentInput && tokens.length === 0 && hasUsableLastResult()) {
-    tokens = [lastResult];
   }
 
   if (!currentInput && (tokens.length === 0 || isOperator(tokens[tokens.length - 1])) && operator === "-") {

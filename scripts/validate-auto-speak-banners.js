@@ -259,27 +259,30 @@ async function createHarness() {
 }
 
 (async () => {
+  const specialMathUrl = `${pathToFileURL(path.resolve("js/special-math.js")).href}?test=${Date.now()}`;
+  const { specialMathPhrases } = await import(specialMathUrl);
   const h = await createHarness();
   let failed = false;
 
   h.runExpression(["1", "/", "0", "="]);
   const lastInfinitySpeech = h.spoken[h.spoken.length - 1];
-  const infinityExpected = "Warp jump! Dividing by zero launched us to infinity.";
-  const infinityPass = lastInfinitySpeech === infinityExpected;
+  const infinityPass = specialMathPhrases.LESSON_DIVIDE_BY_ZERO.includes(lastInfinitySpeech);
   console.log(`[auto-speak] infinity equals speaks banner: ${infinityPass ? "PASS" : "FAIL"}`);
   if (!infinityPass) {
-    console.log(`  expected: ${infinityExpected}`);
+    console.log(`  expected one of: ${JSON.stringify(specialMathPhrases.LESSON_DIVIDE_BY_ZERO)}`);
     console.log(`  received: ${lastInfinitySpeech}`);
     failed = true;
   }
 
   const beforeMeme = h.spoken.length;
   h.runExpression(["6", "*", "7", "="]);
-  const memeExpected = "42 detected: six is still side-eyeing seven for eating nine.";
-  const memePass = h.spoken.length === beforeMeme + 1 && h.spoken[h.spoken.length - 1] === memeExpected;
+  const memePass = (
+    h.spoken.length === beforeMeme + 1 &&
+    h.spoken[h.spoken.length - 1] === specialMathPhrases.BANNER_SIX_SEVEN_MEME
+  );
   console.log(`[auto-speak] meme 6*7 auto-speaks banner: ${memePass ? "PASS" : "FAIL"}`);
   if (!memePass) {
-    console.log(`  expected: ${memeExpected}`);
+    console.log(`  expected: ${specialMathPhrases.BANNER_SIX_SEVEN_MEME}`);
     console.log(`  received: ${h.spoken[h.spoken.length - 1]}`);
     failed = true;
   }

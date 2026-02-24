@@ -39,6 +39,7 @@ These notes define the behavior contract for future Swift/iOS implementation.
 - Indeterminate/Error: `Mission unknown: this infinity move is indeterminate.`
 - Infinity fallback: `Deep space math: still infinity!`
 - Negative infinity fallback: `Deep space math: negative infinity!`
+- Infinity flows rotate through a 30+ phrase lesson pool to keep repeated interactions fresh.
 
 ## Auto-Speak Behavior
 - On `=` with Fun Mode enabled, any shown special banner is auto-spoken using the banner text (including `meme_6_7`).

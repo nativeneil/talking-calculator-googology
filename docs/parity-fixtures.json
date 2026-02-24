@@ -42,7 +42,7 @@
     "specialKind": "infinity",
     "speechText": "infinity",
     "bannerText": "Warp jump! Dividing by zero launched us to infinity.",
-    "notes": "Finite divide by zero special banner."
+    "notes": "Finite divide by zero banner category; text rotates through lesson variants."
   },
   {
     "id": "divide-by-zero-negative",
@@ -51,7 +51,7 @@
     "specialKind": "negative_infinity",
     "speechText": "negative infinity",
     "bannerText": "Warp jump! Dividing by zero launched us to infinity.",
-    "notes": "Negative finite divide by zero still uses warp-jump rule."
+    "notes": "Negative finite divide by zero still uses the rotating divide-by-zero lesson pool."
   },
   {
     "id": "infinity-times-finite",
@@ -60,7 +60,7 @@
     "specialKind": "infinity",
     "speechText": "infinity",
     "bannerText": "Cosmic rule: infinity stays infinity.",
-    "notes": "Stable infinity rule."
+    "notes": "Stable infinity banner category; text rotates through lesson variants."
   },
   {
     "id": "infinity-sign-flip",
@@ -69,7 +69,7 @@
     "specialKind": "negative_infinity",
     "speechText": "negative infinity",
     "bannerText": "Cosmic flip! Now we are at negative infinity.",
-    "notes": "Sign-flip rule when positive infinity gets multiplied by a negative finite."
+    "notes": "Sign-flip banner category; text rotates through lesson variants."
   },
   {
     "id": "indeterminate-infinity-times-zero",
@@ -78,7 +78,7 @@
     "specialKind": "indeterminate",
     "speechText": "unknown number - error error error",
     "bannerText": "Mission unknown: this infinity move is indeterminate.",
-    "notes": "Indeterminate form."
+    "notes": "Indeterminate banner category; text rotates through lesson variants."
   },
   {
     "id": "indeterminate-infinity-minus-infinity",

@@ -33,7 +33,7 @@ const { pathToFileURL } = require("url");
         kind: "infinity",
         subtype: "divide_by_zero",
         speech: "infinity",
-        banner: specialMathPhrases.BANNER_WARP_JUMP,
+        bannerIn: specialMathPhrases.LESSON_DIVIDE_BY_ZERO,
       },
     },
     {
@@ -42,7 +42,7 @@ const { pathToFileURL } = require("url");
       expected: {
         kind: "infinity",
         subtype: "infinity_stays_infinity",
-        banner: specialMathPhrases.BANNER_COSMIC_RULE,
+        bannerIn: specialMathPhrases.LESSON_INFINITY_STAYS_INFINITY,
       },
     },
     {
@@ -51,7 +51,7 @@ const { pathToFileURL } = require("url");
       expected: {
         kind: "negative_infinity",
         subtype: "sign_flip_negative_infinity",
-        banner: specialMathPhrases.BANNER_COSMIC_FLIP,
+        bannerIn: specialMathPhrases.LESSON_SIGN_FLIP_NEG_INFINITY,
       },
     },
     {
@@ -61,7 +61,7 @@ const { pathToFileURL } = require("url");
         kind: "indeterminate",
         subtype: "infinity_times_zero",
         speech: "unknown number - error error error",
-        banner: specialMathPhrases.BANNER_INDETERMINATE,
+        bannerIn: specialMathPhrases.LESSON_INDETERMINATE,
       },
     },
     {
@@ -94,7 +94,7 @@ const { pathToFileURL } = require("url");
       expected: {
         kind: "infinity",
         subtype: "generic",
-        banner: specialMathPhrases.BANNER_FALLBACK_INFINITY,
+        bannerIn: specialMathPhrases.LESSON_FALLBACK_INFINITY,
       },
     },
     {
@@ -103,7 +103,7 @@ const { pathToFileURL } = require("url");
       expected: {
         kind: "error",
         speech: "unknown number - error error error",
-        banner: specialMathPhrases.BANNER_INDETERMINATE,
+        bannerIn: specialMathPhrases.LESSON_INDETERMINATE,
       },
     },
     {
@@ -125,6 +125,13 @@ const { pathToFileURL } = require("url");
       pass = false;
     } else {
       for (const [key, expectedValue] of Object.entries(testCase.expected)) {
+        if (key === "bannerIn") {
+          if (!Array.isArray(expectedValue) || !expectedValue.includes(actual.banner)) {
+            pass = false;
+            break;
+          }
+          continue;
+        }
         if (actual[key] !== expectedValue) {
           pass = false;
           break;
@@ -140,6 +147,38 @@ const { pathToFileURL } = require("url");
       console.log(`  Received: ${JSON.stringify(actual)}`);
       hasFailure = true;
     }
+  }
+
+  const infinityLessonPools = [
+    specialMathPhrases.LESSON_DIVIDE_BY_ZERO,
+    specialMathPhrases.LESSON_INFINITY_STAYS_INFINITY,
+    specialMathPhrases.LESSON_SIGN_FLIP_NEG_INFINITY,
+    specialMathPhrases.LESSON_INDETERMINATE,
+    specialMathPhrases.LESSON_FALLBACK_INFINITY,
+    specialMathPhrases.LESSON_FALLBACK_NEG_INFINITY,
+  ];
+
+  const uniqueInfinityLessons = new Set(infinityLessonPools.flat());
+  const lessonCountPass = uniqueInfinityLessons.size >= 30;
+  console.log(`[special] at least 30 unique infinity lesson phrases: ${lessonCountPass ? "PASS" : "FAIL"}`);
+  if (!lessonCountPass) {
+    console.log(`  unique lesson count: ${uniqueInfinityLessons.size}`);
+    hasFailure = true;
+  }
+
+  const rotationBanners = [];
+  for (let i = 0; i < 4; i += 1) {
+    const context = classifySpecialMath({
+      tokenList: ["1", "/", "0"],
+      resultString: "Infinity",
+    });
+    rotationBanners.push(context?.banner || "");
+  }
+  const rotationPass = new Set(rotationBanners).size > 1;
+  console.log(`[special] rotating lessons cycle across repeated infinity events: ${rotationPass ? "PASS" : "FAIL"}`);
+  if (!rotationPass) {
+    console.log(`  observed banners: ${JSON.stringify(rotationBanners)}`);
+    hasFailure = true;
   }
 
   if (hasFailure) {

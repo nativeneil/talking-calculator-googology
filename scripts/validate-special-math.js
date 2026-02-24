@@ -9,6 +9,24 @@ const { pathToFileURL } = require("url");
 
   const cases = [
     {
+      name: "six seven meme easter egg",
+      input: { tokenList: ["6", "*", "7"], resultString: "42" },
+      expected: {
+        kind: "meme_6_7",
+        subtype: "six_times_seven_meme",
+        speech: specialMathPhrases.MEME_SIX_SEVEN_SPEECH,
+        banner: specialMathPhrases.BANNER_SIX_SEVEN_MEME,
+      },
+    },
+    {
+      name: "seven six meme order also works",
+      input: { tokenList: ["7", "*", "6"], resultString: "42" },
+      expected: {
+        kind: "meme_6_7",
+        subtype: "six_times_seven_meme",
+      },
+    },
+    {
       name: "finite divide by zero",
       input: { tokenList: ["1", "/", "0"], resultString: "Infinity" },
       expected: {

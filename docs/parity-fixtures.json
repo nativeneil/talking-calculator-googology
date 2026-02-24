@@ -18,6 +18,24 @@
     "notes": "Decimal precision path."
   },
   {
+    "id": "six-seven-meme",
+    "expression": "6 * 7",
+    "resultText": "42",
+    "specialKind": "meme_6_7",
+    "speechText": "Forty-two. Yep, six is still afraid that seven ate nine.",
+    "bannerText": "42 detected: six is still side-eyeing seven for eating nine.",
+    "notes": "Fun easter egg for the popular 6/7 meme."
+  },
+  {
+    "id": "sixty-seven-speak-meme",
+    "expression": "67",
+    "resultText": "67",
+    "specialKind": null,
+    "speechText": "Sixty-seven. Nice. Six still does not trust seven around nine.",
+    "bannerText": null,
+    "notes": "Speak-only meme line when Fun Mode is enabled."
+  },
+  {
     "id": "divide-by-zero-positive",
     "expression": "1 / 0",
     "resultText": "Infinity",

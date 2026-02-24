@@ -17,6 +17,7 @@ export function createCalculatorState() {
     voiceSettings: {
       ...defaultVoiceSettings,
     },
+    funModeEnabled: true,
     lastSpecialContext: null,
   };
 }

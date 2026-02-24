@@ -7,6 +7,8 @@ const BANNER_COSMIC_FLIP = "Cosmic flip! Now we are at negative infinity.";
 const BANNER_INDETERMINATE = "Mission unknown: this infinity move is indeterminate.";
 const BANNER_FALLBACK_INFINITY = "Deep space math: still infinity!";
 const BANNER_FALLBACK_NEG_INFINITY = "Deep space math: negative infinity!";
+const MEME_SIX_SEVEN_SPEECH = "Forty-two. Yep, six is still afraid that seven ate nine.";
+const BANNER_SIX_SEVEN_MEME = "42 detected: six is still side-eyeing seven for eating nine.";
 
 function normalizeToken(token) {
   return String(token ?? "").trim().replace(/,/g, "");
@@ -55,6 +57,38 @@ function isFiniteToken(token) {
 function isFiniteNegativeToken(token) {
   const numeric = parseFiniteToken(token);
   return numeric !== null && numeric < 0;
+}
+
+function isFiniteTokenEqual(token, expected) {
+  const numeric = parseFiniteToken(token);
+  return numeric !== null && numeric === expected;
+}
+
+function classifySixSevenMeme(tokenList, resultString) {
+  if (!Array.isArray(tokenList) || tokenList.length !== 3 || !isOperator(tokenList[1])) {
+    return null;
+  }
+
+  const [left, operator, right] = tokenList;
+  if (operator !== "*") {
+    return null;
+  }
+
+  const isSixSevenPair = (
+    (isFiniteTokenEqual(left, 6) && isFiniteTokenEqual(right, 7)) ||
+    (isFiniteTokenEqual(left, 7) && isFiniteTokenEqual(right, 6))
+  );
+
+  if (!isSixSevenPair || !isFiniteTokenEqual(resultString, 42)) {
+    return null;
+  }
+
+  return {
+    kind: "meme_6_7",
+    subtype: "six_times_seven_meme",
+    speech: MEME_SIX_SEVEN_SPEECH,
+    banner: BANNER_SIX_SEVEN_MEME,
+  };
 }
 
 function isIndeterminateBinary(left, operator, right) {
@@ -154,6 +188,11 @@ function buildFallbackBanner(kind) {
 }
 
 export function classifySpecialMath({ tokenList, resultString }) {
+  const memeContext = classifySixSevenMeme(tokenList, resultString);
+  if (memeContext) {
+    return memeContext;
+  }
+
   const kind = classifyResultKind(resultString);
   if (!kind) {
     return null;
@@ -222,6 +261,8 @@ export function classifySpecialMath({ tokenList, resultString }) {
 
 export const specialMathPhrases = {
   UNKNOWN_SPEECH,
+  MEME_SIX_SEVEN_SPEECH,
+  BANNER_SIX_SEVEN_MEME,
   BANNER_WARP_JUMP,
   BANNER_COSMIC_RULE,
   BANNER_COSMIC_FLIP,

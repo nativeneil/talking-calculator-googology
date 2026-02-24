@@ -21,6 +21,7 @@ const voiceSelect = document.getElementById("voiceSelect");
 const voiceRate = document.getElementById("voiceRate");
 const voicePitch = document.getElementById("voicePitch");
 const voiceVolume = document.getElementById("voiceVolume");
+const funModeToggle = document.getElementById("funModeToggle");
 const voiceReset = document.getElementById("voiceReset");
 const funBannerEl = document.getElementById("funBanner");
 
@@ -87,6 +88,18 @@ function saveVoiceSettings(settings) {
   localStorage.setItem("voiceRate", String(settings.rate));
   localStorage.setItem("voicePitch", String(settings.pitch));
   localStorage.setItem("voiceVolume", String(settings.volume));
+}
+
+function getStoredFunMode() {
+  const stored = localStorage.getItem("funModeEnabled");
+  if (stored === null) {
+    return true;
+  }
+  return stored === "true";
+}
+
+function saveFunMode(enabled) {
+  localStorage.setItem("funModeEnabled", String(enabled));
 }
 
 function buildVoiceLabel(voice) {
@@ -159,6 +172,16 @@ function applyVoiceSettings(settings) {
   }
 }
 
+function applyFunMode(enabled) {
+  state.funModeEnabled = enabled;
+  if (funModeToggle) {
+    funModeToggle.checked = enabled;
+  }
+  if (!enabled) {
+    clearSpecialMathFeedback();
+  }
+}
+
 function resetVoiceSettings() {
   applyVoiceSettings({
     ...defaultVoiceSettings,
@@ -198,6 +221,14 @@ function handleVoiceSelection() {
   if (selected) {
     setSelectedVoice(selected);
   }
+}
+
+function handleFunModeToggle() {
+  if (!funModeToggle) {
+    return;
+  }
+  applyFunMode(funModeToggle.checked);
+  saveFunMode(state.funModeEnabled);
 }
 
 function hasUsableLastResult() {
@@ -338,6 +369,11 @@ function toggleSign() {
 }
 
 function applySpecialContext(tokenList, resultString) {
+  if (!state.funModeEnabled) {
+    clearSpecialMathFeedback();
+    return;
+  }
+
   const context = classifySpecialMath({ tokenList, resultString });
   state.lastSpecialContext = context;
   if (context) {
@@ -405,6 +441,7 @@ function speakCurrent() {
     lastResult: state.lastResult,
     displayText: resultEl?.textContent || "",
     specialContext,
+    funModeEnabled: state.funModeEnabled,
     numberToWords,
   });
 
@@ -521,6 +558,10 @@ if (voiceVolume) {
   });
 }
 
+if (funModeToggle) {
+  funModeToggle.addEventListener("change", handleFunModeToggle);
+}
+
 if (voiceReset) {
   voiceReset.addEventListener("click", () => {
     resetVoiceSettings();
@@ -544,6 +585,7 @@ document.addEventListener("click", (event) => {
 
 window.speechSynthesis.addEventListener("voiceschanged", refreshVoiceList);
 applyVoiceSettings(getStoredVoiceSettings());
+applyFunMode(getStoredFunMode());
 refreshVoiceList();
 
 document.addEventListener("keydown", (event) => {

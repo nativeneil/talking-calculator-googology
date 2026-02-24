@@ -1,4 +1,5 @@
 const UNKNOWN_SPEECH = "unknown number - error error error";
+const MEME_SIXTY_SEVEN_SPEECH = "Sixty-seven. Nice. Six still does not trust seven around nine.";
 
 function makeSpeechFriendlyUtteranceText(text) {
   return text.replace(/\b[a-z]+illion\b/gi, (word) => {
@@ -12,7 +13,14 @@ function makeSpeechFriendlyUtteranceText(text) {
   });
 }
 
-export function buildSpeechText({ currentInput, lastResult, displayText, specialContext, numberToWords }) {
+export function buildSpeechText({
+  currentInput,
+  lastResult,
+  displayText,
+  specialContext,
+  funModeEnabled = true,
+  numberToWords,
+}) {
   if (specialContext?.speech) {
     return specialContext.speech;
   }
@@ -22,7 +30,13 @@ export function buildSpeechText({ currentInput, lastResult, displayText, special
     return "";
   }
 
-  const normalized = rawValue.trim().toLowerCase();
+  const normalizedRaw = rawValue.trim();
+  const normalizedNumeric = normalizedRaw.replace(/,/g, "");
+  if (funModeEnabled && /^\+?67(?:\.0+)?$/.test(normalizedNumeric)) {
+    return MEME_SIXTY_SEVEN_SPEECH;
+  }
+
+  const normalized = normalizedRaw.toLowerCase();
   if (normalized === "infinity" || normalized === "+infinity") {
     return "infinity";
   }
@@ -94,4 +108,4 @@ export function speakText({
   speechSynthesis.speak(utterance);
 }
 
-export { makeSpeechFriendlyUtteranceText, UNKNOWN_SPEECH };
+export { makeSpeechFriendlyUtteranceText, UNKNOWN_SPEECH, MEME_SIXTY_SEVEN_SPEECH };

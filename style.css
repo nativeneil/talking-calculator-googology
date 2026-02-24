@@ -220,6 +220,20 @@ button {
   gap: 8px;
 }
 
+.voice-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.voice-toggle {
+  width: 44px;
+  height: 24px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
 .voice-panel input[type="range"] {
   width: 100%;
   accent-color: var(--accent-primary);
@@ -1324,7 +1338,8 @@ button {
 }
 
 .voice-select:focus-visible,
-.voice-reset:focus-visible {
+.voice-reset:focus-visible,
+.voice-toggle:focus-visible {
   outline: 2px solid var(--accent-primary);
   outline-offset: 2px;
 }

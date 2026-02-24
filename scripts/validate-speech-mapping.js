@@ -7,7 +7,7 @@ const { pathToFileURL } = require("url");
   const speechUrl = `${pathToFileURL(path.resolve("js/speech.js")).href}?test=${Date.now()}`;
   const wordsUrl = `${pathToFileURL(path.resolve("js/number-words.js")).href}?test=${Date.now()}`;
 
-  const { buildSpeechText } = await import(speechUrl);
+  const { buildSpeechText, MEME_SIXTY_SEVEN_SPEECH } = await import(speechUrl);
   const { numberToWords } = await import(wordsUrl);
 
   const cases = [
@@ -78,6 +78,30 @@ const { pathToFileURL } = require("url");
         numberToWords,
       },
       expected: "forty two",
+    },
+    {
+      name: "67 meme speech when fun mode on",
+      input: {
+        currentInput: "",
+        lastResult: "67",
+        displayText: "67",
+        specialContext: null,
+        funModeEnabled: true,
+        numberToWords,
+      },
+      expected: MEME_SIXTY_SEVEN_SPEECH,
+    },
+    {
+      name: "67 uses normal speech when fun mode off",
+      input: {
+        currentInput: "",
+        lastResult: "67",
+        displayText: "67",
+        specialContext: null,
+        funModeEnabled: false,
+        numberToWords,
+      },
+      expected: "sixty seven",
     },
   ];
 

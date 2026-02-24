@@ -1,5 +1,5 @@
 const UNKNOWN_SPEECH = "unknown number - error error error";
-const MEME_SIXTY_SEVEN_SPEECH = "Sixty-seven. Nice. Six still does not trust seven around nine.";
+const MEME_SIXTY_SEVEN_SPEECH = "six seven";
 
 function makeSpeechFriendlyUtteranceText(text) {
   return text.replace(/\b[a-z]+illion\b/gi, (word) => {

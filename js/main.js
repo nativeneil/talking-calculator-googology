@@ -378,6 +378,15 @@ function applySpecialContext(tokenList, resultString) {
   state.lastSpecialContext = context;
   if (context) {
     funBanner.showFunBanner(context.banner, 2600);
+    const speakButton = document.querySelector(".key.speak");
+    speakText({
+      text: context.banner,
+      selectedVoiceName: state.selectedVoiceName,
+      voiceSettings: state.voiceSettings,
+      speakButton,
+      speechSynthesis: window.speechSynthesis,
+      SpeechSynthesisUtteranceCtor: globalThis.SpeechSynthesisUtterance,
+    });
   } else {
     funBanner.hideFunBanner();
   }

@@ -26,7 +26,7 @@ These notes define the behavior contract for future Swift/iOS implementation.
 
 ## Speech Contract
 - `6 * 7` (or `7 * 6`) -> `Forty-two. Yep, six is still afraid that seven ate nine.`
-- Display value `67` (Fun Mode on) -> `Sixty-seven. Nice. Six still does not trust seven around nine.`
+- Display value `67` (Fun Mode on) -> `six seven`
 - `Infinity` -> `infinity`
 - `-Infinity` -> `negative infinity`
 - `NaN`/`Error` -> `unknown number - error error error`
@@ -39,6 +39,9 @@ These notes define the behavior contract for future Swift/iOS implementation.
 - Indeterminate/Error: `Mission unknown: this infinity move is indeterminate.`
 - Infinity fallback: `Deep space math: still infinity!`
 - Negative infinity fallback: `Deep space math: negative infinity!`
+
+## Auto-Speak Behavior
+- On `=` with Fun Mode enabled, any shown special banner is auto-spoken using the banner text (including `meme_6_7`).
 
 ## iOS Implementation Guidance
 - Recreate classifier logic as pure Swift functions.

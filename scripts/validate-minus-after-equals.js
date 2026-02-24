@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const fs = require("fs");
-const vm = require("vm");
+const path = require("path");
+const { pathToFileURL } = require("url");
 
 class FakeDecimal {
   constructor(value) {
@@ -75,6 +75,10 @@ class FakeElement {
     this.type = "";
     this.listeners = new Map();
     this.attributes = new Map();
+    this.classList = {
+      add: () => {},
+      remove: () => {},
+    };
   }
 
   addEventListener(type, handler) {
@@ -105,10 +109,16 @@ class FakeElement {
   closest() {
     return this;
   }
+
+  querySelector() {
+    return null;
+  }
 }
 
-function createHarness() {
+async function createHarness() {
   const keydownListeners = [];
+  const clickListeners = [];
+
   const elements = {
     result: new FakeElement("result"),
     expression: new FakeElement("expression"),
@@ -121,7 +131,10 @@ function createHarness() {
     voicePitch: new FakeElement("voicePitch"),
     voiceVolume: new FakeElement("voiceVolume"),
     voiceReset: new FakeElement("voiceReset"),
+    funBanner: new FakeElement("funBanner"),
   };
+
+  elements.voicePanel.setAttribute("hidden", "");
 
   const storage = new Map();
   const localStorage = {
@@ -140,6 +153,9 @@ function createHarness() {
     querySelector(selector) {
       if (selector === ".keypad") {
         return elements.keypad;
+      }
+      if (selector === ".key.speak") {
+        return new FakeElement("speak");
       }
       return new FakeElement(selector);
     },
@@ -162,6 +178,9 @@ function createHarness() {
       if (type === "keydown") {
         keydownListeners.push(handler);
       }
+      if (type === "click") {
+        clickListeners.push(handler);
+      }
     },
   };
 
@@ -174,44 +193,43 @@ function createHarness() {
     cancel() {},
   };
 
-  const context = {
-    console,
-    document: fakeDocument,
-    localStorage,
-    window: {
-      speechSynthesis,
-      getComputedStyle() {
-        return {
-          fontWeight: "400",
-          fontSize: "16px",
-          fontFamily: "sans-serif",
-        };
-      },
+  const fakeWindow = {
+    speechSynthesis,
+    getComputedStyle() {
+      return {
+        fontWeight: "400",
+        fontSize: "16px",
+        fontFamily: "sans-serif",
+      };
     },
-    SpeechSynthesisUtterance: function SpeechSynthesisUtterance(text) {
-      this.text = text;
-      this.voice = null;
-      this.rate = 1;
-      this.pitch = 1;
-      this.volume = 1;
-    },
-    Decimal: FakeDecimal,
+    window: null,
+  };
+  fakeWindow.window = fakeWindow;
+
+  global.document = fakeDocument;
+  global.localStorage = localStorage;
+  global.window = fakeWindow;
+  global.Decimal = FakeDecimal;
+  global.SpeechSynthesisUtterance = function SpeechSynthesisUtterance(text) {
+    this.text = text;
+    this.voice = null;
+    this.rate = 1;
+    this.pitch = 1;
+    this.volume = 1;
   };
 
-  context.window.window = context.window;
-  vm.createContext(context);
-
-  const source = fs.readFileSync("app.js", "utf8");
-  vm.runInContext(source, context);
+  const moduleUrl = `${pathToFileURL(path.resolve("js/main.js")).href}?test=${Date.now()}`;
+  const app = await import(moduleUrl);
 
   function clear() {
-    context.clearAll();
+    app.clearAll();
   }
 
   function keypress(key) {
     const event = {
       key,
       preventDefault() {},
+      target: null,
     };
     keydownListeners.forEach((listener) => listener(event));
   }
@@ -225,13 +243,13 @@ function createHarness() {
       }
 
       if (/^[0-9]$/.test(token) || token === "." || token === "e") {
-        context.handleDigit(token);
+        app.handleDigit(token);
       } else if (["+", "-", "*", "/"].includes(token)) {
-        context.handleOperator(token);
+        app.handleOperator(token);
       } else if (token === "=") {
-        context.handleEquals();
+        app.handleEquals();
       } else if (token === "C") {
-        context.clearAll();
+        app.clearAll();
       } else {
         throw new Error(`Unsupported token: ${token}`);
       }
@@ -309,27 +327,24 @@ const cases = [
   },
 ];
 
-function validate(mode) {
-  const harness = createHarness();
-  let failures = 0;
+(async () => {
+  const harness = await createHarness();
+  let hasFailure = false;
 
-  cases.forEach((testCase) => {
-    const outcome = harness.runTokens(testCase.sequence, mode);
-    const passed = outcome.result === testCase.expected;
-    const status = passed ? "PASS" : `FAIL (got ${outcome.result})`;
-    console.log(`[${mode}] ${testCase.name}: ${status}`);
-    if (!passed) {
-      failures += 1;
+  for (const mode of ["keypad", "keyboard"]) {
+    for (const testCase of cases) {
+      const { result } = harness.runTokens(testCase.sequence, mode);
+      const pass = result === testCase.expected;
+      const status = pass ? "PASS" : "FAIL";
+      console.log(`[${mode}] ${testCase.name}: ${status}`);
+      if (!pass) {
+        console.log(`  Expected ${testCase.expected}, received ${result}`);
+        hasFailure = true;
+      }
     }
-  });
+  }
 
-  return failures;
-}
-
-const keypadFailures = validate("keypad");
-const keyboardFailures = validate("keyboard");
-const totalFailures = keypadFailures + keyboardFailures;
-
-if (totalFailures > 0) {
-  process.exitCode = 1;
-}
+  if (hasFailure) {
+    process.exitCode = 1;
+  }
+})();

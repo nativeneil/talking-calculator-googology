@@ -1,0 +1,92 @@
+[
+  {
+    "id": "precedence-basic",
+    "expression": "2 + 3 * 4",
+    "resultText": "14",
+    "specialKind": null,
+    "speechText": "fourteen",
+    "bannerText": null,
+    "notes": "Operator precedence should match standard arithmetic."
+  },
+  {
+    "id": "decimal-precision",
+    "expression": "0.1 + 0.2",
+    "resultText": "0.3",
+    "specialKind": null,
+    "speechText": "zero point three",
+    "bannerText": null,
+    "notes": "Decimal precision path."
+  },
+  {
+    "id": "divide-by-zero-positive",
+    "expression": "1 / 0",
+    "resultText": "Infinity",
+    "specialKind": "infinity",
+    "speechText": "infinity",
+    "bannerText": "Warp jump! Dividing by zero launched us to infinity.",
+    "notes": "Finite divide by zero special banner."
+  },
+  {
+    "id": "divide-by-zero-negative",
+    "expression": "-1 / 0",
+    "resultText": "-Infinity",
+    "specialKind": "negative_infinity",
+    "speechText": "negative infinity",
+    "bannerText": "Warp jump! Dividing by zero launched us to infinity.",
+    "notes": "Negative finite divide by zero still uses warp-jump rule."
+  },
+  {
+    "id": "infinity-times-finite",
+    "expression": "Infinity * 2",
+    "resultText": "Infinity",
+    "specialKind": "infinity",
+    "speechText": "infinity",
+    "bannerText": "Cosmic rule: infinity stays infinity.",
+    "notes": "Stable infinity rule."
+  },
+  {
+    "id": "infinity-sign-flip",
+    "expression": "Infinity * -2",
+    "resultText": "-Infinity",
+    "specialKind": "negative_infinity",
+    "speechText": "negative infinity",
+    "bannerText": "Cosmic flip! Now we are at negative infinity.",
+    "notes": "Sign-flip rule when positive infinity gets multiplied by a negative finite."
+  },
+  {
+    "id": "indeterminate-infinity-times-zero",
+    "expression": "Infinity * 0",
+    "resultText": "NaN",
+    "specialKind": "indeterminate",
+    "speechText": "unknown number - error error error",
+    "bannerText": "Mission unknown: this infinity move is indeterminate.",
+    "notes": "Indeterminate form."
+  },
+  {
+    "id": "indeterminate-infinity-minus-infinity",
+    "expression": "Infinity - Infinity",
+    "resultText": "NaN",
+    "specialKind": "indeterminate",
+    "speechText": "unknown number - error error error",
+    "bannerText": "Mission unknown: this infinity move is indeterminate.",
+    "notes": "Indeterminate form."
+  },
+  {
+    "id": "indeterminate-zero-div-zero",
+    "expression": "0 / 0",
+    "resultText": "NaN",
+    "specialKind": "indeterminate",
+    "speechText": "unknown number - error error error",
+    "bannerText": "Mission unknown: this infinity move is indeterminate.",
+    "notes": "Indeterminate form."
+  },
+  {
+    "id": "error-fallback",
+    "expression": "invalid runtime expression",
+    "resultText": "Error",
+    "specialKind": "error",
+    "speechText": "unknown number - error error error",
+    "bannerText": "Mission unknown: this infinity move is indeterminate.",
+    "notes": "Generic error fallback phrasing."
+  }
+]

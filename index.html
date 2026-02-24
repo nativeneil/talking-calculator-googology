@@ -9,7 +9,7 @@
   <title>CALC-01 | Mission Calculator</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/decimal.js@10.4.3/decimal.min.js" defer></script>
-  <script src="app.js" defer></script>
+  <script type="module" src="./js/main.js"></script>
 </head>
 <body>
   <main class="app">
@@ -43,6 +43,7 @@
       <header class="display">
         <div class="result" id="result">0</div>
         <div class="expression" id="expression"></div>
+        <div id="funBanner" class="fun-banner" hidden aria-live="polite"></div>
       </header>
 
       <section class="keypad">

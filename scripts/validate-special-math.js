@@ -5,9 +5,14 @@ const { pathToFileURL } = require("url");
 
 (async () => {
   const moduleUrl = `${pathToFileURL(path.resolve("js/special-math.js")).href}?test=${Date.now()}`;
-  const { classifySpecialMath, specialMathPhrases } = await import(moduleUrl);
+  const {
+    applyProgressAfterEvent,
+    getSpecialContextWithProgress,
+    resetFunProgress,
+    specialMathPhrases,
+  } = await import(moduleUrl);
 
-  const cases = [
+  const baseCases = [
     {
       name: "six seven meme easter egg",
       input: { tokenList: ["6", "*", "7"], resultString: "42" },
@@ -115,8 +120,13 @@ const { pathToFileURL } = require("url");
 
   let hasFailure = false;
 
-  for (const testCase of cases) {
-    const actual = classifySpecialMath(testCase.input);
+  for (const testCase of baseCases) {
+    const progress = resetFunProgress();
+    const actual = getSpecialContextWithProgress({
+      ...testCase.input,
+      progressState: progress,
+    });
+
     let pass = true;
 
     if (testCase.expected === null) {
@@ -149,35 +159,87 @@ const { pathToFileURL } = require("url");
     }
   }
 
-  const infinityLessonPools = [
-    specialMathPhrases.LESSON_DIVIDE_BY_ZERO,
-    specialMathPhrases.LESSON_INFINITY_STAYS_INFINITY,
-    specialMathPhrases.LESSON_SIGN_FLIP_NEG_INFINITY,
-    specialMathPhrases.LESSON_INDETERMINATE,
-    specialMathPhrases.LESSON_FALLBACK_INFINITY,
-    specialMathPhrases.LESSON_FALLBACK_NEG_INFINITY,
-  ];
+  const totalUniqueLessons = new Set([
+    ...specialMathPhrases.LESSON_DIVIDE_BY_ZERO,
+    ...specialMathPhrases.LESSON_INFINITY_STAYS_INFINITY,
+    ...specialMathPhrases.LESSON_SIGN_FLIP_NEG_INFINITY,
+    ...specialMathPhrases.LESSON_INDETERMINATE,
+    ...specialMathPhrases.LESSON_FALLBACK_INFINITY,
+    ...specialMathPhrases.LESSON_FALLBACK_NEG_INFINITY,
+  ]).size;
 
-  const uniqueInfinityLessons = new Set(infinityLessonPools.flat());
-  const lessonCountPass = uniqueInfinityLessons.size >= 30;
-  console.log(`[special] at least 30 unique infinity lesson phrases: ${lessonCountPass ? "PASS" : "FAIL"}`);
+  const lessonCountPass = totalUniqueLessons >= 72;
+  console.log(`[special] at least 72 unique infinity lesson phrases: ${lessonCountPass ? "PASS" : "FAIL"}`);
   if (!lessonCountPass) {
-    console.log(`  unique lesson count: ${uniqueInfinityLessons.size}`);
+    console.log(`  unique lesson count: ${totalUniqueLessons}`);
     hasFailure = true;
   }
 
-  const rotationBanners = [];
-  for (let i = 0; i < 4; i += 1) {
-    const context = classifySpecialMath({
+  const nonRepeatProgress = resetFunProgress();
+  const seenSequence = [];
+  for (let i = 0; i < 8; i += 1) {
+    const context = getSpecialContextWithProgress({
       tokenList: ["1", "/", "0"],
       resultString: "Infinity",
+      progressState: nonRepeatProgress,
     });
-    rotationBanners.push(context?.banner || "");
+    if (context) {
+      seenSequence.push(context.banner);
+      applyProgressAfterEvent({ context, progressState: nonRepeatProgress });
+    }
   }
-  const rotationPass = new Set(rotationBanners).size > 1;
-  console.log(`[special] rotating lessons cycle across repeated infinity events: ${rotationPass ? "PASS" : "FAIL"}`);
-  if (!rotationPass) {
-    console.log(`  observed banners: ${JSON.stringify(rotationBanners)}`);
+
+  const nonRepeatPass = seenSequence.every((banner, index) => index === 0 || banner !== seenSequence[index - 1]);
+  console.log(`[special] lesson selection avoids immediate repeats: ${nonRepeatPass ? "PASS" : "FAIL"}`);
+  if (!nonRepeatPass) {
+    console.log(`  observed sequence: ${JSON.stringify(seenSequence)}`);
+    hasFailure = true;
+  }
+
+  const lockedProgress = resetFunProgress();
+  const lockedSet = new Set();
+  for (let i = 0; i < 12; i += 1) {
+    const context = getSpecialContextWithProgress({
+      tokenList: ["1", "/", "0"],
+      resultString: "Infinity",
+      progressState: lockedProgress,
+    });
+    if (context && context.banner) {
+      lockedSet.add(context.banner);
+      applyProgressAfterEvent({ context, progressState: lockedProgress });
+    }
+  }
+
+  const packAOnly = specialMathPhrases.LESSON_PACK_A.divide_by_zero;
+  const nonRankBanners = [...lockedSet].filter((banner) => !banner.startsWith("Rank up!"));
+  const lockedPass = nonRankBanners.every((banner) => packAOnly.includes(banner));
+  console.log(`[special] rank-locked mode uses pack A phrases only: ${lockedPass ? "PASS" : "FAIL"}`);
+  if (!lockedPass) {
+    console.log(`  observed locked banners: ${JSON.stringify([...lockedSet])}`);
+    hasFailure = true;
+  }
+
+  const unlockedProgress = resetFunProgress();
+  unlockedProgress.rankIndex = 2;
+  unlockedProgress.unlockedPackIds = ["A", "B"];
+  const unlockedSet = new Set();
+  for (let i = 0; i < 18; i += 1) {
+    const context = getSpecialContextWithProgress({
+      tokenList: ["1", "/", "0"],
+      resultString: "Infinity",
+      progressState: unlockedProgress,
+    });
+    if (context && context.banner) {
+      unlockedSet.add(context.banner);
+      applyProgressAfterEvent({ context, progressState: unlockedProgress });
+    }
+  }
+
+  const packB = specialMathPhrases.LESSON_PACK_B.divide_by_zero;
+  const unlockPass = [...unlockedSet].some((banner) => packB.includes(banner));
+  console.log(`[special] rank 2 unlock includes pack B phrases: ${unlockPass ? "PASS" : "FAIL"}`);
+  if (!unlockPass) {
+    console.log(`  observed unlocked banners: ${JSON.stringify([...unlockedSet])}`);
     hasFailure = true;
   }
 

@@ -106,5 +106,56 @@
     "speechText": "unknown number - error error error",
     "bannerText": "Mission unknown: this infinity move is indeterminate.",
     "notes": "Generic error fallback phrasing."
+  },
+  {
+    "id": "progress-rank-up-queue",
+    "expression": "1 / 0 (5th special event after fresh progress)",
+    "resultText": "Infinity",
+    "specialKind": "infinity",
+    "speechText": "infinity",
+    "bannerText": "Rank up! Scout unlocked.",
+    "progressBefore": {
+      "totalSpecialEvents": 4,
+      "rankIndex": 1,
+      "eventsSinceRankUp": 0,
+      "unlockedPackIds": ["A"],
+      "pendingRankUpBanner": "Rank up! Scout unlocked."
+    },
+    "progressAfter": {
+      "totalSpecialEvents": 5,
+      "rankIndex": 1,
+      "eventsSinceRankUp": 1,
+      "unlockedPackIds": ["A"],
+      "pendingRankUpBanner": null
+    },
+    "notes": "Rank-up banner is queued on threshold and consumed on the next special event."
+  },
+  {
+    "id": "pack-lock-vs-unlock",
+    "expression": "1 / 0 repeated",
+    "resultText": "Infinity",
+    "specialKind": "infinity",
+    "speechText": "infinity",
+    "bannerText": "Starter pack lines at rank 0; pack B lines available at rank 2.",
+    "lockedPoolCategory": "divide_by_zero",
+    "lockedExpectedPackIds": ["A"],
+    "unlockedExpectedPackIds": ["A", "B"],
+    "notes": "Phrase pool expands at rank 2 without changing classification behavior."
+  },
+  {
+    "id": "progress-reset",
+    "expression": "settings -> Reset Fun Progress",
+    "resultText": null,
+    "specialKind": null,
+    "speechText": null,
+    "bannerText": null,
+    "progressAfter": {
+      "totalSpecialEvents": 0,
+      "rankIndex": 0,
+      "eventsSinceRankUp": 0,
+      "unlockedPackIds": ["A"],
+      "pendingRankUpBanner": null
+    },
+    "notes": "Reset restores starter progression state while leaving voice settings and fun-mode toggle unchanged."
   }
 ]

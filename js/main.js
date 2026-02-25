@@ -1,4 +1,4 @@
-import { createCalculatorState, defaultVoiceSettings } from "./state.js";
+import { createCalculatorState, createDefaultFunProgress, defaultVoiceSettings } from "./state.js";
 import { evaluate, isOperator } from "./evaluate.js";
 import {
   formatExpression,
@@ -8,7 +8,12 @@ import {
 } from "./format-display.js";
 import { numberToWords } from "./number-words.js";
 import { buildSpeechText, speakText } from "./speech.js";
-import { classifySpecialMath } from "./special-math.js";
+import {
+  applyProgressAfterEvent,
+  getFunProgressSummary,
+  getSpecialContextWithProgress,
+  resetFunProgress,
+} from "./special-math.js";
 import { createFunBannerController } from "./fun-banner.js";
 
 const resultEl = document.getElementById("result");
@@ -22,11 +27,14 @@ const voiceRate = document.getElementById("voiceRate");
 const voicePitch = document.getElementById("voicePitch");
 const voiceVolume = document.getElementById("voiceVolume");
 const funModeToggle = document.getElementById("funModeToggle");
+const funProgressText = document.getElementById("funProgressText");
+const funProgressReset = document.getElementById("funProgressReset");
 const voiceReset = document.getElementById("voiceReset");
 const funBannerEl = document.getElementById("funBanner");
 
 const state = createCalculatorState();
 const funBanner = createFunBannerController(funBannerEl);
+const FUN_PROGRESS_STORAGE_KEY = "funProgressV1";
 
 function renderDisplay() {
   updateDisplay(state, resultEl, expressionEl);
@@ -102,6 +110,51 @@ function saveFunMode(enabled) {
   localStorage.setItem("funModeEnabled", String(enabled));
 }
 
+function getStoredFunProgress() {
+  const stored = localStorage.getItem(FUN_PROGRESS_STORAGE_KEY);
+  if (!stored) {
+    return createDefaultFunProgress();
+  }
+
+  try {
+    return sanitizeFunProgress(JSON.parse(stored));
+  } catch (error) {
+    return createDefaultFunProgress();
+  }
+}
+
+function sanitizeFunProgress(progress) {
+  const defaults = createDefaultFunProgress();
+  if (!progress || typeof progress !== "object") {
+    return defaults;
+  }
+
+  return {
+    ...defaults,
+    ...progress,
+    unlockedPackIds: Array.isArray(progress.unlockedPackIds)
+      ? progress.unlockedPackIds
+      : defaults.unlockedPackIds,
+    seenPhrasesByCategory: progress.seenPhrasesByCategory && typeof progress.seenPhrasesByCategory === "object"
+      ? progress.seenPhrasesByCategory
+      : defaults.seenPhrasesByCategory,
+    lastPhraseByCategory: progress.lastPhraseByCategory && typeof progress.lastPhraseByCategory === "object"
+      ? progress.lastPhraseByCategory
+      : defaults.lastPhraseByCategory,
+    pendingRankUpBanner: typeof progress.pendingRankUpBanner === "string"
+      ? progress.pendingRankUpBanner
+      : null,
+  };
+}
+
+function saveFunProgress(progress) {
+  localStorage.setItem(FUN_PROGRESS_STORAGE_KEY, JSON.stringify(progress));
+}
+
+function clearStoredFunProgress() {
+  localStorage.removeItem(FUN_PROGRESS_STORAGE_KEY);
+}
+
 function buildVoiceLabel(voice) {
   const lang = voice.lang ? ` (${voice.lang})` : "";
   return `${voice.name}${lang}`;
@@ -172,6 +225,20 @@ function applyVoiceSettings(settings) {
   }
 }
 
+function renderFunProgressText() {
+  if (!funProgressText) {
+    return;
+  }
+  const summary = getFunProgressSummary(state.funProgress);
+  const nextText = summary.nextRankIn > 0 ? String(summary.nextRankIn) : "MAX";
+  funProgressText.textContent = `Fun Rank: ${summary.rankName} · Next Rank In: ${nextText}`;
+}
+
+function applyFunProgress(progress) {
+  state.funProgress = sanitizeFunProgress(progress);
+  renderFunProgressText();
+}
+
 function applyFunMode(enabled) {
   state.funModeEnabled = enabled;
   if (funModeToggle) {
@@ -229,6 +296,12 @@ function handleFunModeToggle() {
   }
   applyFunMode(funModeToggle.checked);
   saveFunMode(state.funModeEnabled);
+}
+
+function handleFunProgressReset() {
+  applyFunProgress(resetFunProgress());
+  clearStoredFunProgress();
+  clearSpecialMathFeedback();
 }
 
 function hasUsableLastResult() {
@@ -374,7 +447,12 @@ function applySpecialContext(tokenList, resultString) {
     return;
   }
 
-  const context = classifySpecialMath({ tokenList, resultString });
+  const context = getSpecialContextWithProgress({
+    tokenList,
+    resultString,
+    progressState: state.funProgress,
+  });
+
   state.lastSpecialContext = context;
   if (context) {
     funBanner.showFunBanner(context.banner, 2600);
@@ -387,6 +465,13 @@ function applySpecialContext(tokenList, resultString) {
       speechSynthesis: window.speechSynthesis,
       SpeechSynthesisUtteranceCtor: globalThis.SpeechSynthesisUtterance,
     });
+
+    applyProgressAfterEvent({
+      context,
+      progressState: state.funProgress,
+    });
+    saveFunProgress(state.funProgress);
+    renderFunProgressText();
   } else {
     funBanner.hideFunBanner();
   }
@@ -577,6 +662,10 @@ if (voiceReset) {
   });
 }
 
+if (funProgressReset) {
+  funProgressReset.addEventListener("click", handleFunProgressReset);
+}
+
 if (voicePanel) {
   voicePanel.addEventListener("click", (event) => {
     event.stopPropagation();
@@ -594,6 +683,7 @@ document.addEventListener("click", (event) => {
 
 window.speechSynthesis.addEventListener("voiceschanged", refreshVoiceList);
 applyVoiceSettings(getStoredVoiceSettings());
+applyFunProgress(getStoredFunProgress());
 applyFunMode(getStoredFunMode());
 refreshVoiceList();
 

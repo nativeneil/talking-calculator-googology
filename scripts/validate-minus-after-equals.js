@@ -144,6 +144,9 @@ async function createHarness() {
     setItem(key, value) {
       storage.set(key, String(value));
     },
+    removeItem(key) {
+      storage.delete(key);
+    },
   };
 
   const fakeDocument = {

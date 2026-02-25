@@ -141,6 +141,8 @@ async function createHarness() {
     voiceRate: new FakeElement("voiceRate"),
     voicePitch: new FakeElement("voicePitch"),
     voiceVolume: new FakeElement("voiceVolume"),
+    funProgressText: new FakeElement("funProgressText"),
+    funProgressReset: new FakeElement("funProgressReset"),
     voiceReset: new FakeElement("voiceReset"),
     funModeToggle: new FakeElement("funModeToggle"),
     funBanner: new FakeElement("funBanner"),
@@ -159,6 +161,9 @@ async function createHarness() {
     },
     setItem(key, value) {
       localStorageMap.set(key, String(value));
+    },
+    removeItem(key) {
+      localStorageMap.delete(key);
     },
   };
 
@@ -260,7 +265,7 @@ async function createHarness() {
 
 (async () => {
   const specialMathUrl = `${pathToFileURL(path.resolve("js/special-math.js")).href}?test=${Date.now()}`;
-  const { specialMathPhrases } = await import(specialMathUrl);
+  const { FUN_EVENTS_PER_RANK, specialMathPhrases } = await import(specialMathUrl);
   const h = await createHarness();
   let failed = false;
 
@@ -287,6 +292,31 @@ async function createHarness() {
     failed = true;
   }
 
+  h.elements.funProgressReset.emit("click");
+  h.spoken.length = 0;
+
+  for (let i = 0; i < FUN_EVENTS_PER_RANK; i += 1) {
+    h.runExpression(["1", "/", "0", "="]);
+  }
+  const queuePass = h.spoken.length === FUN_EVENTS_PER_RANK;
+  console.log(`[auto-speak] rank-up threshold still speaks lesson banners: ${queuePass ? "PASS" : "FAIL"}`);
+  if (!queuePass) {
+    console.log(`  expected ${FUN_EVENTS_PER_RANK} spoken entries, received ${h.spoken.length}`);
+    failed = true;
+  }
+
+  const beforeRankUpSpeech = h.spoken.length;
+  h.runExpression(["1", "/", "0", "="]);
+  const rankUpSpeech = h.spoken[h.spoken.length - 1] || "";
+  const rankUpQueuedPass = h.spoken.length === beforeRankUpSpeech + 1 && /^Rank up! /.test(rankUpSpeech);
+  console.log(`[auto-speak] queued rank-up banner auto-speaks on next special event: ${rankUpQueuedPass ? "PASS" : "FAIL"}`);
+  if (!rankUpQueuedPass) {
+    console.log(`  speech count expected ${beforeRankUpSpeech + 1}, received ${h.spoken.length}`);
+    console.log(`  received speech: ${rankUpSpeech}`);
+    failed = true;
+  }
+
+  const eventsBeforeDisabled = h.app.getState().funProgress.totalSpecialEvents;
   h.elements.funModeToggle.checked = false;
   h.elements.funModeToggle.emit("change");
   const beforeDisabled = h.spoken.length;
@@ -295,6 +325,14 @@ async function createHarness() {
   console.log(`[auto-speak] fun mode off disables auto-speak: ${disabledPass ? "PASS" : "FAIL"}`);
   if (!disabledPass) {
     console.log(`  speech count changed from ${beforeDisabled} to ${h.spoken.length}`);
+    failed = true;
+  }
+
+  const eventsAfterDisabled = h.app.getState().funProgress.totalSpecialEvents;
+  const progressionDisabledPass = eventsAfterDisabled === eventsBeforeDisabled;
+  console.log(`[auto-speak] fun mode off disables progression increments: ${progressionDisabledPass ? "PASS" : "FAIL"}`);
+  if (!progressionDisabledPass) {
+    console.log(`  totalSpecialEvents changed from ${eventsBeforeDisabled} to ${eventsAfterDisabled}`);
     failed = true;
   }
 

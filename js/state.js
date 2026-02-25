@@ -4,6 +4,18 @@ export const defaultVoiceSettings = {
   volume: 1,
 };
 
+export function createDefaultFunProgress() {
+  return {
+    totalSpecialEvents: 0,
+    rankIndex: 0,
+    eventsSinceRankUp: 0,
+    unlockedPackIds: ["A"],
+    seenPhrasesByCategory: {},
+    lastPhraseByCategory: {},
+    pendingRankUpBanner: null,
+  };
+}
+
 export function createCalculatorState() {
   return {
     tokens: [],
@@ -18,6 +30,7 @@ export function createCalculatorState() {
       ...defaultVoiceSettings,
     },
     funModeEnabled: true,
+    funProgress: createDefaultFunProgress(),
     lastSpecialContext: null,
   };
 }

@@ -43,6 +43,38 @@ These notes define the behavior contract for future Swift/iOS implementation.
 
 ## Auto-Speak Behavior
 - On `=` with Fun Mode enabled, any shown special banner is auto-spoken using the banner text (including `meme_6_7`).
+- On rank-up thresholds, the triggering event still speaks its normal lesson banner; a queued `Rank up! <rank>` banner is shown/spoken on the next special event.
+- With Fun Mode disabled, suppress fun banners, banner auto-speak, progression increments, and `67` meme speech override.
+
+## Fun Progression Contract (V2)
+- Persistence key: `funProgressV1` (JSON).
+- Progress model:
+  - `totalSpecialEvents`
+  - `rankIndex`
+  - `eventsSinceRankUp`
+  - `unlockedPackIds`
+  - `seenPhrasesByCategory`
+  - `lastPhraseByCategory`
+  - `pendingRankUpBanner`
+- Rank-up cadence: every `4` special events.
+- Rank names in order:
+  - `Cadet`
+  - `Scout`
+  - `Navigator`
+  - `Pilot`
+  - `Commander`
+  - `Infinity Captain`
+- Pack unlock schedule:
+  - Rank 0 -> Pack A
+  - Rank 2+ -> Pack A + Pack B
+- Phrase rotation rules:
+  - Never repeat the same phrase back-to-back in the same category.
+  - Prefer unseen phrases from unlocked packs.
+  - When a category pool is exhausted, clear seen tracking for that category and continue.
+- Reset behavior:
+  - `Reset Fun Progress` clears `funProgressV1` state back to defaults.
+  - Does not alter voice settings.
+  - Does not disable Fun Mode.
 
 ## iOS Implementation Guidance
 - Recreate classifier logic as pure Swift functions.

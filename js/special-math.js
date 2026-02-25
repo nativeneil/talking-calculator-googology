@@ -110,12 +110,23 @@ const LESSON_INFINITY_TIMES_INFINITY = [
 ];
 
 const LESSON_SIXTY_SEVEN_MEME = [
-  "67! Why was 6 afraid of 7? Because 7 ate 9... and now 67 showed up!",
-  "67 spotted! Six and seven are up to something again.",
-  "Alert: 67 detected — six and seven are hanging out together!",
-  "67! Looks like 6 finally made peace with 7 after that whole 9 incident.",
-  "Fun fact: 67 is 6 and 7 side by side — besties despite the drama.",
-  "67! Six leaned on seven. What could go wrong?",
+  "Teacher: 'Spelling test has 6 or 7 words.' Class: 'SIX SEVEN!!!' Teacher: 'Now it has 10 words.'",
+  "'Do you want 6 or 7 chicken nuggets?' 'SIX SEVEN!!!' Now everyone's counting nuggets like it's a game.",
+  "PE teacher: 'Do 6 or 7 star jumps!' 'SIX SEVEN!!!' We all did 42 and fell over laughing.",
+  "'I'm turning 6 soon!' 'SIX SEVEN!!!' He now tells everyone he is six seven years old.",
+  "Mum: 'You can play outside for 6 or 7 minutes.' 'SIX SEVEN!!!' Mum: 'Screens off right now!'",
+  "Counting in class: 'five… six… seven…' Everyone holds their breath… then — 'SIX SEVEN!!!'",
+  "Why do kids love 6 or 7? Because every time a grown-up says it, we get to yell something silly and make them groan!",
+  "Dentist: 'Brush for 6 or 7 minutes.' 'SIX SEVEN!!!' Dad facepalmed in the waiting room.",
+  "Dad: 'We're leaving in 6 or 7 minutes.' 'SIX SEVEN!!!' We left 42 minutes later.",
+  "Scorekeeper: '6 or 7 more points to win!' 'SIX SEVEN!!!' We lost but it was absolutely worth it.",
+  "Gran: 'I've got 6 or 7 biscuits left.' 'SIX SEVEN!!!' Gran now hides the biscuit tin.",
+  "Coach: 'Give me 6 or 7 more laps!' 'SIX SEVEN!!!' Coach said fine, 42 it is then.",
+  "Pizza place: 'Take 6 or 7 slices!' 'SIX SEVEN!!!' We ordered 42 garlic breads instead.",
+  "Librarian: 'You can borrow 6 or 7 books.' 'SIX SEVEN!!!' She stamped them all without blinking.",
+  "Clock hits 6:07. Entire house yells 'SIX SEVEN!!!' Even the dog barked.",
+  "Maths teacher: 'What is six times seven?' Class: 'FORTY-TWO!!!' Wait, wrong meme. 'SIX SEVEN!!!'",
+  "67 detected! Six and seven are side by side again. They never learn.",
 ];
 
 const lessonPools = {

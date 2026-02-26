@@ -380,7 +380,7 @@ function applySpecialContext(tokenList, resultString) {
     funBanner.showFunBanner(context.banner, 2600);
     const speakButton = document.querySelector(".key.speak");
     speakText({
-      text: context.banner,
+      text: context.speech,
       selectedVoiceName: state.selectedVoiceName,
       voiceSettings: state.voiceSettings,
       speakButton,

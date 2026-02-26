@@ -14,8 +14,28 @@ const { pathToFileURL } = require("url");
       expected: {
         kind: "meme_6_7",
         subtype: "six_times_seven_meme",
-        speech: specialMathPhrases.MEME_SIX_SEVEN_SPEECH,
-        banner: specialMathPhrases.BANNER_SIX_SEVEN_MEME,
+        speech: "six seven",
+        banner: "six seven",
+      },
+    },
+    {
+      name: "sixty seven meme: result exactly 67",
+      input: { tokenList: ["60", "+", "7"], resultString: "67" },
+      expected: {
+        kind: "meme_67",
+        subtype: "sixty_seven_meme",
+        speech: "six seven",
+        banner: "six seven",
+      },
+    },
+    {
+      name: "sixty seven meme: result contains 67",
+      input: { tokenList: ["600", "+", "71"], resultString: "671" },
+      expected: {
+        kind: "meme_67",
+        subtype: "sixty_seven_meme",
+        speech: "six seven",
+        banner: "six seven",
       },
     },
     {

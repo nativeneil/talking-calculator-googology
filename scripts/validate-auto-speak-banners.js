@@ -266,10 +266,10 @@ async function createHarness() {
 
   h.runExpression(["1", "/", "0", "="]);
   const lastInfinitySpeech = h.spoken[h.spoken.length - 1];
-  const infinityPass = specialMathPhrases.LESSON_DIVIDE_BY_ZERO.includes(lastInfinitySpeech);
-  console.log(`[auto-speak] infinity equals speaks banner: ${infinityPass ? "PASS" : "FAIL"}`);
+  const infinityPass = lastInfinitySpeech === "infinity";
+  console.log(`[auto-speak] infinity equals speaks speech text: ${infinityPass ? "PASS" : "FAIL"}`);
   if (!infinityPass) {
-    console.log(`  expected one of: ${JSON.stringify(specialMathPhrases.LESSON_DIVIDE_BY_ZERO)}`);
+    console.log(`  expected: "infinity"`);
     console.log(`  received: ${lastInfinitySpeech}`);
     failed = true;
   }
@@ -278,11 +278,11 @@ async function createHarness() {
   h.runExpression(["6", "*", "7", "="]);
   const memePass = (
     h.spoken.length === beforeMeme + 1 &&
-    h.spoken[h.spoken.length - 1] === specialMathPhrases.BANNER_SIX_SEVEN_MEME
+    h.spoken[h.spoken.length - 1] === specialMathPhrases.MEME_SIX_SEVEN_SPEECH
   );
-  console.log(`[auto-speak] meme 6*7 auto-speaks banner: ${memePass ? "PASS" : "FAIL"}`);
+  console.log(`[auto-speak] meme 6*7 auto-speaks speech text: ${memePass ? "PASS" : "FAIL"}`);
   if (!memePass) {
-    console.log(`  expected: ${specialMathPhrases.BANNER_SIX_SEVEN_MEME}`);
+    console.log(`  expected: ${specialMathPhrases.MEME_SIX_SEVEN_SPEECH}`);
     console.log(`  received: ${h.spoken[h.spoken.length - 1]}`);
     failed = true;
   }

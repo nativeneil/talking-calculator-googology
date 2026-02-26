@@ -89,7 +89,31 @@ const { pathToFileURL } = require("url");
         funModeEnabled: true,
         numberToWords,
       },
-      expected: MEME_SIXTY_SEVEN_SPEECH,
+      expected: "six seven sixty seven",
+    },
+    {
+      name: "671 meme speech when fun mode on",
+      input: {
+        currentInput: "",
+        lastResult: "671",
+        displayText: "671",
+        specialContext: null,
+        funModeEnabled: true,
+        numberToWords,
+      },
+      expected: "six seven six hundred and seventy one",
+    },
+    {
+      name: "6x7=42 with specialContext says six seven",
+      input: {
+        currentInput: "",
+        lastResult: "42",
+        displayText: "42",
+        specialContext: { speech: "six seven" },
+        funModeEnabled: true,
+        numberToWords,
+      },
+      expected: "six seven",
     },
     {
       name: "67 uses normal speech when fun mode off",

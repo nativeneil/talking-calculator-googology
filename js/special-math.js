@@ -1,8 +1,8 @@
 import { isOperator } from "./evaluate.js";
 
 const UNKNOWN_SPEECH = "unknown number - error error error";
-const MEME_SIX_SEVEN_SPEECH = "Forty-two. Yep, six is still afraid that seven ate nine.";
-const BANNER_SIX_SEVEN_MEME = "42 detected: six is still side-eyeing seven for eating nine.";
+const MEME_SIX_SEVEN_SPEECH = "six seven";
+const BANNER_SIX_SEVEN_MEME = "six seven";
 
 const LESSON_DIVIDE_BY_ZERO = [
   "Warp jump! Dividing by zero launched us to infinity.",
@@ -109,26 +109,6 @@ const LESSON_INFINITY_TIMES_INFINITY = [
   "Math fact: the product of two infinities is infinite.",
 ];
 
-const LESSON_SIXTY_SEVEN_MEME = [
-  "Teacher: 'Spelling test has 6 or 7 words.' Class: 'SIX SEVEN!!!' Teacher: 'Now it has 10 words.'",
-  "'Do you want 6 or 7 chicken nuggets?' 'SIX SEVEN!!!' Now everyone's counting nuggets like it's a game.",
-  "PE teacher: 'Do 6 or 7 star jumps!' 'SIX SEVEN!!!' We all did 42 and fell over laughing.",
-  "'I'm turning 6 soon!' 'SIX SEVEN!!!' He now tells everyone he is six seven years old.",
-  "Mum: 'You can play outside for 6 or 7 minutes.' 'SIX SEVEN!!!' Mum: 'Screens off right now!'",
-  "Counting in class: 'five… six… seven…' Everyone holds their breath… then — 'SIX SEVEN!!!'",
-  "Why do kids love 6 or 7? Because every time a grown-up says it, we get to yell something silly and make them groan!",
-  "Dentist: 'Brush for 6 or 7 minutes.' 'SIX SEVEN!!!' Dad facepalmed in the waiting room.",
-  "Dad: 'We're leaving in 6 or 7 minutes.' 'SIX SEVEN!!!' We left 42 minutes later.",
-  "Scorekeeper: '6 or 7 more points to win!' 'SIX SEVEN!!!' We lost but it was absolutely worth it.",
-  "Gran: 'I've got 6 or 7 biscuits left.' 'SIX SEVEN!!!' Gran now hides the biscuit tin.",
-  "Coach: 'Give me 6 or 7 more laps!' 'SIX SEVEN!!!' Coach said fine, 42 it is then.",
-  "Pizza place: 'Take 6 or 7 slices!' 'SIX SEVEN!!!' We ordered 42 garlic breads instead.",
-  "Librarian: 'You can borrow 6 or 7 books.' 'SIX SEVEN!!!' She stamped them all without blinking.",
-  "Clock hits 6:07. Entire house yells 'SIX SEVEN!!!' Even the dog barked.",
-  "Maths teacher: 'What is six times seven?' Class: 'FORTY-TWO!!!' Wait, wrong meme. 'SIX SEVEN!!!'",
-  "67 detected! Six and seven are side by side again. They never learn.",
-];
-
 const lessonPools = {
   divide_by_zero: LESSON_DIVIDE_BY_ZERO,
   infinity_stays_infinity: LESSON_INFINITY_STAYS_INFINITY,
@@ -139,7 +119,6 @@ const lessonPools = {
   negative_divide_by_zero: LESSON_NEGATIVE_DIVIDE_BY_ZERO,
   sign_flip_positive_infinity: LESSON_SIGN_FLIP_POS_INFINITY,
   infinity_times_infinity: LESSON_INFINITY_TIMES_INFINITY,
-  sixty_seven_meme: LESSON_SIXTY_SEVEN_MEME,
 };
 
 const lessonCycle = new Map();
@@ -324,14 +303,13 @@ function isInfinityTimesInfinity(left, operator, right) {
 }
 
 function classifySixtySevenMeme(tokenList, resultString) {
-  if (!isFiniteTokenEqual(resultString, 67)) {
-    return null;
-  }
+  const digits = String(resultString).replace(/[^0-9]/g, "");
+  if (!digits.includes("67")) return null;
   return {
     kind: "meme_67",
     subtype: "sixty_seven_meme",
-    speech: "sixty seven",
-    banner: getNextLesson("sixty_seven_meme"),
+    speech: "six seven",
+    banner: "six seven",
   };
 }
 
@@ -494,7 +472,6 @@ export const specialMathPhrases = {
   LESSON_NEGATIVE_DIVIDE_BY_ZERO,
   LESSON_SIGN_FLIP_POS_INFINITY,
   LESSON_INFINITY_TIMES_INFINITY,
-  LESSON_SIXTY_SEVEN_MEME,
   BANNER_WARP_JUMP,
   BANNER_COSMIC_RULE,
   BANNER_COSMIC_FLIP,

@@ -21,21 +21,25 @@ export function buildSpeechText({
   funModeEnabled = true,
   numberToWords,
 }) {
-  if (specialContext?.speech) {
-    return specialContext.speech;
-  }
-
   const rawValue = currentInput || lastResult || (displayText || "").trim();
   if (!rawValue) {
     return "";
   }
 
-  const normalizedRaw = rawValue.trim();
-  const normalizedNumeric = normalizedRaw.replace(/,/g, "");
-  if (funModeEnabled && /^\+?67(?:\.0+)?$/.test(normalizedNumeric)) {
-    return MEME_SIXTY_SEVEN_SPEECH;
+  const normalizedNumeric = rawValue.trim().replace(/,/g, "");
+
+  if (funModeEnabled) {
+    const digits = normalizedNumeric.replace(/[^0-9]/g, "");
+    if (digits.includes("67")) {
+      return "six seven " + numberToWords(normalizedNumeric);
+    }
   }
 
+  if (specialContext?.speech) {
+    return specialContext.speech;
+  }
+
+  const normalizedRaw = rawValue.trim();
   const normalized = normalizedRaw.toLowerCase();
   if (normalized === "infinity" || normalized === "+infinity") {
     return "infinity";

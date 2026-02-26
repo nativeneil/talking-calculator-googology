@@ -116,6 +116,18 @@ const { pathToFileURL } = require("url");
       expected: "six seven",
     },
     {
+      name: "special context wins over generic 67 fun speech",
+      input: {
+        currentInput: "",
+        lastResult: "67",
+        displayText: "67",
+        specialContext: { speech: "Pi party! 3.14159... keeps circling forever." },
+        funModeEnabled: true,
+        numberToWords,
+      },
+      expected: "Pi party! 3.14159... keeps circling forever.",
+    },
+    {
       name: "67 uses normal speech when fun mode off",
       input: {
         currentInput: "",

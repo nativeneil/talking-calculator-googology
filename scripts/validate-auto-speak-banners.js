@@ -266,10 +266,10 @@ async function createHarness() {
 
   h.runExpression(["1", "/", "0", "="]);
   const lastInfinitySpeech = h.spoken[h.spoken.length - 1];
-  const infinityPass = lastInfinitySpeech === "infinity";
+  const infinityPass = specialMathPhrases.LESSON_DIVIDE_BY_ZERO.includes(lastInfinitySpeech);
   console.log(`[auto-speak] infinity equals speaks speech text: ${infinityPass ? "PASS" : "FAIL"}`);
   if (!infinityPass) {
-    console.log(`  expected: "infinity"`);
+    console.log(`  expected one of: ${JSON.stringify(specialMathPhrases.LESSON_DIVIDE_BY_ZERO)}`);
     console.log(`  received: ${lastInfinitySpeech}`);
     failed = true;
   }

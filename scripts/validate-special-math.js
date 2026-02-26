@@ -52,8 +52,38 @@ const { pathToFileURL } = require("url");
       expected: {
         kind: "infinity",
         subtype: "divide_by_zero",
-        speech: "infinity",
+        speechIn: specialMathPhrases.LESSON_DIVIDE_BY_ZERO,
         bannerIn: specialMathPhrases.LESSON_DIVIDE_BY_ZERO,
+      },
+    },
+    {
+      name: "pi constant easter egg",
+      input: { tokenList: ["355", "/", "113"], resultString: "3.1415929203539823009" },
+      expected: {
+        kind: "constant",
+        subtype: "pi_constant",
+        speechIn: specialMathPhrases.LESSON_PI_CONSTANT,
+        bannerIn: specialMathPhrases.LESSON_PI_CONSTANT,
+      },
+    },
+    {
+      name: "golden ratio easter egg",
+      input: { tokenList: ["89", "/", "55"], resultString: "1.6181818181818181818" },
+      expected: {
+        kind: "constant",
+        subtype: "golden_ratio",
+        speechIn: specialMathPhrases.LESSON_GOLDEN_RATIO,
+        bannerIn: specialMathPhrases.LESSON_GOLDEN_RATIO,
+      },
+    },
+    {
+      name: "e constant easter egg",
+      input: { tokenList: ["19", "/", "7"], resultString: "2.7142857142857142857" },
+      expected: {
+        kind: "constant",
+        subtype: "e_constant",
+        speechIn: specialMathPhrases.LESSON_E_CONSTANT,
+        bannerIn: specialMathPhrases.LESSON_E_CONSTANT,
       },
     },
     {
@@ -152,6 +182,13 @@ const { pathToFileURL } = require("url");
           }
           continue;
         }
+        if (key === "speechIn") {
+          if (!Array.isArray(expectedValue) || !expectedValue.includes(actual.speech)) {
+            pass = false;
+            break;
+          }
+          continue;
+        }
         if (actual[key] !== expectedValue) {
           pass = false;
           break;
@@ -176,6 +213,9 @@ const { pathToFileURL } = require("url");
     specialMathPhrases.LESSON_INDETERMINATE,
     specialMathPhrases.LESSON_FALLBACK_INFINITY,
     specialMathPhrases.LESSON_FALLBACK_NEG_INFINITY,
+    specialMathPhrases.LESSON_PI_CONSTANT,
+    specialMathPhrases.LESSON_GOLDEN_RATIO,
+    specialMathPhrases.LESSON_E_CONSTANT,
   ];
 
   const uniqueInfinityLessons = new Set(infinityLessonPools.flat());

@@ -109,6 +109,33 @@ const LESSON_INFINITY_TIMES_INFINITY = [
   "Math fact: the product of two infinities is infinite.",
 ];
 
+const LESSON_PI_CONSTANT = [
+  "Pi party! 3.14159... keeps circling forever.",
+  "Circle secret unlocked: that is pi, the never-ending ratio.",
+  "Pi detected! Round and round with 3.14159...",
+  "Math sparkle: pi showed up with its endless decimals.",
+  "Orbit note: pi is steering this circle mission.",
+  "Pi cameo! A classic circle constant appeared.",
+];
+
+const LESSON_GOLDEN_RATIO = [
+  "Golden ratio found! Nature's favorite balance is here.",
+  "Phi spotted! That is the golden ratio glow.",
+  "Pattern alert: the golden ratio just appeared.",
+  "Design magic: phi popped in with elegant balance.",
+  "Nature code unlocked: hello, golden ratio!",
+  "Golden ratio cameo! Beautiful proportions detected.",
+];
+
+const LESSON_E_CONSTANT = [
+  "Euler alert! e just rolled in at about 2.71828.",
+  "e detected! Growth math just got exciting.",
+  "Exponential buddy spotted: that is constant e.",
+  "Math mission update: e is on the dashboard.",
+  "e cameo! Continuous growth mode engaged.",
+  "Science sparkle: constant e joined the party.",
+];
+
 const lessonPools = {
   divide_by_zero: LESSON_DIVIDE_BY_ZERO,
   infinity_stays_infinity: LESSON_INFINITY_STAYS_INFINITY,
@@ -119,6 +146,9 @@ const lessonPools = {
   negative_divide_by_zero: LESSON_NEGATIVE_DIVIDE_BY_ZERO,
   sign_flip_positive_infinity: LESSON_SIGN_FLIP_POS_INFINITY,
   infinity_times_infinity: LESSON_INFINITY_TIMES_INFINITY,
+  pi_constant: LESSON_PI_CONSTANT,
+  golden_ratio: LESSON_GOLDEN_RATIO,
+  e_constant: LESSON_E_CONSTANT,
 };
 
 const lessonCycle = new Map();
@@ -193,6 +223,10 @@ function isFiniteNegativeToken(token) {
 function isFiniteTokenEqual(token, expected) {
   const numeric = parseFiniteToken(token);
   return numeric !== null && numeric === expected;
+}
+
+function isWithinTolerance(value, target, tolerance) {
+  return Math.abs(value - target) <= tolerance;
 }
 
 function classifySixSevenMeme(tokenList, resultString) {
@@ -313,6 +347,46 @@ function classifySixtySevenMeme(tokenList, resultString) {
   };
 }
 
+function classifyConstantEasterEgg(resultString) {
+  const numeric = parseFiniteToken(resultString);
+  if (numeric === null) {
+    return null;
+  }
+
+  if (isWithinTolerance(numeric, Math.PI, 0.002)) {
+    const banner = getNextLesson("pi_constant");
+    return {
+      kind: "constant",
+      subtype: "pi_constant",
+      speech: banner,
+      banner,
+    };
+  }
+
+  const goldenRatio = (1 + Math.sqrt(5)) / 2;
+  if (isWithinTolerance(numeric, goldenRatio, 0.005)) {
+    const banner = getNextLesson("golden_ratio");
+    return {
+      kind: "constant",
+      subtype: "golden_ratio",
+      speech: banner,
+      banner,
+    };
+  }
+
+  if (isWithinTolerance(numeric, Math.E, 0.005)) {
+    const banner = getNextLesson("e_constant");
+    return {
+      kind: "constant",
+      subtype: "e_constant",
+      speech: banner,
+      banner,
+    };
+  }
+
+  return null;
+}
+
 function classifyResultKind(resultString) {
   const normalized = normalizeToken(resultString).toLowerCase();
   if (!normalized) {
@@ -373,6 +447,11 @@ export function classifySpecialMath({ tokenList, resultString }) {
     return meme67Context;
   }
 
+  const constantContext = classifyConstantEasterEgg(resultString);
+  if (constantContext) {
+    return constantContext;
+  }
+
   const kind = classifyResultKind(resultString);
   if (!kind) {
     return null;
@@ -405,18 +484,20 @@ export function classifySpecialMath({ tokenList, resultString }) {
 
   if (isFiniteDivideByZero(left, operator, right)) {
     if (isNegativeDivideByZero(left, operator, right)) {
+      const banner = getNextLesson("negative_divide_by_zero");
       return {
         kind,
         subtype: "negative_divide_by_zero",
-        speech,
-        banner: getNextLesson("negative_divide_by_zero"),
+        speech: banner,
+        banner,
       };
     }
+    const banner = getNextLesson("divide_by_zero");
     return {
       kind,
       subtype: "divide_by_zero",
-      speech,
-      banner: getNextLesson("divide_by_zero"),
+      speech: banner,
+      banner,
     };
   }
 
@@ -472,6 +553,9 @@ export const specialMathPhrases = {
   LESSON_NEGATIVE_DIVIDE_BY_ZERO,
   LESSON_SIGN_FLIP_POS_INFINITY,
   LESSON_INFINITY_TIMES_INFINITY,
+  LESSON_PI_CONSTANT,
+  LESSON_GOLDEN_RATIO,
+  LESSON_E_CONSTANT,
   BANNER_WARP_JUMP,
   BANNER_COSMIC_RULE,
   BANNER_COSMIC_FLIP,

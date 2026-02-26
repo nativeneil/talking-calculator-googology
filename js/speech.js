@@ -28,15 +28,15 @@ export function buildSpeechText({
 
   const normalizedNumeric = rawValue.trim().replace(/,/g, "");
 
+  if (specialContext?.speech) {
+    return specialContext.speech;
+  }
+
   if (funModeEnabled) {
     const digits = normalizedNumeric.replace(/[^0-9]/g, "");
     if (digits.includes("67")) {
       return "six seven " + numberToWords(normalizedNumeric);
     }
-  }
-
-  if (specialContext?.speech) {
-    return specialContext.speech;
   }
 
   const normalizedRaw = rawValue.trim();

@@ -29,6 +29,9 @@ export function buildSpeechText({
   const normalizedNumeric = rawValue.trim().replace(/,/g, "");
 
   if (specialContext?.speech) {
+    if (funModeEnabled) {
+      return numberToWords(normalizedNumeric) + ". " + specialContext.speech;
+    }
     return specialContext.speech;
   }
 

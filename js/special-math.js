@@ -5,135 +5,153 @@ const MEME_SIX_SEVEN_SPEECH = "six seven";
 const BANNER_SIX_SEVEN_MEME = "six seven";
 
 const LESSON_DIVIDE_BY_ZERO = [
-  "Warp jump! Dividing by zero launched us to infinity.",
-  "Lesson: any non-zero number divided by zero heads toward infinity.",
-  "Space tip: x divided by zero is an infinite launch.",
-  "Infinity alert: dividing by zero breaks finite limits.",
-  "Mission note: divide-by-zero opens the infinity gate.",
-  "Math fact: non-zero over zero points to infinity.",
-  "Rocket fuel: zero in the denominator means liftoff to infinity.",
-  "Navigation error: dividing by zero sends coordinates off the map.",
-  "Crew log: zero divisor detected, altitude now infinite.",
-  "Astro tip: you cannot split something into zero groups — infinity results.",
+  "Warp core breach! Dividing by zero created a local singularity.",
+  "Warning: Zero divisor detected. Reality is beginning to pixelate.",
+  "Singularity protocol: Any non-zero value over zero heads toward infinity.",
+  "Space-time anomaly! Dividing by zero opens an infinite gateway.",
+  "Navigation error: You cannot divide existence into zero parts.",
+  "Astro tip: Dividing by zero launches the result past the cosmic horizon.",
+  "Deep space alert: Zero divisor detected. Altitude now infinite.",
+  "Mission note: The zero-point field is expanding. Result: Infinity.",
+  "Neural link warning: Dividing by zero creates a logic paradox.",
+  "Cosmic law: Infinity results when finite limits are divided by nothing.",
 ];
 
 const LESSON_INFINITY_STAYS_INFINITY = [
-  "Cosmic rule: infinity stays infinity.",
-  "Lesson: adding or scaling finite values cannot cap infinity.",
-  "Space math: infinity plus finite is still infinity.",
-  "Infinity law: finite tweaks do not shrink endless size.",
-  "Mission lesson: infinity keeps winning against finite numbers.",
-  "Rule check: infinity remains infinity under finite operations here.",
-  "Star chart: no finite number can outrun infinity.",
-  "Crew update: infinity absorbed the finite value without flinching.",
-  "Deep space: finite adjustments vanish next to infinity.",
-  "Navigation: infinity's heading unchanged — finite course correction ignored.",
+  "Cosmic rule: Infinity remains unchanged by finite operations.",
+  "Deep space scan: The horizon is still infinite.",
+  "Universal constant: You cannot increment the absolute maximum.",
+  "Infinity law: Finite tweaks vanish against endless scale.",
+  "Mission update: Infinity has absorbed the value without deviation.",
+  "Star chart: No finite coordinate can outrun the infinite expanse.",
+  "Data log: Infinity is stable. Finite input ignored.",
+  "Navigation: Heading remains infinite. Course correction failed.",
+  "Astro fact: Adding to infinity is like adding a drop to a cosmic ocean.",
+  "System status: Infinity confirmed. Scaling remains boundless.",
 ];
 
 const LESSON_SIGN_FLIP_NEG_INFINITY = [
-  "Cosmic flip! Now we are at negative infinity.",
-  "Lesson: multiplying infinity by a negative flips direction.",
-  "Sign lesson: positive infinity crossed a negative and turned negative.",
-  "Space rule: a negative factor sends infinity below zero forever.",
-  "Mission tip: infinity changed sign, not size.",
-  "Math fact: infinity with a negative scale becomes negative infinity.",
-  "Course reversal: the negative factor flipped infinity downward.",
-  "Alert: positive infinity hit a negative and dove to minus infinity.",
-  "Crew log: sign bit toggled — we are now heading to negative infinity.",
-  "Astro fact: one negative multiplier inverts the infinite direction.",
+  "Cosmic flip! We have entered the negative infinity void.",
+  "Warning: Multiplying infinity by a negative inverts the vector.",
+  "Sign lesson: Positive infinity crossed a negative and dove below zero.",
+  "Space rule: A negative factor sends the infinite dive downward forever.",
+  "Mission tip: Infinity has changed sign. Prepare for negative descent.",
+  "Math fact: Negative scaling has inverted the infinite direction.",
+  "Course reversal: Infinity is now pulling us into the negative abyss.",
+  "Alert: Positive infinity hit a negative and dove to minus infinity.",
+  "Crew log: Sign bit toggled. Heading into the negative infinite zone.",
+  "Astro fact: One negative multiplier flips the infinite destination.",
 ];
 
 const LESSON_INDETERMINATE = [
-  "Mission unknown: this infinity move is indeterminate.",
-  "Lesson: this form does not resolve to one numeric value.",
-  "Space warning: infinity and zero collided into an undefined result.",
-  "Math note: this expression is indeterminate, not finite and not infinite.",
-  "Rule check: operations like infinity minus infinity are undefined.",
-  "System status: indeterminate form detected, result is not well-defined.",
-  "Crew alert: the math engine cannot pick a single answer here.",
-  "Deep space paradox: opposing infinities canceled into mystery.",
-  "Navigation fail: indeterminate form — no heading can be calculated.",
-  "Astro warning: this operation has no well-defined destination.",
+  "Mission unknown: This operation is indeterminate.",
+  "Quantum glitch: This form does not resolve to a single numeric value.",
+  "Paradox detected: Infinity and zero have collided into mystery.",
+  "Math warning: Result is indeterminate. Logic engine is stalling.",
+  "Rule check: Operations like infinity minus infinity are undefined.",
+  "System status: Indeterminate form detected. Result: Unknown.",
+  "Crew alert: The math engine cannot calculate a destination here.",
+  "Deep space anomaly: Opposing infinities have created a logic knot.",
+  "Navigation fail: Indeterminate result. Heading cannot be computed.",
+  "Astro warning: This operation has no well-defined solution.",
 ];
 
 const LESSON_FALLBACK_INFINITY = [
-  "Deep space math: still infinity!",
-  "Lesson: we are still in infinite territory.",
-  "Space update: result stayed at positive infinity.",
-  "Math fact: this path remains unbounded above.",
-  "Mission readout: positive infinity confirmed.",
-  "Infinity check: no finite limit reached.",
-  "Star log: still cruising at positive infinity.",
-  "Crew status: infinity holds steady — no ceiling in sight.",
-  "Astro update: we remain in the infinite zone.",
-  "Navigation: positive infinity locked in, no course change.",
+  "Still soaring through the positive infinite expanse.",
+  "We are locked in the endless sky of infinity.",
+  "Up, up, and beyond! Result remains infinite.",
+  "Infinity alert: We are still climbing at maximum velocity.",
+  "No ceiling detected. Territory remains infinite.",
+  "We are cruising through the infinite zone forever.",
+  "Star log: Still positive infinity. No finite limit in sight.",
+  "Crew status: Infinity holds steady. Heading remains unbounded.",
+  "Astro update: We remain in the infinite sector.",
+  "Navigation: Positive infinity confirmed. No course change.",
 ];
 
 const LESSON_FALLBACK_NEG_INFINITY = [
-  "Deep space math: negative infinity!",
-  "Lesson: the value remains unbounded below.",
-  "Space update: result stayed at negative infinity.",
-  "Math fact: this path heads endlessly negative.",
-  "Mission readout: negative infinity confirmed.",
-  "Infinity check: lower bound is still limitless.",
-  "Star log: still plummeting at negative infinity.",
-  "Crew status: negative infinity holds — no floor in sight.",
-  "Astro update: we remain in the negative infinite zone.",
-  "Navigation: negative infinity locked in, still descending.",
+  "Still falling through the negative infinite void.",
+  "Bottomless pit: Still sinking through negative infinity.",
+  "Down we go! Result remains endlessly negative.",
+  "Stuck in the negative infinity basement.",
+  "No floor detected. Territory remains negative infinite.",
+  "We are diving through the minus infinity zone forever.",
+  "Star log: Still negative infinity. Lower bound is limitless.",
+  "Crew status: Negative infinity holds. Descent remains unbounded.",
+  "Astro update: We remain in the negative infinite sector.",
+  "Navigation: Negative infinity confirmed. Still descending.",
 ];
 
 const LESSON_NEGATIVE_DIVIDE_BY_ZERO = [
-  "Downward warp! Dividing a negative by zero launched us to negative infinity.",
-  "Lesson: a negative number divided by zero plunges toward negative infinity.",
-  "Space tip: negative x over zero means a dive to minus infinity.",
-  "Gravity alert: negative divided by zero pulls us endlessly downward.",
-  "Mission note: negative divide-by-zero opens the downward infinity gate.",
-  "Math fact: negative over zero points to negative infinity.",
+  "Downward warp! Dividing a negative by zero created a dive to infinity.",
+  "Warning: A negative value over zero plunges toward minus infinity.",
+  "Space tip: Negative x over zero means a dive to the negative horizon.",
+  "Gravity alert: Negative divided by zero pulls us endlessly downward.",
+  "Mission note: Negative divide-by-zero opens the downward abyss.",
+  "Math fact: Negative over zero points to negative infinity.",
 ];
 
 const LESSON_SIGN_FLIP_POS_INFINITY = [
   "Double flip! Two negatives launched us back to positive infinity.",
-  "Lesson: negative infinity times a negative flips back to positive.",
-  "Sign lesson: two negatives made a positive — infinity is upward again.",
-  "Space rule: a double sign flip restores the upward infinite heading.",
-  "Mission tip: negative times negative equals positive, even at infinity.",
-  "Math fact: sign flip squared returns infinity to the positive side.",
+  "Sign recovery: Negative infinity times a negative flips back to positive.",
+  "Sign lesson: Double negative scaling restores the upward vector.",
+  "Space rule: A double sign flip returns the infinite heading to positive.",
+  "Mission tip: Negative times negative equals positive, even at infinity.",
+  "Math fact: Sign flip squared returns infinity to the positive side.",
 ];
 
 const LESSON_INFINITY_TIMES_INFINITY = [
-  "Infinity squared! Infinity times infinity is still infinity.",
-  "Lesson: multiplying infinities together keeps you infinite.",
-  "Space tip: infinity times infinity is an even bigger infinity.",
-  "Power surge: two infinities multiplied — result is mega infinity.",
-  "Mission note: infinity scaled by infinity stays boundless.",
-  "Math fact: the product of two infinities is infinite.",
+  "Hyper-infinity! Infinity times infinity is still infinite.",
+  "Lesson: Multiplying infinities together maintains endless scale.",
+  "Space tip: Infinity times infinity is a secondary-order infinity.",
+  "Power surge: Two infinities multiplied. Result: Mega-infinite.",
+  "Mission note: Infinity scaled by infinity remains boundless.",
+  "Math fact: The product of two infinities is always infinite.",
+];
+
+const LESSON_MULTIPLY_BY_ZERO = [
+  "Absolute Zero Protocol: The numbers have been erased from the timeline.",
+  "Zero-Point Event: Your values have collapsed into a void.",
+  "Magic trick: Everything multiplied by zero is zero.",
+  "Zero wins: It crushed your numbers into absolute nothingness.",
+  "Total erasure: The zero ray has neutralized the values.",
+  "Whoosh! Your data has disappeared into the zero-point field.",
+];
+
+const LESSON_LARGE_NUMBER = [
+  "Galactic scale detected. Are we calculating the star count of a nebula?",
+  "Warning: High-density integer. Calculation approaching cosmic proportions.",
+  "Stellar mass values detected. We are counting atoms in the local cluster.",
+  "Interstellar scale: This number exceeds the planetary count of the galaxy.",
+  "Mega-calculation: That number is so large it barely fits the buffer.",
+  "Deep space math: We have reached a multi-billion scale result.",
 ];
 
 const LESSON_PI_CONSTANT = [
-  "Pi party! 3.14159... keeps circling forever.",
-  "Circle secret unlocked: that is pi, the never-ending ratio.",
-  "Pi detected! Round and round with 3.14159...",
-  "Math sparkle: pi showed up with its endless decimals.",
-  "Orbit note: pi is steering this circle mission.",
-  "Pi cameo! A classic circle constant appeared.",
+  "Orbit locked! 3.14159... is the code of the circle.",
+  "Circle secret unlocked: You have found Pi, the eternal ratio.",
+  "Pi detected! We are now circling at 3.14159...",
+  "Math sparkle: Pi has arrived with its never-ending decimals.",
+  "Orbit note: Pi is steering the geometry of this mission.",
+  "Astro cameo: A classic cosmic constant has appeared.",
 ];
 
 const LESSON_GOLDEN_RATIO = [
-  "Golden ratio found! Nature's favorite balance is here.",
-  "Phi spotted! That is the golden ratio glow.",
-  "Pattern alert: the golden ratio just appeared.",
-  "Design magic: phi popped in with elegant balance.",
-  "Nature code unlocked: hello, golden ratio!",
-  "Golden ratio cameo! Beautiful proportions detected.",
+  "Proportion found! You have detected the Golden Ratio.",
+  "Phi spotted! That is the glow of cosmic balance.",
+  "Pattern alert: The Golden Ratio has emerged in the data.",
+  "Design magic: Phi has appeared with perfect elegant balance.",
+  "Nature code unlocked: The Golden Ratio is online.",
+  "Galaxy spiral: Beautiful proportions have been detected.",
 ];
 
 const LESSON_E_CONSTANT = [
-  "Euler alert! e just rolled in at about 2.71828.",
-  "e detected! Growth math just got exciting.",
-  "Exponential buddy spotted: that is constant e.",
-  "Math mission update: e is on the dashboard.",
-  "e cameo! Continuous growth mode engaged.",
-  "Science sparkle: constant e joined the party.",
+  "Euler alert! Constant E has arrived at 2.71828.",
+  "E detected! Growth math just became exponential.",
+  "Exponential buddy spotted: Constant E is on the dashboard.",
+  "Mission update: Continuous growth mode engaged.",
+  "E cameo! The Euler constant has joined the party.",
+  "Science sparkle: Growth constant E is steering the system.",
 ];
 
 const lessonPools = {
@@ -149,6 +167,8 @@ const lessonPools = {
   pi_constant: LESSON_PI_CONSTANT,
   golden_ratio: LESSON_GOLDEN_RATIO,
   e_constant: LESSON_E_CONSTANT,
+  multiply_by_zero: LESSON_MULTIPLY_BY_ZERO,
+  large_number: LESSON_LARGE_NUMBER,
 };
 
 const lessonCycle = new Map();
@@ -336,6 +356,16 @@ function isInfinityTimesInfinity(left, operator, right) {
   return operator === "*" && isInfinityToken(left) && isInfinityToken(right);
 }
 
+function isMultiplyByZero(left, operator, right) {
+  return operator === "*" && (isZeroToken(left) || isZeroToken(right)) && !isInfinityToken(left) && !isInfinityToken(right);
+}
+
+function isLargeNumber(resultString) {
+  const numeric = parseFiniteToken(resultString);
+  if (numeric === null) return false;
+  return Math.abs(numeric) >= 1000000000;
+}
+
 function classifySixtySevenMeme(tokenList, resultString) {
   const digits = String(resultString).replace(/[^0-9]/g, "");
   if (!digits.includes("67")) return null;
@@ -452,6 +482,29 @@ export function classifySpecialMath({ tokenList, resultString }) {
     return constantContext;
   }
 
+  if (isLargeNumber(resultString)) {
+    const banner = getNextLesson("large_number");
+    return {
+      kind: "large_number",
+      subtype: "large_number",
+      speech: banner,
+      banner,
+    };
+  }
+
+  if (Array.isArray(tokenList) && tokenList.length === 3 && isOperator(tokenList[1])) {
+    const [left, operator, right] = tokenList;
+    if (isMultiplyByZero(left, operator, right)) {
+      const banner = getNextLesson("multiply_by_zero");
+      return {
+        kind: "multiply_by_zero",
+        subtype: "multiply_by_zero",
+        speech: banner,
+        banner,
+      };
+    }
+  }
+
   const kind = classifyResultKind(resultString);
   if (!kind) {
     return null;
@@ -556,6 +609,8 @@ export const specialMathPhrases = {
   LESSON_PI_CONSTANT,
   LESSON_GOLDEN_RATIO,
   LESSON_E_CONSTANT,
+  LESSON_MULTIPLY_BY_ZERO,
+  LESSON_LARGE_NUMBER,
   BANNER_WARP_JUMP,
   BANNER_COSMIC_RULE,
   BANNER_COSMIC_FLIP,

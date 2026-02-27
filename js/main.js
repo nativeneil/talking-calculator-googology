@@ -378,15 +378,6 @@ function applySpecialContext(tokenList, resultString) {
   state.lastSpecialContext = context;
   if (context) {
     funBanner.showFunBanner(context.banner, 2600);
-    const speakButton = document.querySelector(".key.speak");
-    speakText({
-      text: context.speech,
-      selectedVoiceName: state.selectedVoiceName,
-      voiceSettings: state.voiceSettings,
-      speakButton,
-      speechSynthesis: window.speechSynthesis,
-      SpeechSynthesisUtteranceCtor: globalThis.SpeechSynthesisUtterance,
-    });
   } else {
     funBanner.hideFunBanner();
   }
@@ -430,6 +421,10 @@ function handleEquals() {
     state.currentInput = "";
     state.lastAction = "equals";
     renderDisplay();
+
+    if (state.lastSpecialContext) {
+      speakCurrent();
+    }
   } catch (error) {
     state.lastResult = "Error";
     state.tokens = [];
@@ -437,6 +432,10 @@ function handleEquals() {
     state.lastAction = "equals";
     applySpecialContext(evaluatedTokens, state.lastResult);
     renderDisplay();
+
+    if (state.lastSpecialContext) {
+      speakCurrent();
+    }
   }
 }
 

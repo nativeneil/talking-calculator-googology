@@ -20,6 +20,7 @@ export function buildSpeechText({
   specialContext,
   funModeEnabled = true,
   numberToWords,
+  isAutoSpeak = false,
 }) {
   const rawValue = currentInput || lastResult || (displayText || "").trim();
   if (!rawValue) {
@@ -30,6 +31,15 @@ export function buildSpeechText({
 
   if (specialContext?.speech) {
     if (funModeEnabled) {
+      // FOR SIX SEVEN: 
+      // - on auto-speak (equals): just say "six seven" 
+      // - on manual speak (peak): say "six seven" + the result (e.g. forty two)
+      if (specialContext.kind === "meme_6_7" || specialContext.kind === "meme_67") {
+        if (isAutoSpeak) {
+          return specialContext.speech;
+        }
+        return specialContext.speech + " " + numberToWords(normalizedNumeric);
+      }
       return numberToWords(normalizedNumeric) + ". " + specialContext.speech;
     }
     return specialContext.speech;

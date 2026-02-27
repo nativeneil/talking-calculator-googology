@@ -423,7 +423,7 @@ function handleEquals() {
     renderDisplay();
 
     if (state.lastSpecialContext) {
-      speakCurrent();
+      speakCurrent(true);
     }
   } catch (error) {
     state.lastResult = "Error";
@@ -434,12 +434,12 @@ function handleEquals() {
     renderDisplay();
 
     if (state.lastSpecialContext) {
-      speakCurrent();
+      speakCurrent(true);
     }
   }
 }
 
-function speakCurrent() {
+function speakCurrent(isAutoSpeak = false) {
   const specialContext = state.lastAction === "equals" && !state.currentInput && state.tokens.length === 0
     ? state.lastSpecialContext
     : null;
@@ -451,6 +451,7 @@ function speakCurrent() {
     specialContext,
     funModeEnabled: state.funModeEnabled,
     numberToWords,
+    isAutoSpeak,
   });
 
   if (!text) {

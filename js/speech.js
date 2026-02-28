@@ -56,6 +56,11 @@ export function buildSpeechText({
         return specialContext.speech + " " + numberToWords(normalizedNumeric);
       }
 
+      // For error/indeterminate results, just speak the lesson directly
+      if (specialContext.kind === "indeterminate" || specialContext.kind === "error") {
+        return specialContext.speech;
+      }
+
       // INFINITY SPEECH REWORK:
       // - auto-speak (equals): speak the educational lesson
       // - manual speak, 1st press on new infinity: just say "infinity" / "negative infinity"

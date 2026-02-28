@@ -266,6 +266,14 @@ button {
   background: rgba(249, 115, 22, 0.15);
 }
 
+.version-label {
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--text-secondary, #888);
+  margin-top: 0.25rem;
+  opacity: 0.6;
+}
+
 /* Display */
 .display {
   background: var(--display-bg);

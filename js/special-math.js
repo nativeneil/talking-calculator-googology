@@ -533,10 +533,12 @@ export function classifySpecialMath({ tokenList, resultString }) {
 
   if (!Array.isArray(tokenList) || tokenList.length !== 3 || !isOperator(tokenList[1])) {
     if (kind === "indeterminate" || kind === "error") {
+      const banner = getNextLesson("indeterminate");
       return {
-        ...buildFallbackContext(kind),
+        kind,
         subtype: kind === "error" ? "error" : "indeterminate",
-        banner: getNextLesson("indeterminate"),
+        speech: banner,
+        banner,
       };
     }
     return buildFallbackContext(kind);
@@ -546,11 +548,12 @@ export function classifySpecialMath({ tokenList, resultString }) {
 
   const indeterminateSubtype = isIndeterminateBinary(left, operator, right);
   if (kind === "indeterminate" || kind === "error" || indeterminateSubtype) {
+    const banner = getNextLesson("indeterminate");
     return {
       kind: kind === "error" ? "error" : "indeterminate",
       subtype: indeterminateSubtype || (kind === "error" ? "error" : "indeterminate"),
-      speech: UNKNOWN_SPEECH,
-      banner: getNextLesson("indeterminate"),
+      speech: banner,
+      banner,
     };
   }
 

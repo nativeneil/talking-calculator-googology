@@ -1,5 +1,10 @@
+import { getNextLesson } from "./special-math.js";
+
 const UNKNOWN_SPEECH = "unknown number - error error error";
 const MEME_SIXTY_SEVEN_SPEECH = "six seven";
+
+let infinitySpeakPressCount = 0;
+let lastDisplayWasInfinity = false;
 
 function makeSpeechFriendlyUtteranceText(text) {
   return text.replace(/\b[a-z]+illion\b/gi, (word) => {
@@ -29,10 +34,20 @@ export function buildSpeechText({
 
   const normalizedNumeric = rawValue.trim().replace(/,/g, "");
 
+  const isInfinityResult =
+    specialContext?.kind === "infinity" || specialContext?.kind === "negative_infinity";
+  const isNegInfinity = specialContext?.kind === "negative_infinity";
+
+  // Reset infinity speak state when display changes to non-infinity
+  if (!isInfinityResult) {
+    infinitySpeakPressCount = 0;
+    lastDisplayWasInfinity = false;
+  }
+
   if (specialContext?.speech) {
     if (funModeEnabled) {
-      // FOR SIX SEVEN: 
-      // - on auto-speak (equals): just say "six seven" 
+      // FOR SIX SEVEN:
+      // - on auto-speak (equals): just say "six seven"
       // - on manual speak (peak): say "six seven" + the result (e.g. forty two)
       if (specialContext.kind === "meme_6_7" || specialContext.kind === "meme_67") {
         if (isAutoSpeak) {
@@ -40,6 +55,34 @@ export function buildSpeechText({
         }
         return specialContext.speech + " " + numberToWords(normalizedNumeric);
       }
+
+      // INFINITY SPEECH REWORK:
+      // - auto-speak (equals): speak the educational lesson
+      // - manual speak, 1st press on new infinity: just say "infinity" / "negative infinity"
+      // - manual speak, subsequent: cycle through funny quips
+      if (isInfinityResult) {
+        if (isAutoSpeak) {
+          // On equals, speak the lesson (already set as specialContext.speech)
+          lastDisplayWasInfinity = true;
+          infinitySpeakPressCount = 0;
+          return specialContext.speech;
+        }
+        // Manual speak button
+        infinitySpeakPressCount++;
+        if (!lastDisplayWasInfinity) {
+          // First press on a new infinity result
+          lastDisplayWasInfinity = true;
+          return isNegInfinity ? "negative infinity" : "infinity";
+        }
+        if (infinitySpeakPressCount === 1) {
+          // First manual press after auto-speak already said the lesson
+          return isNegInfinity ? "negative infinity" : "infinity";
+        }
+        // Subsequent presses: cycle through quips
+        const quipKey = isNegInfinity ? "quips_negative_infinity" : "quips_infinity";
+        return getNextLesson(quipKey);
+      }
+
       return numberToWords(normalizedNumeric) + ". " + specialContext.speech;
     }
     return specialContext.speech;

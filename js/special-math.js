@@ -82,6 +82,32 @@ const LESSON_FALLBACK_NEG_INFINITY = [
   "Navigation: Negative infinity confirmed. Still descending.",
 ];
 
+const QUIPS_INFINITY_SPEAK = [
+  "still infinity",
+  "there is nothing beyond infinity",
+  "always infinity",
+  "infinity forever",
+  "yep, still infinity",
+  "infinity all day long",
+  "surprise, it is infinity",
+  "infinity is not going anywhere",
+  "the answer remains infinity",
+  "endlessly infinity",
+];
+
+const QUIPS_NEG_INFINITY_SPEAK = [
+  "still negative infinity",
+  "the void goes on",
+  "negative infinity forever",
+  "yep, still negative infinity",
+  "endlessly negative infinity",
+  "the abyss has no bottom",
+  "negative infinity is not going anywhere",
+  "always negative infinity",
+  "deeper and deeper, negative infinity",
+  "the minus side of forever",
+];
+
 const LESSON_NEGATIVE_DIVIDE_BY_ZERO = [
   "Downward warp! Dividing a negative by zero created a dive to infinity.",
   "Warning: A negative value over zero plunges toward minus infinity.",
@@ -169,6 +195,8 @@ const lessonPools = {
   e_constant: LESSON_E_CONSTANT,
   multiply_by_zero: LESSON_MULTIPLY_BY_ZERO,
   large_number: LESSON_LARGE_NUMBER,
+  quips_infinity: QUIPS_INFINITY_SPEAK,
+  quips_negative_infinity: QUIPS_NEG_INFINITY_SPEAK,
 };
 
 const lessonCycle = new Map();
@@ -437,16 +465,6 @@ function classifyResultKind(resultString) {
   return null;
 }
 
-function getSpeechByKind(kind) {
-  if (kind === "infinity") {
-    return "infinity";
-  }
-  if (kind === "negative_infinity") {
-    return "negative infinity";
-  }
-  return UNKNOWN_SPEECH;
-}
-
 function buildFallbackBanner(kind) {
   if (kind === "negative_infinity") {
     return getNextLesson("fallback_negative_infinity");
@@ -457,14 +475,17 @@ function buildFallbackBanner(kind) {
   return getNextLesson("indeterminate");
 }
 
-function buildFallbackContext(kind, speech) {
+function buildFallbackContext(kind) {
+  const banner = buildFallbackBanner(kind);
   return {
     kind,
     subtype: "generic",
-    speech,
-    banner: buildFallbackBanner(kind),
+    speech: banner,
+    banner,
   };
 }
+
+export { getNextLesson };
 
 export function classifySpecialMath({ tokenList, resultString }) {
   const memeContext = classifySixSevenMeme(tokenList, resultString);
@@ -510,17 +531,15 @@ export function classifySpecialMath({ tokenList, resultString }) {
     return null;
   }
 
-  const speech = getSpeechByKind(kind);
-
   if (!Array.isArray(tokenList) || tokenList.length !== 3 || !isOperator(tokenList[1])) {
     if (kind === "indeterminate" || kind === "error") {
       return {
-        ...buildFallbackContext(kind, speech),
+        ...buildFallbackContext(kind),
         subtype: kind === "error" ? "error" : "indeterminate",
         banner: getNextLesson("indeterminate"),
       };
     }
-    return buildFallbackContext(kind, speech);
+    return buildFallbackContext(kind);
   }
 
   const [left, operator, right] = tokenList;
@@ -555,42 +574,46 @@ export function classifySpecialMath({ tokenList, resultString }) {
   }
 
   if (isInfinityTimesInfinity(left, operator, right)) {
+    const banner = getNextLesson("infinity_times_infinity");
     return {
       kind,
       subtype: "infinity_times_infinity",
-      speech,
-      banner: getNextLesson("infinity_times_infinity"),
+      speech: banner,
+      banner,
     };
   }
 
   if (isSignFlipToPositiveInfinity(left, operator, right)) {
+    const banner = getNextLesson("sign_flip_positive_infinity");
     return {
       kind,
       subtype: "sign_flip_positive_infinity",
-      speech,
-      banner: getNextLesson("sign_flip_positive_infinity"),
+      speech: banner,
+      banner,
     };
   }
 
   if (isStableInfinityBinary(left, operator, right)) {
     if (kind === "negative_infinity" && isSignFlipToNegativeInfinity(left, operator, right)) {
+      const banner = getNextLesson("sign_flip_negative_infinity");
       return {
         kind,
         subtype: "sign_flip_negative_infinity",
-        speech,
-        banner: getNextLesson("sign_flip_negative_infinity"),
+        speech: banner,
+        banner,
       };
     }
 
+    const banner = getNextLesson("infinity_stays_infinity");
     return {
       kind,
       subtype: "infinity_stays_infinity",
-      speech,
-      banner: getNextLesson("infinity_stays_infinity"),
+      speech: banner,
+      banner,
     };
   }
 
-  return buildFallbackContext(kind, speech);
+  return buildFallbackContext(kind);
 }
 
 export const specialMathPhrases = {
@@ -611,6 +634,8 @@ export const specialMathPhrases = {
   LESSON_E_CONSTANT,
   LESSON_MULTIPLY_BY_ZERO,
   LESSON_LARGE_NUMBER,
+  QUIPS_INFINITY_SPEAK,
+  QUIPS_NEG_INFINITY_SPEAK,
   BANNER_WARP_JUMP,
   BANNER_COSMIC_RULE,
   BANNER_COSMIC_FLIP,

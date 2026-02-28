@@ -56,10 +56,10 @@ export function buildSpeechText({
         return specialContext.speech + " " + numberToWords(normalizedNumeric);
       }
 
-      // For error/indeterminate: lesson on equals, fun error line on speak
+      // For error/indeterminate: fun error line + lesson on equals, just error line on speak
       if (specialContext.kind === "indeterminate" || specialContext.kind === "error") {
         if (isAutoSpeak) {
-          return specialContext.speech;
+          return UNKNOWN_SPEECH + ". " + specialContext.speech;
         }
         return UNKNOWN_SPEECH;
       }

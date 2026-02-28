@@ -15,6 +15,9 @@ const LESSON_DIVIDE_BY_ZERO = [
   "Mission note: The zero-point field is expanding. Result: Infinity.",
   "Neural link warning: Dividing by zero creates a logic paradox.",
   "Cosmic law: Infinity results when finite limits are divided by nothing.",
+  "Nice try! You split something into zero groups and broke math.",
+  "Pro tip: Dividing by zero is how you unlock infinity. Every time.",
+  "You found the cheat code! Divide by zero equals instant infinity.",
 ];
 
 const LESSON_INFINITY_STAYS_INFINITY = [
@@ -28,6 +31,11 @@ const LESSON_INFINITY_STAYS_INFINITY = [
   "Navigation: Heading remains infinite. Course correction failed.",
   "Astro fact: Adding to infinity is like adding a drop to a cosmic ocean.",
   "System status: Infinity confirmed. Scaling remains boundless.",
+  "No matter how hard you try, infinity plus anything is still infinity.",
+  "Nice attempt! But you cannot sneak past infinity with addition.",
+  "Fun fact: Infinity ate your number for breakfast and did not even notice.",
+  "Infinity plus a million? Still infinity. Infinity plus a billion? Still infinity. It always wins.",
+  "You could add every number ever invented and infinity would just shrug.",
 ];
 
 const LESSON_SIGN_FLIP_NEG_INFINITY = [
@@ -41,6 +49,9 @@ const LESSON_SIGN_FLIP_NEG_INFINITY = [
   "Alert: Positive infinity hit a negative and dove to minus infinity.",
   "Crew log: Sign bit toggled. Heading into the negative infinite zone.",
   "Astro fact: One negative multiplier flips the infinite destination.",
+  "Plot twist! One little minus sign flipped infinity upside down.",
+  "Infinity was going up forever but a negative sent it crashing the other way.",
+  "Lesson learned: Even infinity obeys the sign rules. Negative flips the direction.",
 ];
 
 const LESSON_INDETERMINATE = [
@@ -67,6 +78,8 @@ const LESSON_FALLBACK_INFINITY = [
   "Crew status: Infinity holds steady. Heading remains unbounded.",
   "Astro update: We remain in the infinite sector.",
   "Navigation: Positive infinity confirmed. No course change.",
+  "Yep, still infinity. It is not going to change its mind no matter what you press.",
+  "Infinity is just vibing. Nothing you do can faze it.",
 ];
 
 const LESSON_FALLBACK_NEG_INFINITY = [
@@ -124,6 +137,8 @@ const LESSON_SIGN_FLIP_POS_INFINITY = [
   "Space rule: A double sign flip returns the infinite heading to positive.",
   "Mission tip: Negative times negative equals positive, even at infinity.",
   "Math fact: Sign flip squared returns infinity to the positive side.",
+  "Two negatives made a positive! Infinity bounced back from the void.",
+  "Negative times negative? Even infinity knows that trick. Back to positive!",
 ];
 
 const LESSON_INFINITY_TIMES_INFINITY = [
@@ -133,6 +148,10 @@ const LESSON_INFINITY_TIMES_INFINITY = [
   "Power surge: Two infinities multiplied. Result: Mega-infinite.",
   "Mission note: Infinity scaled by infinity remains boundless.",
   "Math fact: The product of two infinities is always infinite.",
+  "No such thing as double infinity! Infinity times infinity is just infinity being dramatic.",
+  "Sorry, you cannot level up infinity. It is already the final boss.",
+  "Infinity squared? Still infinity. There is no bigger infinity in this calculator.",
+  "Two infinities walk into a bar. The result? Still just one infinity.",
 ];
 
 const LESSON_MULTIPLY_BY_ZERO = [

@@ -150,4 +150,5 @@ export function updateDisplay(state, resultEl, expressionEl) {
       : state.lastExpression;
 
   expressionEl.textContent = activeExpression;
+  expressionEl.scrollLeft = expressionEl.scrollWidth;
 }

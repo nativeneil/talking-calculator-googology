@@ -332,6 +332,20 @@ function handleOperator(operator) {
   }
 
   state.lastAction = null;
+
+  const numericTokens = state.tokens.filter((t) => !isOperator(t));
+  if (numericTokens.length >= 2) {
+    try {
+      const tokensToEval = isOperator(state.tokens[state.tokens.length - 1])
+        ? state.tokens.slice(0, -1)
+        : [...state.tokens];
+      const intermediate = evaluate(tokensToEval);
+      state.lastResult = intermediate.toString();
+    } catch {
+      // leave lastResult as-is if evaluation fails
+    }
+  }
+
   renderDisplay();
 }
 

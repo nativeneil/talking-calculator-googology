@@ -535,7 +535,6 @@ button {
 }
 
 /* Speak Button Visual Container */
-/* Speak Button Visual Container */
 .speak-visual {
   position: relative;
   display: flex;
@@ -545,144 +544,158 @@ button {
   height: 60px;
 }
 
-/* Speak Visual - Friendly Robot */
-.mouth-face {
+/* Speak Visual - T-Rex Head (side profile, facing right) */
+.trex-face {
   position: relative;
-  width: 44px;
-  height: 40px;
-  background: #e4e4e7; /* Zinc-200 metallic/plastic look */
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06),
-    inset 0 2px 4px rgba(255, 255, 255, 0.8),
-    inset 0 -2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-  margin-top: 4px; /* Space for antenna */
+  width: 54px;
+  height: 46px;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-origin: center bottom;
 }
 
-.key.speak:hover .mouth-face {
-  transform: translateY(-2px);
-  background: #f4f4f5;
-  box-shadow: 
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05),
-    inset 0 2px 4px rgba(255, 255, 255, 0.9);
+.key.speak:hover .trex-face {
+  transform: translateY(-2px) rotate(-2deg);
 }
 
-/* Antenna */
-.mouth-face::before {
+/* Upper head + snout */
+.trex-head {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 54px;
+  height: 28px;
+  background: linear-gradient(180deg, #4ade80 0%, #22c55e 55%, #16a34a 100%);
+  border-radius: 16px 22px 4px 12px;
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.35),
+    inset 0 -3px 5px rgba(0, 0, 0, 0.25),
+    0 3px 6px rgba(0, 0, 0, 0.3);
+  transform-origin: left center;
+  transition: transform 0.12s ease;
+  z-index: 2;
+}
+
+/* Brow ridge over the eye */
+.trex-head::before {
   content: '';
   position: absolute;
-  top: -6px;
-  width: 2px;
-  height: 6px;
-  background: #a1a1aa;
-  transition: all 0.2s ease;
+  top: 2px;
+  left: 6px;
+  width: 18px;
+  height: 7px;
+  background: #16a34a;
+  border-radius: 8px 8px 2px 2px;
 }
 
-.mouth-face::after {
-  content: '';
+/* Eye */
+.trex-eye {
   position: absolute;
-  top: -10px;
-  width: 6px;
-  height: 6px;
+  top: 7px;
+  left: 9px;
+  width: 9px;
+  height: 9px;
+  background: #fef08a;
   border-radius: 50%;
-  background: #ef4444; /* Dotted red light default */
-  box-shadow: 0 0 4px rgba(239, 68, 68, 0.4);
-  transition: all 0.2s ease;
+  box-shadow: 0 0 0 1px #14532d;
+  z-index: 3;
 }
 
-.key.speak:hover .mouth-face::after {
-  background: var(--accent-primary);
-  box-shadow: 0 0 8px var(--accent-primary);
-  transform: scale(1.2);
-}
-
-/* Eyes */
-.eyes {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 6px;
-  width: 100%;
-  justify-content: center;
-}
-
-.eye {
-  width: 8px;
-  height: 10px;
-  background: #18181b;
-  border-radius: 4px; /* Rounded rectangle eyes */
-  transition: all 0.2s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.eye::after {
+.trex-eye::after {
   content: '';
   position: absolute;
-  top: 1px;
-  right: 1px;
-  width: 3px;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.6);
+  top: 2px;
+  left: 3px;
+  width: 4px;
+  height: 5px;
+  background: #18181b;
   border-radius: 50%;
 }
 
-/* Mouth */
-.mouth {
-  width: 14px;
-  height: 3px;
-  background: #18181b;
-  border-radius: 2px;
-  transition: all 0.2s ease;
-  border: none;
+/* Nostril at the snout tip */
+.trex-nostril {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 4px;
+  height: 4px;
+  background: #14532d;
+  border-radius: 50%;
 }
 
-.tongue {
-  display: none;
+/* Upper teeth - downward-pointing sawtooth */
+.trex-upper-teeth {
+  position: absolute;
+  bottom: -5px;
+  right: 4px;
+  width: 40px;
+  height: 8px;
+  background: #fafafa;
+  z-index: 3;
+  clip-path: polygon(
+    0 0, 100% 0,
+    100% 30%, 90% 100%, 80% 30%, 70% 100%, 60% 30%,
+    50% 100%, 40% 30%, 30% 100%, 20% 30%, 10% 100%, 0 30%
+  );
 }
 
-/* Speaking Animation - Robot Active */
-.key.speak.speaking .mouth-face {
-  animation: robot-bobble 0.5s infinite alternate ease-in-out;
+/* Lower jaw */
+.trex-jaw {
+  position: absolute;
+  bottom: 0;
+  right: 2px;
+  width: 42px;
+  height: 14px;
+  background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
+  border-radius: 4px 8px 12px 14px;
+  box-shadow:
+    inset 0 -2px 3px rgba(0, 0, 0, 0.25),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+  transform-origin: left center;
+  transition: transform 0.12s ease;
+  z-index: 1;
 }
 
-.key.speak.speaking .mouth-face::after {
-  background: #22c55e; /* Green when speaking */
-  box-shadow: 0 0 12px #22c55e;
-  animation: antenna-flash 0.5s infinite alternate;
+/* Lower teeth - upward-pointing sawtooth */
+.trex-lower-teeth {
+  position: absolute;
+  top: -4px;
+  right: 4px;
+  width: 36px;
+  height: 7px;
+  background: #fafafa;
+  clip-path: polygon(
+    0 100%, 100% 100%,
+    100% 70%, 90% 0, 80% 70%, 70% 0, 60% 70%,
+    50% 0, 40% 70%, 30% 0, 20% 70%, 10% 0, 0 70%
+  );
 }
 
-.key.speak.speaking .mouth {
-  animation: robot-speak 0.15s infinite alternate ease-in-out;
-  background: var(--accent-primary);
-  box-shadow: 0 0 8px var(--accent-glow);
+/* Speaking Animation - T-Rex chomp + roar */
+.key.speak.speaking .trex-head {
+  animation: trex-upper-chomp 0.32s infinite alternate ease-in-out;
 }
 
-.key.speak.speaking .eye {
-  height: 4px; /* Squint/Happy eyes */
-  margin-top: 3px;
-  margin-bottom: 3px;
+.key.speak.speaking .trex-jaw {
+  animation: trex-jaw-chomp 0.32s infinite alternate ease-in-out;
 }
 
-@keyframes robot-bobble {
+.key.speak.speaking .trex-face {
+  animation: trex-bob 0.32s infinite alternate ease-in-out;
+}
+
+@keyframes trex-jaw-chomp {
+  0% { transform: rotate(0deg) translateY(0); }
+  100% { transform: rotate(18deg) translateY(4px); }
+}
+
+@keyframes trex-upper-chomp {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-4deg); }
+}
+
+@keyframes trex-bob {
   0% { transform: translateY(0) rotate(0deg); }
-  100% { transform: translateY(-2px) rotate(1deg); }
-}
-
-@keyframes robot-speak {
-  0% { width: 12px; height: 3px; }
-  100% { width: 18px; height: 6px; border-radius: 3px; }
-}
-
-@keyframes antenna-flash {
-  0% { opacity: 0.7; transform: scale(1); }
-  100% { opacity: 1; transform: scale(1.3); }
+  100% { transform: translateY(-1px) rotate(-1deg); }
 }
 
 /* Speak Label - Orange */
@@ -886,30 +899,14 @@ button {
     height: 70px;
   }
 
-  .mouth-face {
-    width: 50px;
-    height: 46px;
-    margin-top: 5px;
+  .trex-face {
+    width: 62px;
+    height: 52px;
   }
 
-  .eyes {
-    gap: 14px;
-    margin-bottom: 8px;
-  }
-
-  .eye {
-    width: 10px;
-    height: 12px;
-  }
-
-  .mouth {
-    width: 18px;
-    height: 4px;
-  }
-
-  @keyframes robot-speak {
-    0% { width: 16px; height: 4px; }
-    100% { width: 24px; height: 8px; border-radius: 4px; }
+  .trex-head {
+    width: 62px;
+    height: 32px;
   }
 
   .speak-label {
@@ -991,37 +988,45 @@ button {
     height: 44px;
   }
 
-  .mouth-face {
-    width: 32px;
-    height: 28px;
-    margin-top: 3px;
-    border-radius: 8px;
+  .trex-face {
+    width: 40px;
+    height: 34px;
   }
 
-  .eyes {
-    gap: 6px;
-    margin-bottom: 4px;
+  .trex-head {
+    width: 40px;
+    height: 21px;
+    border-radius: 12px 16px 3px 9px;
   }
 
-  .eye {
-    width: 6px;
+  .trex-eye {
+    top: 5px;
+    left: 7px;
+    width: 7px;
     height: 7px;
-    border-radius: 3px;
   }
 
-  .eye::after {
-    width: 2px;
-    height: 2px;
+  .trex-eye::after {
+    top: 1px;
+    left: 2px;
+    width: 3px;
+    height: 4px;
   }
 
-  .mouth {
-    width: 10px;
-    height: 2px;
+  .trex-upper-teeth {
+    width: 30px;
+    height: 6px;
+    bottom: -4px;
   }
 
-  @keyframes robot-speak {
-    0% { width: 8px; height: 2px; }
-    100% { width: 14px; height: 5px; border-radius: 3px; }
+  .trex-jaw {
+    height: 11px;
+    width: 32px;
+  }
+
+  .trex-lower-teeth {
+    width: 27px;
+    height: 5px;
   }
 
   .speak-label {
@@ -1112,27 +1117,45 @@ button {
     height: 36px;
   }
 
-  .mouth-face {
-    width: 26px;
-    height: 24px;
-    border-radius: 6px;
-    margin-top: 2px;
+  .trex-face {
+    width: 34px;
+    height: 28px;
   }
 
-  .eyes {
-    gap: 5px;
-    margin-bottom: 2px;
+  .trex-head {
+    width: 34px;
+    height: 18px;
+    border-radius: 10px 14px 3px 8px;
   }
 
-  .eye {
-    width: 5px;
+  .trex-eye {
+    top: 4px;
+    left: 6px;
+    width: 6px;
     height: 6px;
-    border-radius: 2px;
   }
 
-  .mouth {
-    width: 8px;
-    height: 2px;
+  .trex-eye::after {
+    top: 1px;
+    left: 2px;
+    width: 2px;
+    height: 3px;
+  }
+
+  .trex-upper-teeth {
+    width: 25px;
+    height: 5px;
+    bottom: -3px;
+  }
+
+  .trex-jaw {
+    height: 9px;
+    width: 27px;
+  }
+
+  .trex-lower-teeth {
+    width: 22px;
+    height: 4px;
   }
 
   .speak-label {
@@ -1222,24 +1245,8 @@ button {
     background: linear-gradient(180deg, rgba(249, 115, 22, 0.08) 0%, transparent 40%);
   }
 
-   .key.speak:hover .mouth-face {
-    background: #f4f4f5;
-    box-shadow: 
-      0 4px 10px rgba(0, 0, 0, 0.1),
-      inset 0 2px 4px rgba(255, 255, 255, 0.9);
-  }
-
-  .key.speak:hover .eye {
-    background: var(--text-dark);
-  }
-
-  .key.speak:hover .mouth {
-    background: var(--text-dark);
-  }
-
-  .key.speak:hover .mouth-face::after {
-    background: var(--accent-primary);
-    box-shadow: 0 0 8px var(--accent-primary);
+  .key.speak:hover .trex-face {
+    transform: translateY(-2px) rotate(-2deg);
   }
 
   .key.speak:hover .speak-label {
@@ -1327,9 +1334,9 @@ button {
 @media (prefers-reduced-motion: reduce) {
   .key,
   .key.speak,
-  .mouth,
-  .eye,
-  .mouth-face,
+  .trex-face,
+  .trex-head,
+  .trex-jaw,
   .speak-label,
   .history li,
   .fun-banner {

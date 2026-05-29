@@ -38,12 +38,16 @@
           <label class="voice-label" for="voiceVolume">Volume</label>
           <input id="voiceVolume" type="range" min="0" max="1" step="0.05" value="1" />
         </div>
+        <div class="voice-control character-control">
+          <label class="voice-label" id="characterLabel">Buddy</label>
+          <div class="character-options" id="characterOptions" role="radiogroup" aria-labelledby="characterLabel"></div>
+        </div>
         <div class="voice-toggle-row">
           <label class="voice-label" for="funModeToggle">Fun Mode</label>
           <input id="funModeToggle" class="voice-toggle" type="checkbox" checked />
         </div>
         <button class="voice-reset" id="voiceReset" type="button">Reset</button>
-        <div class="version-label">v1.4.5</div>
+        <div class="version-label">v1.5.0</div>
       </div>
       </div>
       <header class="display">
@@ -54,20 +58,7 @@
 
       <section class="keypad">
         <button data-action="speak" class="key action speak key-speak">
-          <div class="speak-visual">
-            <div class="trex-face" aria-hidden="true">
-              <!-- Upper head / snout -->
-              <div class="trex-head">
-                <span class="trex-eye"></span>
-                <span class="trex-nostril"></span>
-                <span class="trex-upper-teeth"></span>
-              </div>
-              <!-- Lower jaw -->
-              <div class="trex-jaw">
-                <span class="trex-lower-teeth"></span>
-              </div>
-            </div>
-          </div>
+          <div class="speak-visual" aria-hidden="true"></div>
           <span class="speak-label">Speak</span>
         </button>
         <button data-action="clear" class="key action key-clear">C</button>

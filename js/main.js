@@ -10,6 +10,12 @@ import { numberToWords } from "./number-words.js";
 import { buildSpeechText, speakText } from "./speech.js";
 import { classifySpecialMath } from "./special-math.js";
 import { createFunBannerController } from "./fun-banner.js";
+import {
+  CHARACTERS,
+  getStoredCharacter,
+  renderCharacter,
+  saveCharacter,
+} from "./characters.js";
 
 const resultEl = document.getElementById("result");
 const expressionEl = document.getElementById("expression");
@@ -24,6 +30,8 @@ const voiceVolume = document.getElementById("voiceVolume");
 const funModeToggle = document.getElementById("funModeToggle");
 const voiceReset = document.getElementById("voiceReset");
 const funBannerEl = document.getElementById("funBanner");
+const speakButton = document.querySelector(".key.speak");
+const characterOptions = document.getElementById("characterOptions");
 
 const state = createCalculatorState();
 const funBanner = createFunBannerController(funBannerEl);
@@ -221,6 +229,46 @@ function handleVoiceSelection() {
   if (selected) {
     setSelectedVoice(selected);
   }
+}
+
+function applyCharacter(id) {
+  renderCharacter(speakButton, id);
+  if (characterOptions) {
+    characterOptions.querySelectorAll(".character-option").forEach((option) => {
+      const isActive = option.dataset.character === id;
+      option.classList.toggle("selected", isActive);
+      option.setAttribute("aria-checked", String(isActive));
+    });
+  }
+}
+
+function buildCharacterPicker() {
+  if (!characterOptions) {
+    return;
+  }
+  characterOptions.innerHTML = "";
+  CHARACTERS.forEach((character) => {
+    const option = document.createElement("button");
+    option.type = "button";
+    option.className = "character-option";
+    option.dataset.character = character.id;
+    option.setAttribute("role", "radio");
+    option.setAttribute("aria-checked", "false");
+    option.setAttribute("aria-label", character.label);
+    option.title = character.label;
+    option.textContent = character.emoji;
+    characterOptions.appendChild(option);
+  });
+
+  characterOptions.addEventListener("click", (event) => {
+    const option = event.target.closest(".character-option");
+    if (!option) {
+      return;
+    }
+    const id = option.dataset.character;
+    saveCharacter(id);
+    applyCharacter(id);
+  });
 }
 
 function handleFunModeToggle() {
@@ -609,6 +657,8 @@ document.addEventListener("click", (event) => {
 window.speechSynthesis.addEventListener("voiceschanged", refreshVoiceList);
 applyVoiceSettings(getStoredVoiceSettings());
 applyFunMode(getStoredFunMode());
+buildCharacterPicker();
+applyCharacter(getStoredCharacter());
 refreshVoiceList();
 
 document.addEventListener("keydown", (event) => {

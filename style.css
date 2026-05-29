@@ -544,69 +544,163 @@ button {
   height: 60px;
 }
 
-/* Speak Visual - T-Rex Head (side profile, facing right) */
-.trex-face {
+/* Speak Visual - Full T-Rex (side profile, facing right) */
+.trex {
+  --trex-scale: 1;
   position: relative;
-  width: 54px;
-  height: 46px;
+  width: 58px;
+  height: 52px;
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   transform-origin: center bottom;
+  transform: scale(var(--trex-scale));
 }
 
-.key.speak:hover .trex-face {
-  transform: translateY(-2px) rotate(-2deg);
+.key.speak:hover .trex {
+  transform: translateY(-2px) rotate(-2deg) scale(var(--trex-scale));
+}
+
+/* Tail - tapered, sweeping back-left */
+.trex-tail {
+  position: absolute;
+  top: 20px;
+  left: -4px;
+  width: 26px;
+  height: 12px;
+  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+  border-radius: 12px 2px 2px 12px;
+  transform: rotate(-8deg);
+  transform-origin: right center;
+  clip-path: polygon(0 35%, 100% 0, 100% 100%, 0 75%);
+  box-shadow: inset 0 -2px 3px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* Body - rounded torso */
+.trex-body {
+  position: absolute;
+  top: 16px;
+  left: 14px;
+  width: 30px;
+  height: 22px;
+  background: linear-gradient(160deg, #4ade80 0%, #22c55e 55%, #16a34a 100%);
+  border-radius: 16px 18px 14px 10px;
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.3),
+    inset 0 -3px 5px rgba(0, 0, 0, 0.22),
+    0 3px 6px rgba(0, 0, 0, 0.28);
+  z-index: 2;
+}
+
+/* Tiny arm */
+.trex-arm {
+  position: absolute;
+  top: 9px;
+  right: 1px;
+  width: 9px;
+  height: 4px;
+  background: #16a34a;
+  border-radius: 3px 4px 4px 3px;
+  transform: rotate(12deg);
+  z-index: 4;
+}
+
+.trex-arm::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  top: 1px;
+  width: 3px;
+  height: 3px;
+  background: #fafafa;
+  border-radius: 1px;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+/* Legs */
+.trex-leg {
+  position: absolute;
+  width: 9px;
+  height: 18px;
+  background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
+  border-radius: 5px 5px 3px 3px;
+  z-index: 1;
+  box-shadow: inset 0 -2px 3px rgba(0, 0, 0, 0.25);
+}
+
+/* Foot */
+.trex-leg::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -3px;
+  width: 13px;
+  height: 5px;
+  background: #15803d;
+  border-radius: 3px 4px 2px 4px;
+}
+
+.trex-leg-back {
+  top: 32px;
+  left: 16px;
+  transform: rotate(4deg);
+}
+
+.trex-leg-front {
+  top: 32px;
+  left: 28px;
+  z-index: 3;
 }
 
 /* Upper head + snout */
 .trex-head {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 54px;
-  height: 28px;
+  left: 30px;
+  width: 28px;
+  height: 18px;
   background: linear-gradient(180deg, #4ade80 0%, #22c55e 55%, #16a34a 100%);
-  border-radius: 16px 22px 4px 12px;
+  border-radius: 12px 16px 3px 10px;
   box-shadow:
     inset 0 2px 3px rgba(255, 255, 255, 0.35),
     inset 0 -3px 5px rgba(0, 0, 0, 0.25),
     0 3px 6px rgba(0, 0, 0, 0.3);
-  transform-origin: left center;
+  transform-origin: left bottom;
   transition: transform 0.12s ease;
-  z-index: 2;
+  z-index: 5;
 }
 
 /* Brow ridge over the eye */
 .trex-head::before {
   content: '';
   position: absolute;
-  top: 2px;
-  left: 6px;
-  width: 18px;
-  height: 7px;
+  top: 1px;
+  left: 3px;
+  width: 11px;
+  height: 5px;
   background: #16a34a;
-  border-radius: 8px 8px 2px 2px;
+  border-radius: 6px 6px 2px 2px;
 }
 
 /* Eye */
 .trex-eye {
   position: absolute;
-  top: 7px;
-  left: 9px;
-  width: 9px;
-  height: 9px;
+  top: 4px;
+  left: 5px;
+  width: 7px;
+  height: 7px;
   background: #fef08a;
   border-radius: 50%;
   box-shadow: 0 0 0 1px #14532d;
-  z-index: 3;
+  z-index: 6;
 }
 
 .trex-eye::after {
   content: '';
   position: absolute;
-  top: 2px;
-  left: 3px;
-  width: 4px;
-  height: 5px;
+  top: 1px;
+  left: 2px;
+  width: 3px;
+  height: 4px;
   background: #18181b;
   border-radius: 50%;
 }
@@ -614,10 +708,10 @@ button {
 /* Nostril at the snout tip */
 .trex-nostril {
   position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 4px;
-  height: 4px;
+  top: 4px;
+  right: 4px;
+  width: 3px;
+  height: 3px;
   background: #14532d;
   border-radius: 50%;
 }
@@ -625,12 +719,12 @@ button {
 /* Upper teeth - downward-pointing sawtooth */
 .trex-upper-teeth {
   position: absolute;
-  bottom: -5px;
-  right: 4px;
-  width: 40px;
-  height: 8px;
+  bottom: -4px;
+  right: 3px;
+  width: 22px;
+  height: 6px;
   background: #fafafa;
-  z-index: 3;
+  z-index: 6;
   clip-path: polygon(
     0 0, 100% 0,
     100% 30%, 90% 100%, 80% 30%, 70% 100%, 60% 30%,
@@ -641,27 +735,27 @@ button {
 /* Lower jaw */
 .trex-jaw {
   position: absolute;
-  bottom: 0;
-  right: 2px;
-  width: 42px;
-  height: 14px;
+  top: 14px;
+  left: 32px;
+  width: 24px;
+  height: 9px;
   background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
-  border-radius: 4px 8px 12px 14px;
+  border-radius: 3px 6px 8px 10px;
   box-shadow:
     inset 0 -2px 3px rgba(0, 0, 0, 0.25),
     0 2px 4px rgba(0, 0, 0, 0.3);
   transform-origin: left center;
   transition: transform 0.12s ease;
-  z-index: 1;
+  z-index: 4;
 }
 
 /* Lower teeth - upward-pointing sawtooth */
 .trex-lower-teeth {
   position: absolute;
-  top: -4px;
-  right: 4px;
-  width: 36px;
-  height: 7px;
+  top: -3px;
+  right: 3px;
+  width: 20px;
+  height: 5px;
   background: #fafafa;
   clip-path: polygon(
     0 100%, 100% 100%,
@@ -670,7 +764,7 @@ button {
   );
 }
 
-/* Speaking Animation - T-Rex chomp + roar */
+/* Speaking Animation - T-Rex chomp + roar + stomp */
 .key.speak.speaking .trex-head {
   animation: trex-upper-chomp 0.32s infinite alternate ease-in-out;
 }
@@ -679,23 +773,32 @@ button {
   animation: trex-jaw-chomp 0.32s infinite alternate ease-in-out;
 }
 
-.key.speak.speaking .trex-face {
+.key.speak.speaking .trex {
   animation: trex-bob 0.32s infinite alternate ease-in-out;
+}
+
+.key.speak.speaking .trex-tail {
+  animation: trex-tail-wag 0.4s infinite alternate ease-in-out;
 }
 
 @keyframes trex-jaw-chomp {
   0% { transform: rotate(0deg) translateY(0); }
-  100% { transform: rotate(18deg) translateY(4px); }
+  100% { transform: rotate(16deg) translateY(3px); }
 }
 
 @keyframes trex-upper-chomp {
   0% { transform: rotate(0deg); }
-  100% { transform: rotate(-4deg); }
+  100% { transform: rotate(-5deg); }
 }
 
 @keyframes trex-bob {
-  0% { transform: translateY(0) rotate(0deg); }
-  100% { transform: translateY(-1px) rotate(-1deg); }
+  0% { transform: translateY(0) rotate(0deg) scale(var(--trex-scale)); }
+  100% { transform: translateY(-1px) rotate(-1deg) scale(var(--trex-scale)); }
+}
+
+@keyframes trex-tail-wag {
+  0% { transform: rotate(-8deg); }
+  100% { transform: rotate(-16deg); }
 }
 
 /* Speak Label - Orange */
@@ -899,14 +1002,8 @@ button {
     height: 70px;
   }
 
-  .trex-face {
-    width: 62px;
-    height: 52px;
-  }
-
-  .trex-head {
-    width: 62px;
-    height: 32px;
+  .trex {
+    --trex-scale: 1.18;
   }
 
   .speak-label {
@@ -988,45 +1085,8 @@ button {
     height: 44px;
   }
 
-  .trex-face {
-    width: 40px;
-    height: 34px;
-  }
-
-  .trex-head {
-    width: 40px;
-    height: 21px;
-    border-radius: 12px 16px 3px 9px;
-  }
-
-  .trex-eye {
-    top: 5px;
-    left: 7px;
-    width: 7px;
-    height: 7px;
-  }
-
-  .trex-eye::after {
-    top: 1px;
-    left: 2px;
-    width: 3px;
-    height: 4px;
-  }
-
-  .trex-upper-teeth {
-    width: 30px;
-    height: 6px;
-    bottom: -4px;
-  }
-
-  .trex-jaw {
-    height: 11px;
-    width: 32px;
-  }
-
-  .trex-lower-teeth {
-    width: 27px;
-    height: 5px;
+  .trex {
+    --trex-scale: 0.74;
   }
 
   .speak-label {
@@ -1117,45 +1177,8 @@ button {
     height: 36px;
   }
 
-  .trex-face {
-    width: 34px;
-    height: 28px;
-  }
-
-  .trex-head {
-    width: 34px;
-    height: 18px;
-    border-radius: 10px 14px 3px 8px;
-  }
-
-  .trex-eye {
-    top: 4px;
-    left: 6px;
-    width: 6px;
-    height: 6px;
-  }
-
-  .trex-eye::after {
-    top: 1px;
-    left: 2px;
-    width: 2px;
-    height: 3px;
-  }
-
-  .trex-upper-teeth {
-    width: 25px;
-    height: 5px;
-    bottom: -3px;
-  }
-
-  .trex-jaw {
-    height: 9px;
-    width: 27px;
-  }
-
-  .trex-lower-teeth {
-    width: 22px;
-    height: 4px;
+  .trex {
+    --trex-scale: 0.62;
   }
 
   .speak-label {
@@ -1245,8 +1268,8 @@ button {
     background: linear-gradient(180deg, rgba(249, 115, 22, 0.08) 0%, transparent 40%);
   }
 
-  .key.speak:hover .trex-face {
-    transform: translateY(-2px) rotate(-2deg);
+  .key.speak:hover .trex {
+    transform: translateY(-2px) rotate(-2deg) scale(var(--trex-scale));
   }
 
   .key.speak:hover .speak-label {
@@ -1334,9 +1357,10 @@ button {
 @media (prefers-reduced-motion: reduce) {
   .key,
   .key.speak,
-  .trex-face,
+  .trex,
   .trex-head,
   .trex-jaw,
+  .trex-tail,
   .speak-label,
   .history li,
   .fun-banner {
